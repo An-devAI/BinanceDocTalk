@@ -4,7 +4,7 @@
 
 | Check | Observed result |
 |---|---|
-| Core and integration suite | 64 tests pass on Python 3.12.3 |
+| Core and integration suite | 67 tests pass on Python 3.12.3 |
 | Benchmark structural audit | 80 drafts; splits 8/32/40; labels 56/24; zero declared human reviews |
 | CLI demonstration | Actual original-note retrieval, false-premise example and out-of-scope response |
 | API transport | Mocked structured generation, embedding order, usage, 401/no retry, 429/one retry |
@@ -66,7 +66,10 @@ observations are integration timings, not a representative latency benchmark or 
 Pinned Transformers 4.57.6 and Sentence Transformers 5.2.0 worked with torch 2.11.0+cpu.
 See `docs/kaggle_embedding_run.json` for actual outputs and source hash.
 
-The separate Qwen GPU notebook is still queued; generation is not yet verified. Human review
+Qwen generation executed on a real Tesla T4 (torch 2.11.0+cu128, CUDA 12.8, FP16). Two initial
+integration runs failed with four formatting/validation errors out of six outputs each; preserved
+evidence is in `docs/kaggle_gpu_failures.json`. A corrected constrained-decoding run has been
+submitted and is tracked separately. No successful end-to-end GPU run is claimed yet. Human review
 remains pending at the owner’s explicit request, and no held-out inference has been performed.
 
 ## Reproduce local checks

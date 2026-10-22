@@ -30,3 +30,20 @@ Show successes and failures from both systems, including baseline wins when pres
 - Citation validation is structural; semantic grounding depends on the model and human evaluation.
 - Source-review declarations are not externally certified.
 - A budget reservation can remain after an interrupted request because billed usage is unknown.
+
+## Observed synthetic GPU integration failures
+
+These are actual engineering diagnostics on original notes, not official-corpus scores or human
+quality grades. Both initial Qwen runs recorded four validation errors in six outputs.
+
+| Observed output | Failure boundary | Correction / remaining limit |
+|---|---|---|
+| Extra quote after the JSON object | JSON parser rejected extra data | Token-level JSON grammar blocks trailing content |
+| Abstained with an empty message | Shared answer validator rejected the contract | Separate abstention schema requires a nonempty message |
+| Missing `claims` or malformed key/value | JSON parser or required-fields validator | Grammar requires complete fields before ending |
+| Baseline used the phrase “guaranteeing fill” | Structurally valid; potential factual overstatement | Grammar does not judge truth; human correctness grading remains pending |
+
+The raw malformed cases are retained as regression fixtures, and both failed-run summaries are
+preserved in `kaggle_gpu_failures.json`. Output lengths below the cap ruled out token truncation
+for these failures. The corrected run must pass independently; rejected outputs are not repaired,
+dropped, or relabeled as knowledge abstentions. No held-out data was used for this correction.

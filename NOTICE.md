@@ -10,3 +10,7 @@ candidate source documents has been established. Raw sources and indexes are kep
 
 Official material may change, omit qualifications, or contain inconsistent simplifications.
 This assistant is not investment advice and cannot determine live account or trading conditions.
+
+Model weights and dependencies retain their own licences. Qwen3-4B-Instruct-2507 is Apache 2.0,
+BGE-small-en-v1.5 and LM Format Enforcer are MIT; model cards and dependency distributions are
+authoritative. Weights are downloaded separately and are not included in the repository.

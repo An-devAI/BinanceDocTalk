@@ -1,0 +1,282 @@
+{
+  "kind": "synthetic_integration_failures_not_quality_study",
+  "runs": [
+    {
+      "kernel": "annguyencherry/binancedoctalk-gpu-4d90fcc8",
+      "status": "ERROR",
+      "source_sha256": "4d90fcc8dc745b52167cd4e616489bc7b21308bfa7c46860a173b721d5cdb478",
+      "created_at": "2026-10-22T15:58:58.312894+00:00",
+      "runtime": {
+        "provider": "huggingface_local",
+        "model_revision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+        "embedding_revision": "5c38ec7c405ec4b44b94cc5a9bb96e735b38267a",
+        "decoding": "greedy",
+        "compute_usd": null,
+        "cost_basis": "API only; GPU compute not priced",
+        "gpu": "Tesla T4",
+        "total_vram_bytes": 15636037632,
+        "free_vram_at_load_bytes": 15526068224,
+        "torch": "2.11.0+cu128",
+        "cuda": "12.8",
+        "dtype": "float16",
+        "model_load_seconds": 51.31757068500002,
+        "peak_vram_allocated_bytes": 8413297152
+      },
+      "errors": 4,
+      "prediction_count": 6,
+      "predictions": [
+        {
+          "mode": "baseline",
+          "question": "How is a market order different from a limit order?",
+          "status": "answered",
+          "error_type": null,
+          "message": "",
+          "claims": [
+            {
+              "text": "A market order executes at the best available price immediately, guaranteeing fill but not price control.",
+              "evidence_ids": []
+            },
+            {
+              "text": "A limit order specifies a maximum price to pay (buy) or minimum price to accept (sell), ensuring price control but not guaranteed execution.",
+              "evidence_ids": []
+            }
+          ],
+          "usage": {
+            "input_tokens": 433,
+            "output_tokens": 89,
+            "embedding_tokens": 0
+          },
+          "latency_ms": 5120.2387270000145
+        },
+        {
+          "mode": "rag",
+          "question": "How is a market order different from a limit order?",
+          "status": "error",
+          "error_type": "ProviderError",
+          "message": "Local model returned invalid JSON; output was not repaired",
+          "claims": [],
+          "usage": {
+            "input_tokens": 657,
+            "output_tokens": 123,
+            "embedding_tokens": 21
+          },
+          "latency_ms": 7419.234082999992
+        },
+        {
+          "mode": "baseline",
+          "question": "A stop-limit order guarantees execution after triggering, right?",
+          "status": "error",
+          "error_type": "ValueError",
+          "message": "Abstention must explain the limitation without factual claims",
+          "claims": [],
+          "usage": {
+            "input_tokens": 433,
+            "output_tokens": 27,
+            "embedding_tokens": 0
+          },
+          "latency_ms": 1652.2472359999938
+        },
+        {
+          "mode": "rag",
+          "question": "A stop-limit order guarantees execution after triggering, right?",
+          "status": "answered",
+          "error_type": null,
+          "message": "",
+          "claims": [
+            {
+              "text": "A stop-limit order does not guarantee execution after triggering.",
+              "evidence_ids": [
+                "DEMO02:c0001"
+              ]
+            },
+            {
+              "text": "Execution depends on available liquidity at the limit price or better.",
+              "evidence_ids": [
+                "DEMO02:c0001"
+              ]
+            },
+            {
+              "text": "If no matching liquidity is available, the order can remain unfilled.",
+              "evidence_ids": [
+                "DEMO02:c0001"
+              ]
+            }
+          ],
+          "usage": {
+            "input_tokens": 654,
+            "output_tokens": 103,
+            "embedding_tokens": 22
+          },
+          "latency_ms": 6270.547819000001
+        },
+        {
+          "mode": "baseline",
+          "question": "What is the exact Spot fee for my account today?",
+          "status": "error",
+          "error_type": "ProviderError",
+          "message": "Local model returned invalid JSON; output was not repaired",
+          "claims": [],
+          "usage": {
+            "input_tokens": 433,
+            "output_tokens": 19,
+            "embedding_tokens": 0
+          },
+          "latency_ms": 1258.3324980000157
+        },
+        {
+          "mode": "rag",
+          "question": "What is the exact Spot fee for my account today?",
+          "status": "error",
+          "error_type": "ValueError",
+          "message": "Unexpected answer fields",
+          "claims": [],
+          "usage": {
+            "input_tokens": 648,
+            "output_tokens": 28,
+            "embedding_tokens": 21
+          },
+          "latency_ms": 2009.6486529999993
+        }
+      ]
+    },
+    {
+      "kernel": "annguyencherry/binancedoctalk-gpu-d5d0728b-l4",
+      "status": "ERROR",
+      "source_sha256": "d5d0728b040a08281d64610299e7328a56d1b5a37c710a8765d6a047aec64902",
+      "created_at": "2026-10-22T16:00:03.795266+00:00",
+      "runtime": {
+        "provider": "huggingface_local",
+        "model_revision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+        "embedding_revision": "5c38ec7c405ec4b44b94cc5a9bb96e735b38267a",
+        "decoding": "greedy",
+        "compute_usd": null,
+        "cost_basis": "API only; GPU compute not priced",
+        "gpu": "Tesla T4",
+        "total_vram_bytes": 15636037632,
+        "free_vram_at_load_bytes": 15526068224,
+        "torch": "2.11.0+cu128",
+        "cuda": "12.8",
+        "dtype": "float16",
+        "model_load_seconds": 51.052793166000015,
+        "peak_vram_allocated_bytes": 8414642688
+      },
+      "errors": 4,
+      "prediction_count": 6,
+      "predictions": [
+        {
+          "mode": "baseline",
+          "question": "How is a market order different from a limit order?",
+          "status": "answered",
+          "error_type": null,
+          "message": "",
+          "claims": [
+            {
+              "text": "A market order executes at the best available price immediately, guaranteeing fill but not price control.",
+              "evidence_ids": []
+            },
+            {
+              "text": "A limit order specifies a maximum price to pay (buy) or minimum price to accept (sell), ensuring price control but not guaranteed execution.",
+              "evidence_ids": []
+            }
+          ],
+          "usage": {
+            "input_tokens": 433,
+            "output_tokens": 89,
+            "embedding_tokens": 0
+          },
+          "latency_ms": 5219.460181999977
+        },
+        {
+          "mode": "rag",
+          "question": "How is a market order different from a limit order?",
+          "status": "error",
+          "error_type": "ProviderError",
+          "message": "Local model returned invalid JSON; output was not repaired",
+          "claims": [],
+          "usage": {
+            "input_tokens": 657,
+            "output_tokens": 123,
+            "embedding_tokens": 21
+          },
+          "latency_ms": 7446.784953000019
+        },
+        {
+          "mode": "baseline",
+          "question": "A stop-limit order guarantees execution after triggering, right?",
+          "status": "error",
+          "error_type": "ValueError",
+          "message": "Abstention must explain the limitation without factual claims",
+          "claims": [],
+          "usage": {
+            "input_tokens": 433,
+            "output_tokens": 27,
+            "embedding_tokens": 0
+          },
+          "latency_ms": 1721.540143000027
+        },
+        {
+          "mode": "rag",
+          "question": "A stop-limit order guarantees execution after triggering, right?",
+          "status": "answered",
+          "error_type": null,
+          "message": "",
+          "claims": [
+            {
+              "text": "A stop-limit order does not guarantee execution after triggering.",
+              "evidence_ids": [
+                "DEMO02:c0001"
+              ]
+            },
+            {
+              "text": "Execution depends on available liquidity at the limit price or better.",
+              "evidence_ids": [
+                "DEMO02:c0001"
+              ]
+            },
+            {
+              "text": "If no matching liquidity is available, the order can remain unfilled.",
+              "evidence_ids": [
+                "DEMO02:c0001"
+              ]
+            }
+          ],
+          "usage": {
+            "input_tokens": 654,
+            "output_tokens": 103,
+            "embedding_tokens": 22
+          },
+          "latency_ms": 6328.894258000048
+        },
+        {
+          "mode": "baseline",
+          "question": "What is the exact Spot fee for my account today?",
+          "status": "error",
+          "error_type": "ProviderError",
+          "message": "Local model returned invalid JSON; output was not repaired",
+          "claims": [],
+          "usage": {
+            "input_tokens": 433,
+            "output_tokens": 19,
+            "embedding_tokens": 0
+          },
+          "latency_ms": 1268.7800029999607
+        },
+        {
+          "mode": "rag",
+          "question": "What is the exact Spot fee for my account today?",
+          "status": "error",
+          "error_type": "ValueError",
+          "message": "Unexpected answer fields",
+          "claims": [],
+          "usage": {
+            "input_tokens": 648,
+            "output_tokens": 28,
+            "embedding_tokens": 21
+          },
+          "latency_ms": 1985.805163000009
+        }
+      ]
+    }
+  ],
+  "human_reviewed_gold": false
+}
