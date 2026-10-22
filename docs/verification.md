@@ -4,7 +4,7 @@
 
 | Check | Observed result |
 |---|---|
-| Core and integration suite | 45 tests pass on Python 3.12.3 |
+| Core and integration suite | 59 tests pass on Python 3.12.3 |
 | Benchmark structural audit | 80 drafts; splits 8/32/40; labels 56/24; zero declared human reviews |
 | CLI demonstration | Actual original-note retrieval, false-premise example and out-of-scope response |
 | API transport | Mocked structured generation, embedding order, usage, 401/no retry, 429/one retry |
@@ -22,7 +22,8 @@ assertions validate the metric implementation; they are not project accuracy or 
 ## Not verified / not completed
 
 - No actual OpenAI call: no OpenAI key is configured in the implementation environment.
-- No official Binance corpus has been collected or manually approved.
+- Official collection attempted 20 URLs: zero usable articles; see `docs/source_collection_run.json`.
+  No official corpus or human approval is claimed.
 - No human gold annotation, official held-out inference or semantic output grading is complete.
 - Streamlit and tiktoken are declared optional requirements but were not installed here.
 - No real browser UI inspection: browser control reported no available browser, and local browser

@@ -15,7 +15,7 @@ and paired evaluation tooling are implemented. **The official-source quality stu
 | Offline demonstration | Runs on 12 original synthetic notes, with no LLM or API charges |
 | Official source manifest | 20 candidate URLs; no collection dates or hashes invented |
 | Benchmark | 80 AI-authored drafts: 8 smoke / 32 dev / 40 test; human review pending |
-| Official corpus collection | Not collected; source permission and human review steps remain pending |
+| Official corpus collection | Attempted 20 sources; zero usable articles. [Collection evidence and import workflow](docs/collection_workflow.md) |
 | Live OpenAI integration | Implemented and mock-tested; no API key available for a live check |
 | Held-out quality, latency, cost | **Not measured**; no claims of improvement |
 | GitHub repository | Pushed to [An-devAI/BinanceDocTalk](https://github.com/An-devAI/BinanceDocTalk); official quality study remains pending |

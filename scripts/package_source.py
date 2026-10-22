@@ -16,7 +16,7 @@ def public_files(include_media: bool = True) -> list[Path]:
              "data/manifest.v1.jsonl", "artifacts/results/README.md", ".github/workflows/ci.yml"]
     paths = [ROOT / name for name in names if (ROOT / name).is_file()]
     for pattern in ["src/binance_doctalk/*.py", "src/binance_doctalk/ui.html", "tests/*.py",
-                    "scripts/*.py", "scripts/*.sh", "configs/*.toml", "docs/*.md", "docs/kaggle_run.json",
+                    "scripts/*.py", "scripts/*.sh", "configs/*.toml", "docs/*.md", "docs/kaggle_run.json", "docs/source_collection_run.json",
                     "data/demo/*.jsonl", "data/eval/drafts/*.jsonl", "kaggle/README.md"]:
         paths.extend(ROOT.glob(pattern))
     if include_media:

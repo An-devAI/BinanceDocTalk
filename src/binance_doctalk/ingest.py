@@ -135,6 +135,8 @@ def collect(manifest: Path, output: Path, acknowledge_terms: bool,
                 raise ValueError("robots.txt disallows this collector")
             request = Request(source["url"], headers={"User-Agent": USER_AGENT})
             with opener.open(request, timeout=30) as response:
+                if response.status != 200:
+                    raise ValueError(f"Source returned HTTP {response.status}; no article collected")
                 if "text/html" not in response.headers.get("Content-Type", ""):
                     raise ValueError("Expected an HTML document")
                 raw = response.read(4_000_001)

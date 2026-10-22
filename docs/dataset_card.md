@@ -4,7 +4,7 @@
 
 | Asset | Location | Version/status |
 |---|---|---|
-| Candidate official-source manifest | `data/manifest.v1.jsonl` | 20 URLs, checked as candidates on 2026-10-22; not collected |
+| Candidate official-source manifest | `data/manifest.v1.jsonl` | 20 URLs; collection attempted on 2026-10-22, zero usable articles |
 | Benchmark | `data/eval/drafts/*.jsonl` | 80 AI-authored drafts, no human-reviewed gold evidence |
 | Original preview corpus | `data/demo/notes.jsonl` | 12 synthetic notes; not official Binance material |
 
@@ -12,6 +12,9 @@ No training/fine-tuning dataset is used. Never add question/reference-answer fil
 All official data is English from Binance.com Academy. The manifest deliberately does not mix
 Binance.US or user-generated Square content. Some old Academy URLs redirect; retain both original
 and resolved URLs when collecting.
+
+See [collection evidence and review handoff](collection_workflow.md). HTML imports require actual
+collection timestamps; a missing corpus is never replaced with synthetic notes under official URLs.
 
 ## Corpus schema
 

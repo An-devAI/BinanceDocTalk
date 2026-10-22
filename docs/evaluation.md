@@ -50,8 +50,8 @@ runs are unreviewed and cannot establish an official quality result. Standalone 
 rejects the test split. Final test retrieval recall can be computed from saved RAG hits without
 performing additional inference or using it for tuning.
 
-Grade development outputs with the same rubric as test. Select the RAG k maximizing the mean of
-answerable grounded success and insufficient-information abstention recall; ties select k=3.
+Grade development outputs with the same rubric as test. Select the RAG k maximizing answerable grounded success; ties select the lower citation error
+rate, then lower median latency, then k=3. Report abstention separately to expose tradeoffs.
 If both fail important demonstration scenarios, fix the system on dev before freezing.
 
 ## Baseline fairness
