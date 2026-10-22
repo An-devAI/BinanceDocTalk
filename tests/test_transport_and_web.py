@@ -160,6 +160,19 @@ class WebHandlerTests(unittest.TestCase):
 
 
 class FreezeTests(unittest.TestCase):
+    def test_development_cannot_compare_different_generation_models(self):
+        config = replace(Config(), tokenizer="regex_word_v1")
+        class Embedder:
+            def embed(self, texts, *, purpose="document"): return [[1, 0] for _ in texts]
+        index = build_index([fixture_doc("official")], config, Embedder(), reviewed=False)
+        rows = read_jsonl(ROOT/"data/eval/drafts/dev.jsonl")
+        with tempfile.TemporaryDirectory() as folder:
+            with self.assertRaisesRegex(ValueError, "share settings"):
+                run_experiment(ROOT, rows, index,
+                    [replace(config, system="baseline"), replace(config, model="different-model")],
+                    lambda c: self.fail("Provider must not load before paired settings validation"),
+                    Path(folder)/"run", "dev", allow_draft=True)
+
     def test_frozen_test_is_consumed_once_and_files_cannot_change(self):
         config = replace(Config(), tokenizer="regex_word_v1")
         with tempfile.TemporaryDirectory() as directory:

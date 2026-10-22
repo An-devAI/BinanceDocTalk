@@ -4,7 +4,7 @@
 
 | Check | Observed result |
 |---|---|
-| Core and integration suite | 63 tests pass on Python 3.12.3 |
+| Core and integration suite | 64 tests pass on Python 3.12.3 |
 | Benchmark structural audit | 80 drafts; splits 8/32/40; labels 56/24; zero declared human reviews |
 | CLI demonstration | Actual original-note retrieval, false-premise example and out-of-scope response |
 | API transport | Mocked structured generation, embedding order, usage, 401/no retry, 429/one retry |

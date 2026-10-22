@@ -180,6 +180,9 @@ def run_experiment(root: Path, rows: list[dict], index: Index, configs: list[Con
         raise ValueError("Output run already exists; do not overwrite experiment history")
     if {c.system for c in configs} != {"baseline", "rag"} or len(configs) != 2:
         raise ValueError("Run requires paired baseline and RAG configurations")
+    comparable = [{k: v for k, v in c.to_dict().items() if k != "system"} for c in configs]
+    if comparable[0] != comparable[1]:
+        raise ValueError("Paired runs must share settings except system, including on development")
     if index.metadata["kind"] != "official" or index.vectors is None:
         raise ValueError("Paired LLM evaluation requires an official dense corpus index")
     # Create providers before consuming the held-out run marker (missing key is preflight).
@@ -201,6 +204,7 @@ def run_experiment(root: Path, rows: list[dict], index: Index, configs: list[Con
                 "installed_optional_versions": optional_versions(),
                 "platform": platform.platform(), "seed": 42, "concurrency": 1,
                 "response_cache": False, "cold_start_included": False,
+                "cost_basis": "estimated API spend; local GPU compute is not priced",
                 "configs": [c.to_dict() for c in configs],
                 "prompt_hashes": {"baseline": digest(BASELINE_PROMPT), "rag": digest(RAG_PROMPT)},
                 "human_review_complete": all(r.get("review_status") == "human_reviewed" for r in rows)}
@@ -321,6 +325,7 @@ def score_predictions(predictions: list[dict], grades: list[dict], rows: list[di
         raise ValueError("Incomplete paired run; missing predictions cannot be silently dropped")
     report = {"status": "human_graded", "question_count": len(rows),
               "review_warning": "Owner-declared human review; not independent certification",
+              "cost_basis": "estimated API spend only; excludes compute and hosting",
               "systems": {}}
     for arm, items in groups.items():
         a = [i for i in items if i["answerable"]]

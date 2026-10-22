@@ -19,6 +19,13 @@ The target role descriptions consulted during planning:
 [Applied AI Application Engineer](https://jobs.lever.co/binance/ef77ec2f-1ffa-49bc-a18d-9f019ca1edae).
 Vacancies and requirements can change; check again before applying.
 
+## Technical milestone that can be stated now
+
+“Implemented a configurable RAG application with pinned local-model backends, provenance checks,
+and paired evaluation safeguards; verified BGE embeddings on Kaggle and maintained passing CI
+on Python 3.11–3.13.” Describe the 80 questions as unreviewed drafts until actual annotation.
+Do not call the GPU generation backend validated until the Qwen run evidence is available.
+
 ## Bullets to use only after completing the corresponding work
 
 - Built an evidence-grounded crypto knowledge assistant over [N_sources] official Binance sources,
