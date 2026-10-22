@@ -1,5 +1,11 @@
 # Kaggle execution
 
+**Local-model GPU integration is verified:** 67 tests and six structured outputs passed on a
+private Kaggle run. See [actual GPU evidence](../docs/kaggle_gpu_run.json),
+[recorded outputs](../demo/gpu-recorded-preview.html), and [reproduction](../docs/local_inference.md).
+These use original notes, not reviewed official-source benchmark gold. The earlier CPU smoke
+and embedding checks below remain separate historical evidence.
+
 The owner authorized Kaggle CLI execution. CLI 2.2.4 is installed in `.venv-kaggle`; existing OAuth
 was refreshed successfully, and a private CPU notebook completed with 45 tests passing and three demo cases. See
 [verification evidence](../docs/verification.md) for the observed run result.

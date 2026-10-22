@@ -53,3 +53,15 @@ inside otherwise valid abstention `message` strings. A CPU replay confirmed the 
 this contract violation. Local abstention messages now use fixed, reason-specific limitation
 templates during generation; factual answer content must remain in `claims`. This does not
 certify claims as true or supported. The full six-output diagnostic remains local and auditable.
+
+## Final technical rerun
+
+The private run `annguyencherry/binancedoctalk-gpu-2918daa9-l4` completed with 67 passing tests
+and zero structural errors in six original-note outputs. The three questions, both arms and
+all raw final outputs are retained in `demo/gpu-recorded-results.json`. Abstention messages
+are fixed limitation templates; they no longer carry factual or malformed prose.
+
+The baseline classified the in-scope stop-limit question as out of scope. Market-order responses
+can still strengthen source wording into execution guarantees. These are observed model-content
+limitations, not fixed by grammar or valid citation IDs. No human correctness/support grade is
+assigned here. Review and development experiments are required before claiming answer quality.

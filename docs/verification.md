@@ -1,4 +1,4 @@
-# Verification record — 2026-10-22
+# Verification record — updated 2026-10-23 (UTC+07)
 
 ## Completed locally
 
@@ -13,8 +13,8 @@
 | Browser JavaScript | Syntax checked with Node.js; not browser interaction testing |
 | Python package | Wheel builds without fetching runtime dependencies; HTML asset included |
 | Core lockfile | `uv lock --check --offline` passes; no runtime dependencies |
-| Kaggle notebook | Private CPU run COMPLETE; 45 tests pass on Python 3.13.15; three demo cases executed |
-| Demo video | 27-second VP8 WebM, 1280×720, inspected with GStreamer; original-note CLI walkthrough |
+| Kaggle GPU notebook | COMPLETE; 67 tests pass on Python 3.13.15; six actual Qwen outputs pass structure/citation checks |
+| Demo videos | Original 27-second CLI preview plus 30-second actual-Qwen output presentation; VP8 WebM, 1280×720 |
 
 The test suite uses original/synthetic fixtures and mocked network responses. Its numerical
 assertions validate the metric implementation; they are not project accuracy or citation scores.
@@ -30,8 +30,9 @@ assertions validate the metric implementation; they are not project accuracy or 
   see `docs/local_ui_run.json`. No live browser visual QA is claimed.
 - No real browser UI inspection: browser control reported no available browser, and local browser
   process startup was blocked. The poster is a rendered CLI presentation, not a browser screenshot.
-- Online hosting has not been performed. GitHub Actions passed on Python 3.11–3.13 for commit
-  `6a08cb3`: https://github.com/An-devAI/BinanceDocTalk/actions/runs/39805295371.
+- Online hosting has not been performed. GitHub Actions passed core checks on Python 3.11–3.13,
+  optional Streamlit checks and actual grammar replay for `f6fa78f`:
+  https://github.com/An-devAI/BinanceDocTalk/actions/runs/39825385108.
 
 ## Kaggle account and execution state
 
@@ -66,11 +67,33 @@ observations are integration timings, not a representative latency benchmark or 
 Pinned Transformers 4.57.6 and Sentence Transformers 5.2.0 worked with torch 2.11.0+cpu.
 See `docs/kaggle_embedding_run.json` for actual outputs and source hash.
 
-Qwen generation executed on a real Tesla T4 (torch 2.11.0+cu128, CUDA 12.8, FP16). Two initial
-integration runs failed with four formatting/validation errors out of six outputs each; preserved
-evidence is in `docs/kaggle_gpu_failures.json`. A corrected constrained-decoding run has been
-submitted and is tracked separately. No successful end-to-end GPU run is claimed yet. Human review
-remains pending at the owner’s explicit request, and no held-out inference has been performed.
+## Real Qwen GPU integration — completed
+
+[Private executed notebook](https://www.kaggle.com/code/annguyencherry/binancedoctalk-gpu-2918daa9-l4),
+version 1, reports `KernelWorkerStatus.COMPLETE`. Remote metadata confirms private visibility.
+The executed source SHA-256 is `2918daa924cb46d82cd2a2d3a464bde3d1fb1fb1f2130af77c42c2589f40f58c`.
+
+- Runtime: Python 3.13.15; Tesla T4; torch 2.11.0+cu128; CUDA 12.8; FP16.
+- The requested shape was `NvidiaL4`, but device telemetry reported Tesla T4. Report the observed device.
+- Qwen and BGE revisions are pinned in the saved configuration; shared model weights serve both arms.
+- All 67 tests passed remotely. Three original-note questions produced six baseline/RAG outputs,
+  with zero structural validation errors. Both current-account-fee queries abstained.
+- Setup including model loading/warmup took 92.23 seconds. Observed per-query times were approximately
+  2.00–14.92 seconds; six illustrative outputs do not establish a representative latency benchmark.
+- PyTorch peak allocated VRAM was 8,581,229,056 bytes; this is not total driver/device allocation.
+- API spend was zero. Compute cost is unpriced; no paid fallback or pay-to-scale change was made.
+
+The two initial runs each failed four of six outputs; `kaggle_gpu_failures.json` preserves those
+results. Token-level JSON constraints fixed syntax/field failures. An intermediate structurally
+valid run exposed factual/nonsensical prose in abstention messages; fixed limitation templates
+closed that contract loophole. The shared validator was not weakened and outputs were not repaired.
+
+See `kaggle_gpu_run.json`, `demo/gpu-recorded-results.json`, the recorded HTML preview and 30-second
+video. All six final outputs are retained. Structural validity is constrained by construction;
+correctness, refusal classification and semantic citation support are **not human-graded**.
+Observed limitations include a potential market-order guarantee overstatement and a baseline
+refusal of an in-scope question. Human source/gold review remains pending by owner choice;
+no held-out inference, quality metric, or claimed RAG improvement exists.
 
 ## Reproduce local checks
 

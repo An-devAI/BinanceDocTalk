@@ -16,6 +16,7 @@ and paired evaluation tooling are implemented. **The official-source quality stu
 | Official source manifests | 20 candidate URLs plus actual snapshot timestamps/hashes; raw text excluded from Git |
 | Benchmark | 80 AI-authored drafts: 8 smoke / 32 dev / 40 test; human review pending |
 | Official corpus collection | 20 web-reader snapshots / 481 paragraphs retrieved locally; potentially cached, human review pending. [Provenance](docs/collection_workflow.md) |
+| Local Qwen + BGE integration | Verified on Kaggle GPU: 67 tests pass, six original-note outputs validated; semantic quality ungraded |
 | Live OpenAI integration | Implemented and mock-tested; no API key available for a live check |
 | Held-out quality, latency, cost | **Not measured**; no claims of improvement |
 | GitHub repository | Pushed to [An-devAI/BinanceDocTalk](https://github.com/An-devAI/BinanceDocTalk); official quality study remains pending |
@@ -24,13 +25,16 @@ See [verification evidence](docs/verification.md), [evaluation protocol](docs/ev
 and [remaining acceptance steps](docs/roadmap.md). Unit tests and the offline preview are **not**
 evidence of official-corpus answer quality.
 
-**Kaggle runtime:** the private CPU notebook completed successfully: **45 tests passed** and three demo cases ran.
-See [Kaggle execution](kaggle/README.md) and [verification evidence](docs/verification.md) for the
-observed run status. The default notebook performs no paid API calls.
+**Kaggle GPU verification:** pinned Qwen3-4B and BGE completed actual retrieval and generation on
+Tesla T4 / FP16 / CUDA 12.8. All 67 tests and six structured-output checks passed in the submitted
+snapshot. See [run evidence](docs/kaggle_gpu_run.json), [local inference](docs/local_inference.md),
+and [the full outputs and limitations](demo/gpu-recorded-preview.html). This is a synthetic
+integration check, **not an answer-accuracy or citation-support benchmark**. No paid model API calls.
 
-**Open-model GPU backend:** pinned Qwen3-4B + BGE inference is implemented. See
-[local inference on Kaggle](docs/local_inference.md); the GPU run evidence is recorded separately
-from the earlier CPU smoke and from the still-pending official-source study.
+Watch the [30-second recorded GPU walkthrough](demo/gpu-walkthrough.webm). All six outputs,
+including imperfect model behavior, are retained in [recorded JSON](demo/gpu-recorded-results.json).
+
+![Recorded GPU output presentation, not a browser screenshot](demo/gpu-preview.png)
 
 ## Run in under a minute
 

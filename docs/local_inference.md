@@ -20,7 +20,8 @@ arms. It validates real inference and JSON/citation structure, not semantic accu
 Binance answer quality. It does not consume development or held-out questions.
 
 Real BGE integration completed on a private Kaggle CPU notebook; see
-[`kaggle_embedding_run.json`](kaggle_embedding_run.json). Qwen GPU inference is tracked separately.
+[`kaggle_embedding_run.json`](kaggle_embedding_run.json). Qwen GPU inference subsequently completed; see [`kaggle_gpu_run.json`](kaggle_gpu_run.json)
+and the full six recorded outputs in `demo/`. Structural success does not certify semantic support.
 To reproduce the CPU check, prepare with `--embedding-smoke` instead of `--gpu` and use a separate folder.
 Push commands cap execution at 3,600 seconds.
 

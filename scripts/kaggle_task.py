@@ -164,7 +164,7 @@ for question in questions:
     if answer["message"]:
         print(answer["message"])
 (work / "offline-demo.json").write_text(json.dumps(outputs, indent=2))
-print("\\nOfficial corpus: not collected; human gold review pending; LLM quality NOT MEASURED.")
+print("\\nOfficial corpus is not included in this smoke run; human gold review pending; LLM quality NOT MEASURED.")
 '''
     probe = '''# Optional owner-enabled connectivity probe. This is NOT a held-out evaluation.
 RUN_PAID_OPENAI_PROBE = False

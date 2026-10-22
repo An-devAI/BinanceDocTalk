@@ -17,9 +17,9 @@ source review and annotation time vary, so remove UI polish/hosting before reduc
 ## Before declaring the official-source portfolio study complete
 
 - [ ] Confirm source and external API processing rights; no raw source redistribution without permission.
-- [ ] Install and lock optional dependencies; record environment versions.
-- [ ] Verify optional Streamlit and the loopback UI on the owner's machine.
-- [ ] Check the live API integration and fixed snapshot with the owner's key.
+- [x] Lock the optional UI stack, pin local model revisions/packages, and record actual torch/CUDA versions.
+- [x] Verify loopback HTTP startup and optional Streamlit AppTest; browser visual QA remains unverified.
+- [x] Verify the chosen local Qwen/BGE backend with real Kaggle GPU inference; optional OpenAI remains mock-tested.
 - [ ] Complete source/gold review and semantic near-duplicate inspection.
 - [ ] Freeze before test; retain first run including errors.
 - [ ] Complete human grading and publish sanitized measured artifacts.

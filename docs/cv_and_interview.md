@@ -22,9 +22,10 @@ Vacancies and requirements can change; check again before applying.
 ## Technical milestone that can be stated now
 
 “Implemented a configurable RAG application with pinned local-model backends, provenance checks,
-and paired evaluation safeguards; verified BGE embeddings on Kaggle and maintained passing CI
+and paired evaluation safeguards; verified local Qwen/BGE retrieval and inference on Kaggle GPU, and maintained passing CI
 on Python 3.11–3.13.” Describe the 80 questions as unreviewed drafts until actual annotation.
-Do not call the GPU generation backend validated until the Qwen run evidence is available.
+The GPU integration evidence includes 67 passing tests and six structurally validated original-note
+outputs; these are not accuracy or semantic citation-support measurements.
 
 ## Bullets to use only after completing the corresponding work
 
