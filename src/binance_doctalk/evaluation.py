@@ -84,7 +84,7 @@ def source_fingerprint(root: Path) -> str:
 
 def optional_versions() -> dict:
     versions = {}
-    for name in ["tiktoken", "streamlit", "numpy", "openai", "kaggle", "torch", "transformers", "sentence-transformers"]:
+    for name in ["tiktoken", "streamlit", "numpy", "openai", "kaggle", "torch", "transformers", "sentence-transformers", "lm-format-enforcer"]:
         try:
             versions[name] = importlib.metadata.version(name)
         except importlib.metadata.PackageNotFoundError:

@@ -21,6 +21,24 @@ def local_config():
 
 
 class LocalProviderTests(unittest.TestCase):
+    def setUp(self):
+        # Runtime contract tests use a fake model; actual grammar is tested separately.
+        prefix_patch = patch('binance_doctalk.local_provider.build_prefix_enforcer', return_value=None)
+        self.prefix = prefix_patch.start()
+        self.addCleanup(prefix_patch.stop)
+
+    def test_generation_passes_constraints_to_the_model_without_postprocessing(self):
+        runtime = self.fake_runtime('{"status":"abstained","reason":"out_of_scope","message":"Outside scope.","claims":[]}')
+        from unittest.mock import Mock
+        generate = Mock(return_value=[[1]*32+[2,0]])
+        runtime[2].generate = generate
+        sentinel = object()
+        self.prefix.return_value = sentinel
+        with patch('binance_doctalk.local_provider.generation_runtime', return_value=runtime):
+            result = LocalProvider(local_config()).generate('instructions','question',[])
+        self.assertIs(generate.call_args.kwargs['prefix_allowed_tokens_fn'], sentinel)
+        self.assertEqual(result['message'], 'Outside scope.')
+
     def test_factory_selects_local_without_key_or_loading_weights(self):
         with patch('binance_doctalk.local_provider.generation_runtime') as loader:
             provider = create_provider(local_config())

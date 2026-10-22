@@ -126,6 +126,15 @@ class KaggleBundleTests(unittest.TestCase):
                 if item["cell_type"] == "code":
                     compile("".join(item["source"]), f"embedding-{index}", "exec")
 
+    def test_l4_configuration_has_matching_title_slug_and_visibility(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder)
+            result = prepare_gpu("unit-test-owner", path, "NvidiaL4")
+            metadata = json.loads((path/"kernel-metadata.json").read_text())
+            self.assertTrue(metadata["is_private"])
+            self.assertEqual(metadata["machine_shape"], "NvidiaL4")
+            self.assertEqual(metadata["title"].lower().replace(" ", "-"), result["kernel"].split("/")[1])
+
     def test_email_or_token_cannot_be_used_as_owner(self):
         with tempfile.TemporaryDirectory() as folder:
             with self.assertRaises(ValueError):

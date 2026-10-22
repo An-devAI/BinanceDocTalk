@@ -1,0 +1,26 @@
+{
+  "kind": "synthetic_gpu_integration_format_failures",
+  "source_sha256": "d5d0728b040a08281d64610299e7328a56d1b5a37c710a8765d6a047aec64902",
+  "cases": [
+    {
+      "mode": "rag",
+      "raw_output": "{\"status\": \"answered\", \"reason\": null, \"message\": \"\", \"claims\": [{\"text\": \"A market order prioritizes execution at available order-book prices.\", \"evidence_ids\": [\"DEMO01:c0001\"]}, {\"text\": \"A limit order sets a maximum buying price or minimum selling price.\", \"evidence_ids\": [\"DEMO01:c0001\"]}, {\"text\": \"A limit order can remain unfilled; it does not guarantee immediate execution.\", \"evidence_ids\": [\"DEMO01:c0001\"]}]}\"",
+      "error_type": "ProviderError"
+    },
+    {
+      "mode": "baseline",
+      "raw_output": "{\"status\": \"abstained\", \"reason\": \"insufficient_evidence\", \"message\": \"\", \"claims\": []}",
+      "error_type": "ValueError"
+    },
+    {
+      "mode": "baseline",
+      "raw_output": "{\"status\":\"abstained\",\"reason\":\"insufficient_evidence\",\"message\":\"\",\"claims\"}",
+      "error_type": "ProviderError"
+    },
+    {
+      "mode": "rag",
+      "raw_output": "{\"status\":\"abstained\",\"reason\":\"insufficient_evidence\",\"message\":\"No evidence provides current Spot fees for the account.\"}",
+      "error_type": "ValueError"
+    }
+  ]
+}

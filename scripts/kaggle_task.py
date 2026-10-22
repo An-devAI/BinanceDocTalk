@@ -203,7 +203,9 @@ else:
             "private": True, "gpu": False, "paid_api_calls_enabled": False, "remote_execution": "not_started"}
 
 
-def prepare_gpu(owner: str, output: Path) -> dict:
+def prepare_gpu(owner: str, output: Path, accelerator: str = "NvidiaTeslaT4") -> dict:
+    if accelerator not in {"NvidiaTeslaT4", "NvidiaL4"}:
+        raise ValueError("Use the supported T4 or L4 GPU pool")
     result = prepare(owner, output)
     path = output / "binance_doctalk.ipynb"
     notebook = json.loads(path.read_text())
@@ -214,7 +216,9 @@ os.environ["TOKENIZERS_PARALLELISM"] = "false"
 os.environ["DOCTALK_SOURCE_SHA256"] = EXPECTED_SHA256
 subprocess.run([sys.executable, "-m", "pip", "install", "-q", "-r", "requirements-local-model.txt"], check=True)
 """
-    run = """# One process reuses the same model for baseline and RAG. Strict validation remains enabled.
+    run = """# Replay captured formatting failures before real inference; validation remains enabled.
+subprocess.run([sys.executable, "scripts/check_format_grammar.py"], check=True)
+# One process reuses the same model for baseline and RAG.
 subprocess.run([sys.executable, "scripts/gpu_smoke.py", str(work / "gpu-smoke.json")], check=True)
 """
     notebook["cells"] = notebook["cells"][:2] + [cell(install, True)] + notebook["cells"][2:4] + [cell(run, True),
@@ -222,9 +226,10 @@ subprocess.run([sys.executable, "scripts/gpu_smoke.py", str(work / "gpu-smoke.js
     path.write_text(json.dumps(notebook, indent=2) + "\n")
     metadata_path = output / "kernel-metadata.json"
     metadata = json.loads(metadata_path.read_text())
-    metadata.update(id=f"{owner}/binancedoctalk-gpu-{result['source_sha256'][:8]}",
-                    title="BinanceDocTalk GPU " + result["source_sha256"][:8], enable_gpu=True,
-                    machine_shape="NvidiaTeslaT4")
+    suffix = "-l4" if accelerator == "NvidiaL4" else ""
+    metadata.update(id=f"{owner}/binancedoctalk-gpu-{result['source_sha256'][:8]}{suffix}",
+                    title="BinanceDocTalk GPU " + result["source_sha256"][:8] + (" L4" if suffix else ""),
+                    enable_gpu=True, machine_shape=accelerator)
     metadata_path.write_text(json.dumps(metadata, indent=2)+"\n")
     return {**result, "kernel": metadata["id"], "gpu": True}
 
@@ -265,6 +270,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("command", choices=["doctor", "prepare", "push", "status", "output"])
     parser.add_argument("--owner")
+    parser.add_argument("--accelerator", choices=["NvidiaTeslaT4", "NvidiaL4"], default="NvidiaTeslaT4")
     parser.add_argument("--embedding-smoke", action="store_true", help="Prepare a CPU-only real BGE check")
     parser.add_argument("--gpu", action="store_true", help="Prepare private Qwen GPU integration notebook")
     parser.add_argument("--file-pattern", help="Limit downloaded outputs using a filename regex")
@@ -278,8 +284,13 @@ def main():
     env = environment()
     if args.command == "prepare":
         owner = args.owner or env.get("KAGGLE_USERNAME") or "YOUR_KAGGLE_USERNAME"
-        builder = prepare_embedding if args.embedding_smoke else prepare_gpu if args.gpu else prepare
-        print(json.dumps(builder(owner, args.folder), indent=2))
+        if args.embedding_smoke:
+            prepared = prepare_embedding(owner, args.folder)
+        elif args.gpu:
+            prepared = prepare_gpu(owner, args.folder, args.accelerator)
+        else:
+            prepared = prepare(owner, args.folder)
+        print(json.dumps(prepared, indent=2))
         return
     ready = doctor(check_auth=True)
     if not (ready["cli_available"] and ready["credentials_present"] and ready["dns_resolves"]

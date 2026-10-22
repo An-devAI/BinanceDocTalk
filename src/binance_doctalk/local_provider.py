@@ -12,10 +12,50 @@ import time
 
 from .chunking import BGE_REVISION
 from .provider import ProviderError
-from .schemas import ANSWER_SCHEMA, Config
+from .schemas import Config
 
 QUERY_PREFIX = "Represent this sentence for searching relevant passages: "
 _RUNTIME_LOCK = threading.RLock()
+
+
+def local_answer_schema(grounded: bool, allowed_ids: list[str]) -> dict:
+    """Encode the existing validator contract without deciding factual correctness."""
+    abstained = {"type": "object", "additionalProperties": False, "properties": {
+        "status": {"type": "string", "enum": ["abstained"]},
+        "reason": {"type": "string", "enum": ["insufficient_evidence", "out_of_scope"]},
+        "message": {"type": "string", "minLength": 1, "maxLength": 400},
+        "claims": {"type": "array", "maxItems": 0, "items": {"type": "string"}},
+    }, "required": ["status", "reason", "message", "claims"]}
+    if grounded and not allowed_ids:
+        return abstained
+    citations = {"type": "array", "items": {"type": "string"}, "maxItems": 0}
+    if grounded:
+        citations = {"type": "array", "minItems": 1, "maxItems": len(allowed_ids),
+                     "items": {"type": "string", "enum": sorted(set(allowed_ids))}}
+    answered = {"type": "object", "additionalProperties": False, "properties": {
+        "status": {"type": "string", "enum": ["answered"]},
+        "reason": {"type": "null"}, "message": {"type": "string", "enum": [""]},
+        "claims": {"type": "array", "minItems": 1, "maxItems": 8, "items": {
+            "type": "object", "additionalProperties": False, "properties": {
+                "text": {"type": "string", "minLength": 1, "maxLength": 800},
+                "evidence_ids": citations}, "required": ["text", "evidence_ids"]}},
+    }, "required": ["status", "reason", "message", "claims"]}
+    return {"anyOf": [answered, abstained]}
+
+
+@lru_cache(maxsize=1)
+def constraint_tokenizer_data(model: str, revision: str):
+    from lmformatenforcer.integrations.transformers import build_token_enforcer_tokenizer_data
+    tokenizer = generation_runtime(model, revision)[1]
+    return build_token_enforcer_tokenizer_data(tokenizer)
+
+
+def build_prefix_enforcer(config: Config, schema: dict):
+    from lmformatenforcer import JsonSchemaParser, CharacterLevelParserConfig
+    from lmformatenforcer.integrations.transformers import build_transformers_prefix_allowed_tokens_fn
+    parser = JsonSchemaParser(schema, config=CharacterLevelParserConfig(force_json_field_order=True))
+    return build_transformers_prefix_allowed_tokens_fn(
+        constraint_tokenizer_data(config.model, config.model_revision), parser)
 
 
 class NoApiLedger:
@@ -87,9 +127,13 @@ class LocalProvider:
 
     def generate(self, instructions: str, question: str, context: list[dict]) -> dict:
         with _RUNTIME_LOCK:
+            self.last_raw_output = ""
             torch, tokenizer, model, self.hardware = generation_runtime(
                 self.config.model, self.config.model_revision)
-            schema = json.dumps(ANSWER_SCHEMA, separators=(",", ":"))
+            schema_object = local_answer_schema(self.config.system == "rag",
+                                                [c["chunk_id"] for c in context])
+            prefix_enforcer = build_prefix_enforcer(self.config, schema_object)
+            schema = json.dumps(schema_object, separators=(",", ":"))
             messages = [
                 {"role": "system", "content": instructions + "\nReturn ONLY one JSON object, no Markdown. "
                  "Use this JSON schema: " + schema},
@@ -106,7 +150,8 @@ class LocalProvider:
             torch.cuda.synchronize()
             with torch.inference_mode():
                 output = model.generate(**inputs, do_sample=False, max_new_tokens=self.config.max_output_tokens,
-                                        pad_token_id=tokenizer.eos_token_id)
+                                        pad_token_id=tokenizer.eos_token_id,
+                                        prefix_allowed_tokens_fn=prefix_enforcer)
             torch.cuda.synchronize()
             new_tokens = output[0][count:]
             self.usage["input_tokens"] += count
@@ -130,4 +175,5 @@ class LocalProvider:
     def runtime_info(self):
         return {"provider": "huggingface_local", "model_revision": self.config.model_revision,
                 "embedding_revision": self.config.embedding_revision, "decoding": "greedy",
+                "structured_decoding": "lm-format-enforcer/json-schema/strict-field-order",
                 "compute_usd": None, "cost_basis": "API only; GPU compute not priced", **self.hardware}

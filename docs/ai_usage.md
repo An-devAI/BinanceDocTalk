@@ -51,4 +51,9 @@ actually occur, and retain the relevant diff/test evidence.
   article title. The import failed without creating a corpus; code lines are now excluded before
   heading parsing, with a synthetic regression test.
 
+- Actual GPU inference exposed four formatting failures on six synthetic integration outputs.
+  A captured replay isolated syntax/schema failures and ruled out token-limit truncation.
+  Schema-constrained decoding was added while preserving the original outputs and unchanged
+  application validator; it is not a claim of measured official-corpus answer quality.
+
 These were assistant-discovered corrections. They are not claims of personal human debugging work.
