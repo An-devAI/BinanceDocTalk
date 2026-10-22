@@ -1,0 +1,19 @@
+name: Python checks
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  core:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ['3.11', '3.12', '3.13']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - run: python -m unittest discover -s tests -v
+      - run: python scripts/doctalk.py audit-benchmark
+      - run: python scripts/doctalk.py demo --question "Why can a stop-limit order remain unfilled?"
+      - run: python -m compileall -q src app.py web_app.py

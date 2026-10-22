@@ -1,0 +1,19 @@
+{
+  "date": "2026-10-22",
+  "kernel": "annguyencherry/binancedoctalk-smoke-000bb9cf",
+  "version": 1,
+  "visibility_requested": "private",
+  "accelerator": "CPU",
+  "status": "COMPLETE",
+  "source_sha256": "000bb9cf5e07ff3437df664ced969fec99ff26860e48792832cf5b1210c6b177",
+  "python": "3.13.15",
+  "tests_passed": 45,
+  "test_duration_seconds": 0.238,
+  "demo_statuses": [
+    "answered",
+    "answered",
+    "abstained"
+  ],
+  "paid_probe_enabled": false,
+  "llm_quality_measured": false
+}

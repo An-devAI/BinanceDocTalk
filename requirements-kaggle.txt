@@ -1,0 +1,2 @@
+# Optional deployment tooling, not an application dependency.
+kaggle==2.2.4

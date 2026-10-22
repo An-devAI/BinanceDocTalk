@@ -1,0 +1,2 @@
+# Optional alternative UI. Not part of the dependency-free core lockfile.
+streamlit>=1.40,<2

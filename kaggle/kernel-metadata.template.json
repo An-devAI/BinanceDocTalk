@@ -1,0 +1,14 @@
+{
+  "id": "YOUR_KAGGLE_USERNAME/binance-doctalk-smoke-1ac7ab58",
+  "title": "BinanceDocTalk Smoke 1ac7ab58",
+  "code_file": "binance_doctalk.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": true,
+  "enable_gpu": false,
+  "enable_internet": true,
+  "dataset_sources": [],
+  "competition_sources": [],
+  "kernel_sources": [],
+  "model_sources": []
+}

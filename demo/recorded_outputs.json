@@ -1,0 +1,231 @@
+{
+  "recorded_at": "2026-10-22T13:00:51.637802+00:00",
+  "mode": "demo_extract",
+  "description": "Actual offline CLI outputs on original synthetic notes; not LLM quality results",
+  "cases": [
+    {
+      "mode": "demo_extract",
+      "question": "How is a market order different from a limit order?",
+      "status": "answered",
+      "reason": null,
+      "message": "",
+      "claims": [
+        {
+          "text": "A market order prioritizes execution at available order-book prices. A limit order sets a maximum buying price or minimum selling price. A limit order can remain unfilled; it does not guarantee immediate execution.",
+          "evidence_ids": [
+            "DEMO01:c0001"
+          ]
+        }
+      ],
+      "retrieved": [
+        {
+          "chunk_id": "DEMO01:c0001",
+          "doc_id": "DEMO01",
+          "title": "Market and limit orders",
+          "url": "demo:note-01",
+          "heading": "Order basics",
+          "score": 4.856837588991179,
+          "spans": [
+            {
+              "paragraph_id": "p001",
+              "start": 0,
+              "end": 214
+            }
+          ],
+          "content_hash": "858e6e5b2436769facae0044695a143fef2511723c1ac67601972d84aa15b79f"
+        },
+        {
+          "chunk_id": "DEMO02:c0001",
+          "doc_id": "DEMO02",
+          "title": "Stop-limit orders",
+          "url": "demo:note-02",
+          "heading": "Trigger and fill",
+          "score": 3.1804048036336066,
+          "spans": [
+            {
+              "paragraph_id": "p001",
+              "start": 0,
+              "end": 235
+            }
+          ],
+          "content_hash": "2fe10cc36c463b407329d761667db2c759e0ff039f7854a6bfc9fa3e6c7c214a"
+        },
+        {
+          "chunk_id": "DEMO05:c0001",
+          "doc_id": "DEMO05",
+          "title": "Spread and slippage",
+          "url": "demo:note-05",
+          "heading": "Two different concepts",
+          "score": 2.3681280318844924,
+          "spans": [
+            {
+              "paragraph_id": "p001",
+              "start": 0,
+              "end": 217
+            }
+          ],
+          "content_hash": "9d99b2989c035f0aa8656ad6303156a2af691d2f8743ebf3801e24b7bea476a5"
+        }
+      ],
+      "error_type": null,
+      "latency_ms": 0.12731500100926496,
+      "stages_ms": {
+        "query_embedding_ms": 0.00016500052879564464,
+        "retrieval_ms": 0.07433499922626652,
+        "generation_ms": 0.02855900311260484,
+        "validation_ms": 0.008794999303063378
+      },
+      "usage": {},
+      "estimated_usd": 0.0,
+      "retry_count": 0,
+      "actual_models": []
+    },
+    {
+      "mode": "demo_extract",
+      "question": "A stop-limit order guarantees execution after triggering, right?",
+      "status": "answered",
+      "reason": null,
+      "message": "",
+      "claims": [
+        {
+          "text": "A stop-limit order has a trigger price and a limit price. Reaching the trigger activates a limit order; it does not guarantee execution. If no matching liquidity is available at the limit price or better, the order can remain unfilled.",
+          "evidence_ids": [
+            "DEMO02:c0001"
+          ]
+        }
+      ],
+      "retrieved": [
+        {
+          "chunk_id": "DEMO02:c0001",
+          "doc_id": "DEMO02",
+          "title": "Stop-limit orders",
+          "url": "demo:note-02",
+          "heading": "Trigger and fill",
+          "score": 6.851261401983476,
+          "spans": [
+            {
+              "paragraph_id": "p001",
+              "start": 0,
+              "end": 235
+            }
+          ],
+          "content_hash": "2fe10cc36c463b407329d761667db2c759e0ff039f7854a6bfc9fa3e6c7c214a"
+        },
+        {
+          "chunk_id": "DEMO01:c0001",
+          "doc_id": "DEMO01",
+          "title": "Market and limit orders",
+          "url": "demo:note-01",
+          "heading": "Order basics",
+          "score": 3.977287599925142,
+          "spans": [
+            {
+              "paragraph_id": "p001",
+              "start": 0,
+              "end": 214
+            }
+          ],
+          "content_hash": "858e6e5b2436769facae0044695a143fef2511723c1ac67601972d84aa15b79f"
+        },
+        {
+          "chunk_id": "DEMO06:c0001",
+          "doc_id": "DEMO06",
+          "title": "Makers and takers",
+          "url": "demo:note-06",
+          "heading": "Order-book roles",
+          "score": 2.047396392846477,
+          "spans": [
+            {
+              "paragraph_id": "p001",
+              "start": 0,
+              "end": 219
+            }
+          ],
+          "content_hash": "418d644c83884e2c25af29118ee47f76f70553be6dc814f007e3ccb843bd6cb5"
+        }
+      ],
+      "error_type": null,
+      "latency_ms": 0.13146799756214023,
+      "stages_ms": {
+        "query_embedding_ms": 0.00014599936548620462,
+        "retrieval_ms": 0.09809400216909125,
+        "generation_ms": 0.019137998606311157,
+        "validation_ms": 0.00729100065655075
+      },
+      "usage": {},
+      "estimated_usd": 0.0,
+      "retry_count": 0,
+      "actual_models": []
+    },
+    {
+      "mode": "demo_extract",
+      "question": "What is the exact Spot fee for my account today?",
+      "status": "abstained",
+      "reason": "out_of_scope",
+      "message": "This local preview cannot provide current/account data or investment advice.",
+      "claims": [],
+      "retrieved": [
+        {
+          "chunk_id": "DEMO07:c0001",
+          "doc_id": "DEMO07",
+          "title": "Spot ownership",
+          "url": "demo:note-07",
+          "heading": "Spot basics",
+          "score": 3.7418376126827906,
+          "spans": [
+            {
+              "paragraph_id": "p001",
+              "start": 0,
+              "end": 217
+            }
+          ],
+          "content_hash": "63fe0d7d19469abb848445cb305a358d6ff8b3027a39f0ec50b308be33633a22"
+        },
+        {
+          "chunk_id": "DEMO03:c0001",
+          "doc_id": "DEMO03",
+          "title": "OCO orders",
+          "url": "demo:note-03",
+          "heading": "Linked orders",
+          "score": 1.9646811212312874,
+          "spans": [
+            {
+              "paragraph_id": "p001",
+              "start": 0,
+              "end": 283
+            }
+          ],
+          "content_hash": "643e5c1696060066a8a94b16e8e06ddb8709fe6bcd1eaf9e7698d74d5914e88a"
+        },
+        {
+          "chunk_id": "DEMO01:c0001",
+          "doc_id": "DEMO01",
+          "title": "Market and limit orders",
+          "url": "demo:note-01",
+          "heading": "Order basics",
+          "score": 0.0,
+          "spans": [
+            {
+              "paragraph_id": "p001",
+              "start": 0,
+              "end": 214
+            }
+          ],
+          "content_hash": "858e6e5b2436769facae0044695a143fef2511723c1ac67601972d84aa15b79f"
+        }
+      ],
+      "error_type": null,
+      "latency_ms": 0.10315400140825659,
+      "stages_ms": {
+        "query_embedding_ms": 0.00019200160750187933,
+        "retrieval_ms": 0.08467499719699845,
+        "generation_ms": 0.006392998329829425,
+        "validation_ms": 0.004451998393051326
+      },
+      "usage": {},
+      "estimated_usd": 0.0,
+      "retry_count": 0,
+      "actual_models": []
+    }
+  ]
+}

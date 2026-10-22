@@ -1,0 +1,3 @@
+# Required for the official 400-token chunking configuration.
+# First use may download the cl100k_base vocabulary; prepare before freezing.
+tiktoken>=0.8,<1

@@ -1,0 +1,16 @@
+system = "rag"
+model = "gpt-5.4-mini-2026-03-17"
+embedding_model = "text-embedding-3-small"
+reasoning_effort = "none"
+max_output_tokens = 1000
+top_k = 3
+chunk_tokens = 400
+overlap_tokens = 60
+timeout_seconds = 30
+max_retries = 1
+# Local safety ceiling; not a provider-enforced billing cap.
+budget_usd = 10.0
+input_usd_per_million = 0.75
+output_usd_per_million = 4.50
+embedding_usd_per_million = 0.02
+pricing_checked_at = "2026-10-22"
