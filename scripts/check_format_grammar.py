@@ -5,7 +5,7 @@ import sys
 
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/'src'))
-from binance_doctalk.local_provider import local_answer_schema
+from binance_doctalk.local_provider import local_answer_schema, ABSTENTION_MESSAGES
 from binance_doctalk.schemas import validate_answer
 from lmformatenforcer import JsonSchemaParser, CharacterLevelParserConfig
 
@@ -29,7 +29,8 @@ def main():
             {'text':'A limit order can remain unfilled.','evidence_ids':['DEMO01:c0001']}]}),
         (False,{'status':'answered','reason':None,'message':'','claims':[
             {'text':'A limit order can remain unfilled.','evidence_ids':[]}]}),
-        (True,{'status':'abstained','reason':'out_of_scope','message':'Current account fees are outside scope.','claims':[]}),
+        (True,{'status':'abstained','reason':'out_of_scope','message':ABSTENTION_MESSAGES['out_of_scope'],'claims':[]}),
+        (True,{'status':'abstained','reason':'insufficient_evidence','message':ABSTENTION_MESSAGES['insufficient_evidence'],'claims':[]}),
     ]
     for grounded,answer in examples:
         schema=local_answer_schema(grounded,ids)
@@ -38,7 +39,11 @@ def main():
     invented={'status':'answered','reason':None,'message':'','claims':[
         {'text':'An invented citation.','evidence_ids':['INVENTED']}]}
     assert not accepts(json.dumps(invented),local_answer_schema(True,ids))
-    print('Grammar replay: all 4 captured failures blocked; 3 valid outputs accepted; invented ID blocked.')
+    hidden_answer={'status':'abstained','reason':'insufficient_evidence','message':'A factual answer hidden outside claims.','claims':[]}
+    assert not accepts(json.dumps(hidden_answer),local_answer_schema(True,ids)), 'Uncited prose can hide in abstention message'
+    assert accepts(json.dumps(examples[-1][1]),local_answer_schema(True,[]))
+    assert not accepts(json.dumps(examples[0][1]),local_answer_schema(True,[]))
+    print('Grammar replay: 4 captured failures blocked; 4 valid outputs accepted; invented IDs and uncited abstention prose blocked.')
 
 
 if __name__=='__main__':main()

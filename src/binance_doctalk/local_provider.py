@@ -16,18 +16,23 @@ from .schemas import Config
 
 QUERY_PREFIX = "Represent this sentence for searching relevant passages: "
 _RUNTIME_LOCK = threading.RLock()
+ABSTENTION_MESSAGES = {
+    "insufficient_evidence": "The available information is insufficient to answer this question.",
+    "out_of_scope": "This question is outside the assistant's educational scope.",
+}
 
 
 def local_answer_schema(grounded: bool, allowed_ids: list[str]) -> dict:
     """Encode the existing validator contract without deciding factual correctness."""
-    abstained = {"type": "object", "additionalProperties": False, "properties": {
+    abstentions = [{"type": "object", "additionalProperties": False, "properties": {
         "status": {"type": "string", "enum": ["abstained"]},
-        "reason": {"type": "string", "enum": ["insufficient_evidence", "out_of_scope"]},
-        "message": {"type": "string", "minLength": 1, "maxLength": 400},
+        "reason": {"type": "string", "enum": [reason]},
+        "message": {"type": "string", "enum": [message]},
         "claims": {"type": "array", "maxItems": 0, "items": {"type": "string"}},
     }, "required": ["status", "reason", "message", "claims"]}
+        for reason, message in ABSTENTION_MESSAGES.items()]
     if grounded and not allowed_ids:
-        return abstained
+        return {"anyOf": abstentions}
     citations = {"type": "array", "items": {"type": "string"}, "maxItems": 0}
     if grounded:
         citations = {"type": "array", "minItems": 1, "maxItems": len(allowed_ids),
@@ -40,7 +45,7 @@ def local_answer_schema(grounded: bool, allowed_ids: list[str]) -> dict:
                 "text": {"type": "string", "minLength": 1, "maxLength": 800},
                 "evidence_ids": citations}, "required": ["text", "evidence_ids"]}},
     }, "required": ["status", "reason", "message", "claims"]}
-    return {"anyOf": [answered, abstained]}
+    return {"anyOf": [answered, *abstentions]}
 
 
 @lru_cache(maxsize=1)
@@ -176,4 +181,5 @@ class LocalProvider:
         return {"provider": "huggingface_local", "model_revision": self.config.model_revision,
                 "embedding_revision": self.config.embedding_revision, "decoding": "greedy",
                 "structured_decoding": "lm-format-enforcer/json-schema/strict-field-order",
+                "abstention_messages": "fixed_by_reason_v1",
                 "compute_usd": None, "cost_basis": "API only; GPU compute not priced", **self.hardware}

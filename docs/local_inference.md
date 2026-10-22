@@ -34,7 +34,8 @@ prompts over 4096 tokens are rejected rather than silently truncated. Qwen uses 
 768 maximum output tokens, and a fixed seed; exact GPU reproducibility is not guaranteed.
 JSON Schema token constraints are applied during decoding using LM Format Enforcer 0.11.3.
 The local schema separates answered and abstained objects and restricts citation IDs to supplied
-chunks. The shared validator still rejects invalid/truncated output and duplicate citations;
+chunks. Abstention messages are fixed templates by reason, so factual prose cannot be hidden
+outside `claims`. The model still chooses answer versus abstention and the reason. The shared validator still rejects invalid/truncated output and duplicate citations;
 there is no automatic output repair. Grammar validity does not establish factual correctness.
 Models are process-cached so paired baseline/RAG providers share GPU weights.
 
