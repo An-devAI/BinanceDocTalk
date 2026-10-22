@@ -15,10 +15,19 @@ import zipfile
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 from package_source import source_archive
-from kaggle_task import cli_command, cli_environment, doctor, prepare, prepare_gpu, prepare_embedding
+from kaggle_task import cli_command, cli_environment, doctor, prepare, prepare_gpu, prepare_embedding, run_cli
 
 
 class KaggleBundleTests(unittest.TestCase):
+    def test_cli_zero_exit_push_rejection_is_not_reported_as_success(self):
+        rejected = SimpleNamespace(returncode=0, stdout="Kernel push error: Maximum batch GPU session count of 2 reached.\n", stderr="")
+        with patch("kaggle_task.subprocess.run", return_value=rejected), patch("builtins.print"):
+            with self.assertRaisesRegex(RuntimeError, "did not acknowledge"):
+                run_cli(["kaggle", "kernels", "push"], {}, require_push_ack=True)
+        accepted = SimpleNamespace(returncode=0, stdout="Kernel version 1 successfully pushed.\n", stderr="")
+        with patch("kaggle_task.subprocess.run", return_value=accepted), patch("builtins.print"):
+            self.assertIs(run_cli(["kaggle", "kernels", "push"], {}, require_push_ack=True), accepted)
+
     def test_owner_username_does_not_block_oauth_with_incomplete_legacy_auth(self):
         self.assertNotIn("KAGGLE_USERNAME", cli_environment({"KAGGLE_USERNAME": "owner"}))
         legacy = {"KAGGLE_USERNAME": "owner", "KAGGLE_KEY": "synthetic"}

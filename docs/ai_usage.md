@@ -44,4 +44,11 @@ actually occur, and retain the relevant diff/test evidence.
 - `find_spec('kaggle')` alone incorrectly treated the project's `kaggle/` namespace directory as an
   installed CLI. Detection now requires a real package origin/distribution, with a regression test.
 
+- Kaggle CLI 2.2.4 returned exit code zero while printing a server-side maximum GPU-session
+  rejection. The helper now requires the explicit successful-version acknowledgement and tests
+  both rejection and acceptance; an accepted process exit alone is not a remote-run result.
+- The indexed web-extract importer initially interpreted an indented code comment as a second
+  article title. The import failed without creating a corpus; code lines are now excluded before
+  heading parsing, with a synthetic regression test.
+
 These were assistant-discovered corrections. They are not claims of personal human debugging work.

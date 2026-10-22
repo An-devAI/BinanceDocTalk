@@ -246,6 +246,21 @@ def prepare_embedding(owner: str, output: Path) -> dict:
     return {**result, "kernel": metadata["id"], "gpu": False}
 
 
+def run_cli(command: list[str], env: dict, require_push_ack: bool = False):
+    result = subprocess.run(command, env=env, capture_output=True, text=True)
+    output = result.stdout + result.stderr
+    for name in ["KAGGLE_API_TOKEN", "KAGGLE_KEY"]:
+        if env.get(name):
+            output = output.replace(env[name], "[REDACTED]")
+    print(output, end="")
+    if result.returncode:
+        raise RuntimeError(f"Kaggle CLI failed with exit code {result.returncode}")
+    # CLI 2.2.4 prints server-side push rejection but can still return exit code zero.
+    if require_push_ack and not re.search(r"Kernel version \d+ successfully pushed\.", result.stdout):
+        raise RuntimeError("Kaggle did not acknowledge a successful push; no run was started")
+    return result
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("command", choices=["doctor", "prepare", "push", "status", "output"])
@@ -287,7 +302,7 @@ def main():
         command += ["kernels", "output", metadata["id"], "-p", str(args.download_to)]
         if args.file_pattern:
             command += ["--file-pattern", args.file_pattern]
-    subprocess.run(command, env=cli_environment(env), check=True)
+    run_cli(command, cli_environment(env), require_push_ack=args.command == "push")
 
 
 if __name__ == "__main__":
