@@ -1,0 +1,12 @@
+{
+  "created_at": "2026-10-22T15:52:42.307623+00:00",
+  "python": "3.12.3",
+  "streamlit": "1.66.1",
+  "tiktoken": "0.14.0",
+  "streamlit_initial_render": true,
+  "offline_answer_with_citation": true,
+  "out_of_scope_abstention": true,
+  "actual_unicode_token_offsets": true,
+  "method": "Streamlit AppTest and tokenizer execution; no browser visual QA",
+  "llm_called": false
+}

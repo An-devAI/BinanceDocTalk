@@ -67,18 +67,19 @@ For the optional Streamlit interface:
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
-python -m pip install -r requirements-ui.txt
+python -m pip install -r requirements-ui.lock.txt
 streamlit run app.py
 ```
 
-The core `uv.lock` has no runtime dependencies. Optional UI/tokenizer requirements are declared
-separately and **not transitively locked or installed in the implementation environment**.
-Before a real study, lock them in your environment and archive the actual versions, for example:
+The core `uv.lock` has no runtime dependencies. The optional UI/tokenizer stack is transitively
+pinned in `requirements-ui.lock.txt` for Python 3.12 on Linux. Streamlit 1.66.1 and tiktoken 0.14.0
+were actually installed and exercised through Streamlit AppTest (answer, citation and abstention).
+This is runtime testing, not browser visual QA. Other platforms can resolve the separate input
+requirements. The optional local-model stack has pinned model revisions and top-level package
+versions; the actual Kaggle environment is recorded with its run evidence.
 
 ```bash
-uv pip compile requirements-ui.txt requirements-tokenizer.txt -o requirements-experiment.lock
-uv pip sync requirements-experiment.lock
-python -m pip freeze > artifacts/local/environment.txt
+python scripts/check_optional_ui.py
 ```
 
 ## Problem and scope
@@ -120,14 +121,33 @@ separately. Provider errors and rejected citations never count as successful kno
 To keep the core runnable without package downloads, dataclasses and explicit validation replace
 Pydantic, and a small REST adapter replaces the OpenAI SDK. TOML replaces YAML. Dense dot products
 and BM25 use the standard library at this scale. An optional Streamlit UI is included alongside
-the dependency-free UI. Official experiments still use `cl100k_base` chunking via optional tiktoken;
-the offline preview explicitly records its different `regex_word_v1` tokenizer.
+the dependency-free UI. Kaggle configurations use the BGE tokenizer so 400-token chunks fit the
+embedding model; optional OpenAI configurations use `cl100k_base`. The offline preview explicitly
+records its different `regex_word_v1` tokenizer. Local Qwen generation uses a GPU while BGE runs
+on CPU, and paired experiment arms share the loaded model weights.
 
 These changes reduce installation requirements. They do not turn the synthetic preview into a
 substitute for the official RAG experiment. Dependencies or frameworks should be added only for a
 measured need.
 
-## Official sources and paid API workflow
+## Official-source study with local models
+
+Human review is pending by the owner’s choice. The retrieved snapshots and review packets are
+local; see [collection and review](docs/collection_workflow.md). After actual review, use a GPU
+runtime with `requirements-local-model.txt` installed:
+
+```bash
+python scripts/doctalk.py build --corpus data/local/corpus.reviewed.v1.jsonl \
+  --config configs/kaggle-rag.toml --output data/local/index.local.v1.json
+python scripts/doctalk.py ask "Why can a stop-limit order remain unfilled?" \
+  --config configs/kaggle-rag.toml --index data/local/index.local.v1.json
+```
+
+No OpenAI key is used for this backend. Continue with the paired k=3/k=5 configurations and review,
+freeze, and grading procedures in [local inference](docs/local_inference.md) and
+[evaluation](docs/evaluation.md). A GPU notebook is a batch execution environment, not public web hosting.
+
+## Optional OpenAI workflow
 
 1. Read [data rights and provenance](docs/dataset_card.md). Check applicable terms and permitted
    collection/API processing yourself. No redistribution permission is asserted by this repository.

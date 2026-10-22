@@ -26,7 +26,8 @@ assertions validate the metric implementation; they are not project accuracy or 
   containing 481 paragraphs. These may be cached and remain pending human review; no reviewed
   official corpus is claimed. See `docs/collection_workflow.md`.
 - No human gold annotation, official held-out inference or semantic output grading is complete.
-- Streamlit and tiktoken are declared optional requirements but were not installed here.
+- Streamlit/tiktoken were installed and exercised with AppTest and real tokenizer calls;
+  see `docs/local_ui_run.json`. No live browser visual QA is claimed.
 - No real browser UI inspection: browser control reported no available browser, and local browser
   process startup was blocked. The poster is a rendered CLI presentation, not a browser screenshot.
 - Online hosting has not been performed. GitHub Actions passed on Python 3.11–3.13 for commit
