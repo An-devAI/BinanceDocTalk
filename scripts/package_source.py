@@ -13,7 +13,7 @@ def public_files(include_media: bool = True) -> list[Path]:
     names = ["README.md", "LICENSE", "NOTICE.md", "pyproject.toml", "uv.lock", ".gitignore",
              ".env.example", "app.py", "web_app.py", "requirements-ui.txt",
              "requirements-tokenizer.txt", "requirements-kaggle.txt", "requirements-local-model.txt", "data/LICENSE.md",
-             "data/manifest.v1.jsonl", "artifacts/results/README.md", ".github/workflows/ci.yml"]
+             "data/manifest.v1.jsonl", "data/corpus.web-extract.v1.manifest.jsonl", "artifacts/results/README.md", ".github/workflows/ci.yml"]
     paths = [ROOT / name for name in names if (ROOT / name).is_file()]
     for pattern in ["src/binance_doctalk/*.py", "src/binance_doctalk/ui.html", "tests/*.py",
                     "scripts/*.py", "scripts/*.sh", "configs/*.toml", "docs/*.md", "docs/kaggle_run.json", "docs/source_collection_run.json",

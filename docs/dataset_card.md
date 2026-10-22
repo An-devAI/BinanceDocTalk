@@ -4,7 +4,8 @@
 
 | Asset | Location | Version/status |
 |---|---|---|
-| Candidate official-source manifest | `data/manifest.v1.jsonl` | 20 URLs; collection attempted on 2026-10-22, zero usable articles |
+| Candidate official-source manifest | `data/manifest.v1.jsonl` | 20 URLs; direct HTTP attempt failed; web-reader snapshot import recorded separately |
+| Retrieved source snapshots | Local `corpus.web-extract.v1.jsonl`; public metadata manifest | 20 potentially cached web-reader extracts, 481 paragraphs; human review pending |
 | Benchmark | `data/eval/drafts/*.jsonl` | 80 AI-authored drafts, no human-reviewed gold evidence |
 | Original preview corpus | `data/demo/notes.jsonl` | 12 synthetic notes; not official Binance material |
 

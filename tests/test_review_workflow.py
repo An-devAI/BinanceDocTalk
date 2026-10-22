@@ -10,6 +10,7 @@ from unittest.mock import patch
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT/'scripts'))
 from import_sources import import_snapshots
+from import_web_extracts import extract_snapshot
 from prepare_review import prepare
 from binance_doctalk.ingest import collect
 from binance_doctalk.io import read_jsonl, write_jsonl
@@ -68,6 +69,36 @@ class ReviewWorkflowTests(unittest.TestCase):
             self.assertEqual(doc['review_status'],'pending_human_review')
             self.assertEqual(doc['fetched_at'],'2026-01-01T12:00:00+00:00')
             self.assertEqual(doc['collection_method'],'manual_html_import')
+
+    def test_indexed_snapshot_requires_complete_provenance_and_retains_cache_status(self):
+        raw = ("Original test fixture (https://www.binance.com/en/academy/articles/unit-test)\n"
+               "Total lines: 8\nL0: # Test title\nL1: Updated Jan 1, 2026\nL2: ## Keep\n"
+               "L3: A synthetic paragraph with 【1†inline linked text】 for testing.\n"
+               "L4:     # A code comment is not a second article title\n"
+               "L5: ## Further Reading\nL6: Do not include this unrelated paragraph.\nL7: \n")
+        source = {'doc_id':'TEST','url':'https://www.binance.com/en/academy/articles/unit-test'}
+        meta = {'fetched_at':'2026-01-01T12:00:00+00:00'}
+        row = extract_snapshot(raw, source, meta)
+        self.assertEqual(len(row['paragraphs']), 1)
+        self.assertIn('inline linked text', row['paragraphs'][0]['text'])
+        self.assertEqual(row['paragraph_provenance'][0]['snapshot_line'], 3)
+        self.assertEqual(row['review_status'], 'pending_human_review')
+        self.assertTrue(row['possibly_cached'])
+        self.assertIn('upstream crawl time unknown', row['timestamp_semantics'])
+        with self.assertRaisesRegex(ValueError, 'incomplete'):
+            extract_snapshot(raw.replace('L7: \n',''), source, meta)
+
+    def test_snapshot_scope_includes_descendants_but_excludes_procedural_code(self):
+        raw = ("Original test fixture (https://www.binance.com/en/academy/articles/unit-test)\n"
+               "Total lines: 9\nL0: # Test title\nL1: ## Allowed\nL2: ### Detail\n"
+               "L3: A useful synthetic explanation of an order parameter.\n"
+               "L4: Code Snippet\nL5: This procedural content is excluded from the corpus.\n"
+               "L6: ## Other\nL7: Another paragraph outside the selected parent section.\nL8: Share Posts\n")
+        source = {'doc_id':'TEST','url':'https://www.binance.com/en/academy/articles/unit-test',
+                  'include_headings':['Allowed']}
+        row = extract_snapshot(raw, source, {'fetched_at':'2026-01-01T12:00:00+00:00'})
+        self.assertEqual(len(row['paragraphs']), 1)
+        self.assertEqual(row['paragraphs'][0]['heading'],'Detail')
 
     def test_http_202_does_not_create_an_official_corpus(self):
         class Response:

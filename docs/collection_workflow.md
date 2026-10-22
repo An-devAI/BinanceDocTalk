@@ -8,6 +8,31 @@ corpus was created. A representative direct page request returned HTTP 202 with 
 the article paths at the time of the attempt; this is not a content redistribution license.
 No challenge bypass, proxy rotation, or automatic review approval was used.
 
+## Retrieved web-reader snapshots
+
+The web reader subsequently returned complete indexed text for all 20 official sources.
+These were imported into ignored `data/local/corpus.web-extract.v1.jsonl`: 481 paragraphs,
+all pending human review. The raw indexed text is retained in `data/local/web-extracts/`.
+The public `data/corpus.web-extract.v1.manifest.jsonl` contains only metadata and hashes.
+
+These extracts may be cached. `fetched_at` records our snapshot retrieval time, not a claim
+about the upstream crawler’s exact fetch time or the live page’s freshness. Each paragraph
+retains its indexed snapshot line in local provenance. The importer rejects missing lines,
+removes navigation/related-content blocks and procedural code, and preserves scope filters.
+
+```bash
+python3 scripts/import_web_extracts.py --folder data/local/web-extracts \
+  --output data/local/corpus.web-extract.v2.jsonl
+python3 scripts/prepare_review.py --corpus data/local/corpus.web-extract.v1.jsonl \
+  --output artifacts/local/review-pack-v3
+```
+
+The already generated `artifacts/local/review-pack-v2/` includes the actual 20 snapshots and
+80 drafts, with evidence candidates per required point. The packets do not approve any record.
+Raw web-reader extracts cannot be reconstructed by an HTTP-only script when the website blocks
+that collector. Recollect with an authorized web reader or use the HTML import route below;
+new source content requires a new manifest/hash and evidence review.
+
 ## Import snapshots obtained through ordinary authorized access
 
 Use real saved HTML, not an empty challenge page, PDF printout renamed as HTML, or an AI summary.
@@ -38,7 +63,7 @@ It contains all 80 drafts and proposed source links, with an explicit missing-co
 ## Record actual review decisions
 
 ```bash
-python3 scripts/review_dataset.py sources --input data/local/corpus.imported.v1.jsonl \
+python3 scripts/review_dataset.py sources --input data/local/corpus.web-extract.v1.jsonl \
   --output data/local/corpus.reviewed.v1.jsonl --reviewer 'Your actual name'
 python3 scripts/review_dataset.py questions --input data/eval/drafts/smoke.jsonl \
   --output data/eval/v1/smoke.jsonl --corpus data/local/corpus.reviewed.v1.jsonl \
