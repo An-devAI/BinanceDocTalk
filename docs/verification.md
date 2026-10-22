@@ -27,7 +27,8 @@ assertions validate the metric implementation; they are not project accuracy or 
 - Streamlit and tiktoken are declared optional requirements but were not installed here.
 - No real browser UI inspection: browser control reported no available browser, and local browser
   process startup was blocked. The poster is a rendered CLI presentation, not a browser screenshot.
-- Remote GitHub Actions, GitHub publication and online hosting have not been run.
+- The implementation was pushed to GitHub on `main`; remote Actions results and online hosting
+  have not been verified.
 
 ## Kaggle account and execution state
 

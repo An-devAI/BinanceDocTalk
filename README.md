@@ -18,7 +18,7 @@ and paired evaluation tooling are implemented. **The official-source quality stu
 | Official corpus collection | Not collected; source permission and human review steps remain pending |
 | Live OpenAI integration | Implemented and mock-tested; no API key available for a live check |
 | Held-out quality, latency, cost | **Not measured**; no claims of improvement |
-| GitHub publication | Local `main` repository initialized; not pushed to GitHub |
+| GitHub repository | Pushed to [An-devAI/BinanceDocTalk](https://github.com/An-devAI/BinanceDocTalk); official quality study remains pending |
 
 See [verification evidence](docs/verification.md), [evaluation protocol](docs/evaluation.md),
 and [remaining acceptance steps](docs/roadmap.md). Unit tests and the offline preview are **not**

@@ -30,5 +30,6 @@ source review and annotation time vary, so remove UI polish/hosting before reduc
 - [x] Initialize a real Git checkout on `main`; use an honest initial implementation commit.
 - [ ] Publish the GitHub repository only after these checks; hosting is optional.
 
-A local Git repository is initialized on `main`. No GitHub remote has been configured or pushed.
+The implementation is pushed on `main` to https://github.com/An-devAI/BinanceDocTalk.
+This is an implementation preview; the official-source study and release checks above remain pending.
 The initial commit records the existing implementation; subsequent commits should record real changes.
