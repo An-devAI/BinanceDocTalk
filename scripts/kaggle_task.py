@@ -229,10 +229,28 @@ subprocess.run([sys.executable, "scripts/gpu_smoke.py", str(work / "gpu-smoke.js
     return {**result, "kernel": metadata["id"], "gpu": True}
 
 
+def prepare_embedding(owner: str, output: Path) -> dict:
+    result = prepare_gpu(owner, output)
+    path = output / "binance_doctalk.ipynb"
+    notebook = json.loads(path.read_text())
+    notebook["cells"][0] = cell("# BinanceDocTalk — CPU embedding integration\n\nActual pinned BGE embedding/tokenizer check on original notes. No generation or official-source evaluation.")
+    notebook["cells"][-2] = cell('subprocess.run([sys.executable, "scripts/embedding_smoke.py", str(work / "embedding-smoke.json")], check=True)\n', True)
+    notebook["cells"][-1] = cell("Outputs: `embedding-smoke.json`, `core-tests.txt`, and `benchmark-audit.json`. This validates embedding integration, not answer quality.")
+    path.write_text(json.dumps(notebook, indent=2)+"\n")
+    meta_path = output / "kernel-metadata.json"
+    metadata = json.loads(meta_path.read_text())
+    metadata.update(id=f"{owner}/binancedoctalk-embedding-{result['source_sha256'][:8]}",
+                    title="BinanceDocTalk Embedding " + result["source_sha256"][:8], enable_gpu=False,
+                    machine_shape="")
+    meta_path.write_text(json.dumps(metadata, indent=2)+"\n")
+    return {**result, "kernel": metadata["id"], "gpu": False}
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("command", choices=["doctor", "prepare", "push", "status", "output"])
     parser.add_argument("--owner")
+    parser.add_argument("--embedding-smoke", action="store_true", help="Prepare a CPU-only real BGE check")
     parser.add_argument("--gpu", action="store_true", help="Prepare private Qwen GPU integration notebook")
     parser.add_argument("--file-pattern", help="Limit downloaded outputs using a filename regex")
     parser.add_argument("--folder", type=Path, default=ROOT / "artifacts/local/kaggle/kernel")
@@ -245,7 +263,8 @@ def main():
     env = environment()
     if args.command == "prepare":
         owner = args.owner or env.get("KAGGLE_USERNAME") or "YOUR_KAGGLE_USERNAME"
-        print(json.dumps((prepare_gpu if args.gpu else prepare)(owner, args.folder), indent=2))
+        builder = prepare_embedding if args.embedding_smoke else prepare_gpu if args.gpu else prepare
+        print(json.dumps(builder(owner, args.folder), indent=2))
         return
     ready = doctor(check_auth=True)
     if not (ready["cli_available"] and ready["credentials_present"] and ready["dns_resolves"]
@@ -261,7 +280,7 @@ def main():
         raise ValueError("Set a real owner and preserve private kernel visibility")
     command = cli_command()
     if args.command == "push":
-        command += ["kernels", "push", "-p", str(args.folder)]
+        command += ["kernels", "push", "-p", str(args.folder), "--timeout", "3600"]
     elif args.command == "status":
         command += ["kernels", "status", metadata["id"]]
     else:

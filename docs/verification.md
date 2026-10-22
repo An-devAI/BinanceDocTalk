@@ -4,7 +4,7 @@
 
 | Check | Observed result |
 |---|---|
-| Core and integration suite | 61 tests pass on Python 3.12.3 |
+| Core and integration suite | 63 tests pass on Python 3.12.3 |
 | Benchmark structural audit | 80 drafts; splits 8/32/40; labels 56/24; zero declared human reviews |
 | CLI demonstration | Actual original-note retrieval, false-premise example and out-of-scope response |
 | API transport | Mocked structured generation, embedding order, usage, 401/no retry, 429/one retry |
@@ -54,6 +54,19 @@ Downloaded run logs and outputs are under ignored `artifacts/local/kaggle/`. A s
 summary is in `docs/kaggle_run.json`. The submitted snapshot predates documentation updates and a
 slug-generation correction; its hash identifies that exact executed source, not the current tree.
 This is a successful infrastructure smoke run, not the official held-out study.
+
+## Real embedding integration on Kaggle CPU
+
+Private run `annguyencherry/binancedoctalk-embedding-a52f301e` completed on Python 3.13.15.
+All 61 tests in its submitted snapshot passed. Actual BGE inference produced 384-dimensional
+normalized vectors for 12 original-note chunks; paragraph spans were verified. Two query embedding
+plus retrieval calls took 32.85 ms and 26.42 ms after setup. Setup took 54.36 seconds; these two
+observations are integration timings, not a representative latency benchmark or answer-quality score.
+Pinned Transformers 4.57.6 and Sentence Transformers 5.2.0 worked with torch 2.11.0+cpu.
+See `docs/kaggle_embedding_run.json` for actual outputs and source hash.
+
+The separate Qwen GPU notebook is still queued; generation is not yet verified. Human review
+remains pending at the owner’s explicit request, and no held-out inference has been performed.
 
 ## Reproduce local checks
 

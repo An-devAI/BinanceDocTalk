@@ -15,7 +15,7 @@ import zipfile
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 from package_source import source_archive
-from kaggle_task import cli_command, cli_environment, doctor, prepare, prepare_gpu
+from kaggle_task import cli_command, cli_environment, doctor, prepare, prepare_gpu, prepare_embedding
 
 
 class KaggleBundleTests(unittest.TestCase):
@@ -101,6 +101,21 @@ class KaggleBundleTests(unittest.TestCase):
             self.assertIn("/kaggle/temp", source)
             self.assertIn("scripts/gpu_smoke.py", source)
             self.assertNotIn("RUN_PAID_OPENAI_PROBE", source)
+
+    def test_embedding_notebook_never_loads_generation_weights(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder)
+            result = prepare_embedding("unit-test-owner", path)
+            notebook = json.loads((path/"binance_doctalk.ipynb").read_text())
+            metadata = json.loads((path/"kernel-metadata.json").read_text())
+            self.assertTrue(metadata["is_private"])
+            self.assertFalse(metadata["enable_gpu"])
+            self.assertFalse(result["gpu"])
+            self.assertNotIn("scripts/gpu_smoke.py", json.dumps(notebook))
+            self.assertIn("scripts/embedding_smoke.py", json.dumps(notebook))
+            for index,item in enumerate(notebook["cells"]):
+                if item["cell_type"] == "code":
+                    compile("".join(item["source"]), f"embedding-{index}", "exec")
 
     def test_email_or_token_cannot_be_used_as_owner(self):
         with tempfile.TemporaryDirectory() as folder:

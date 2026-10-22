@@ -14,7 +14,7 @@ source review and annotation time vary, so remove UI polish/hosting before reduc
 | 6 | Error analysis and clean-environment reproduction | Source version limits explicit; saved-output report reproduced |
 | 7 | Review release, record final demo, prepare CV and publish | Public artifacts sanitized, licence split clear, honest commits |
 
-## Before GitHub publication
+## Before declaring the official-source portfolio study complete
 
 - [ ] Confirm source and external API processing rights; no raw source redistribution without permission.
 - [ ] Install and lock optional dependencies; record environment versions.
@@ -28,8 +28,12 @@ source review and annotation time vary, so remove UI polish/hosting before reduc
 - [ ] Record an official-corpus demo; label any offline preview clearly.
 - [ ] Inspect all files for secrets, account data and copied source text.
 - [x] Initialize a real Git checkout on `main`; use an honest initial implementation commit.
-- [ ] Publish the GitHub repository only after these checks; hosting is optional.
+- [ ] Publish a reviewed official-study release after these checks; hosting is optional.
 
 The implementation is pushed on `main` to https://github.com/An-devAI/BinanceDocTalk.
 This is an implementation preview; the official-source study and release checks above remain pending.
 The initial commit records the existing implementation; subsequent commits should record real changes.
+
+On 2026-10-22 the owner explicitly chose to leave human source/gold review pending while technical
+integration is completed. The 20 cached source snapshots and 80-question review packets are ready
+locally. Do not run the held-out study or claim reviewed quality metrics until that review occurs.

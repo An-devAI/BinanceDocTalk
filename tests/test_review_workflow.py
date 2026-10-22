@@ -10,6 +10,7 @@ from unittest.mock import patch
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT/'scripts'))
 from import_sources import import_snapshots
+from audit_splits import audit
 from import_web_extracts import extract_snapshot
 from prepare_review import prepare
 from binance_doctalk.ingest import collect
@@ -99,6 +100,21 @@ class ReviewWorkflowTests(unittest.TestCase):
         row = extract_snapshot(raw, source, {'fetched_at':'2026-01-01T12:00:00+00:00'})
         self.assertEqual(len(row['paragraphs']), 1)
         self.assertEqual(row['paragraphs'][0]['heading'],'Detail')
+
+    def test_split_overlap_audit_flags_candidates_without_changing_labels(self):
+        with tempfile.TemporaryDirectory() as folder:
+            directory=Path(folder)
+            for i,(split,question) in enumerate([
+                    ('smoke','What is spot trading?'),
+                    ('dev','What is spot market trading?'),
+                    ('test','Explain the difference between a blockchain token and a native coin.')]):
+                row=dict(read_jsonl(ROOT/'data/eval/drafts/smoke.jsonl')[0])
+                row.update(question_id=f'FAKE-{i}',family_id=f'family-{i}',split=split,question=question)
+                write_jsonl(directory/f'{split}.jsonl',[row])
+            result=audit(directory)
+            self.assertGreaterEqual(result['flagged_cross_split_pairs'],1)
+            self.assertTrue(all(c['human_decision'] is None for c in result['candidates']))
+            self.assertEqual(result['structural_audit']['reviewed'],0)
 
     def test_http_202_does_not_create_an_official_corpus(self):
         class Response:

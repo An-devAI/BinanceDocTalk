@@ -1,7 +1,6 @@
 """Build local, read-only review packets; never approve sources or questions."""
 from __future__ import annotations
 import argparse
-from dataclasses import asdict
 from html import escape
 from pathlib import Path
 import sys

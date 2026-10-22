@@ -19,6 +19,11 @@ The GPU smoke uses original synthetic notes and three integration questions with
 arms. It validates real inference and JSON/citation structure, not semantic accuracy or official
 Binance answer quality. It does not consume development or held-out questions.
 
+Real BGE integration completed on a private Kaggle CPU notebook; see
+[`kaggle_embedding_run.json`](kaggle_embedding_run.json). Qwen GPU inference is tracked separately.
+To reproduce the CPU check, prepare with `--embedding-smoke` instead of `--gpu` and use a separate folder.
+Push commands cap execution at 3,600 seconds.
+
 For official data, use `build`, `ask`, `retrieval-eval`, `freeze`, and `evaluate` with
 `--config configs/kaggle-rag.toml` or the paired `--baseline-config configs/kaggle-baseline.toml`
 and `--rag-config configs/kaggle-rag.toml`. Existing source/gold review gates still apply.
@@ -36,3 +41,14 @@ separately and excluded from per-query timing. All raw private outputs remain ig
 
 Model cards: https://huggingface.co/Qwen/Qwen3-4B-Instruct-2507 and
 https://huggingface.co/BAAI/bge-small-en-v1.5. Their licenses are separate from project code and Binance content.
+
+## Prepared development configurations
+
+The k=3 pair is `configs/kaggle-baseline.toml` / `configs/kaggle-rag.toml`; the k=5 pair is
+`configs/kaggle-k5-baseline.toml` / `configs/kaggle-k5-rag.toml`. Within a pair only `system` differs.
+The index is reusable across k because embedding/chunk settings are identical. Choose using the
+predeclared development criterion in `docs/evaluation.md`; freeze only the chosen pair.
+
+`python3 scripts/audit_splits.py --output artifacts/local/split-audit.json` produces a ranked
+shortlist of cross-split lexical similarities for semantic inspection. Scores below a threshold
+are not evidence of independence. No questions or labels are automatically changed.
