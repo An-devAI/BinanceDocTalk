@@ -1,4 +1,4 @@
-"""Prepare, push, monitor and download a private CPU Kaggle smoke notebook."""
+"""Prepare, push, monitor and download a private CPU or GPU Kaggle smoke notebook."""
 
 from __future__ import annotations
 
@@ -203,10 +203,38 @@ else:
             "private": True, "gpu": False, "paid_api_calls_enabled": False, "remote_execution": "not_started"}
 
 
+def prepare_gpu(owner: str, output: Path) -> dict:
+    result = prepare(owner, output)
+    path = output / "binance_doctalk.ipynb"
+    notebook = json.loads(path.read_text())
+    notebook["cells"][0] = cell("# BinanceDocTalk — private GPU integration\n\nPinned Qwen inference on original synthetic notes. NOT an official-source quality evaluation. No paid API calls.")
+    install = """# Keep model caches out of notebook outputs; preserve Kaggle's CUDA-enabled PyTorch.
+os.environ["HF_HOME"] = "/kaggle/temp/doctalk-huggingface"
+os.environ["TOKENIZERS_PARALLELISM"] = "false"
+os.environ["DOCTALK_SOURCE_SHA256"] = EXPECTED_SHA256
+subprocess.run([sys.executable, "-m", "pip", "install", "-q", "-r", "requirements-local-model.txt"], check=True)
+"""
+    run = """# One process reuses the same model for baseline and RAG. Strict validation remains enabled.
+subprocess.run([sys.executable, "scripts/gpu_smoke.py", str(work / "gpu-smoke.json")], check=True)
+"""
+    notebook["cells"] = notebook["cells"][:2] + [cell(install, True)] + notebook["cells"][2:4] + [cell(run, True),
+        cell("Outputs: `gpu-smoke.json`, `core-tests.txt`, and `benchmark-audit.json`. GPU results use original synthetic notes and must not be cited as official-source benchmark scores.")]
+    path.write_text(json.dumps(notebook, indent=2) + "\n")
+    metadata_path = output / "kernel-metadata.json"
+    metadata = json.loads(metadata_path.read_text())
+    metadata.update(id=f"{owner}/binancedoctalk-gpu-{result['source_sha256'][:8]}",
+                    title="BinanceDocTalk GPU " + result["source_sha256"][:8], enable_gpu=True,
+                    machine_shape="NvidiaTeslaT4")
+    metadata_path.write_text(json.dumps(metadata, indent=2)+"\n")
+    return {**result, "kernel": metadata["id"], "gpu": True}
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("command", choices=["doctor", "prepare", "push", "status", "output"])
     parser.add_argument("--owner")
+    parser.add_argument("--gpu", action="store_true", help="Prepare private Qwen GPU integration notebook")
+    parser.add_argument("--file-pattern", help="Limit downloaded outputs using a filename regex")
     parser.add_argument("--folder", type=Path, default=ROOT / "artifacts/local/kaggle/kernel")
     parser.add_argument("--check-auth", action="store_true")
     parser.add_argument("--download-to", type=Path, default=ROOT / "artifacts/local/kaggle/output")
@@ -217,7 +245,7 @@ def main():
     env = environment()
     if args.command == "prepare":
         owner = args.owner or env.get("KAGGLE_USERNAME") or "YOUR_KAGGLE_USERNAME"
-        print(json.dumps(prepare(owner, args.folder), indent=2))
+        print(json.dumps((prepare_gpu if args.gpu else prepare)(owner, args.folder), indent=2))
         return
     ready = doctor(check_auth=True)
     if not (ready["cli_available"] and ready["credentials_present"] and ready["dns_resolves"]
@@ -238,6 +266,8 @@ def main():
         command += ["kernels", "status", metadata["id"]]
     else:
         command += ["kernels", "output", metadata["id"], "-p", str(args.download_to)]
+        if args.file_pattern:
+            command += ["--file-pattern", args.file_pattern]
     subprocess.run(command, env=cli_environment(env), check=True)
 
 

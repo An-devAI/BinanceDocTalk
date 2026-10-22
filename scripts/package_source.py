@@ -12,7 +12,7 @@ ROOT = Path(__file__).resolve().parents[1]
 def public_files(include_media: bool = True) -> list[Path]:
     names = ["README.md", "LICENSE", "NOTICE.md", "pyproject.toml", "uv.lock", ".gitignore",
              ".env.example", "app.py", "web_app.py", "requirements-ui.txt",
-             "requirements-tokenizer.txt", "requirements-kaggle.txt", "data/LICENSE.md",
+             "requirements-tokenizer.txt", "requirements-kaggle.txt", "requirements-local-model.txt", "data/LICENSE.md",
              "data/manifest.v1.jsonl", "artifacts/results/README.md", ".github/workflows/ci.yml"]
     paths = [ROOT / name for name in names if (ROOT / name).is_file()]
     for pattern in ["src/binance_doctalk/*.py", "src/binance_doctalk/ui.html", "tests/*.py",

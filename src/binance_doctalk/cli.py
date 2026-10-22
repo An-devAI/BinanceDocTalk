@@ -14,7 +14,7 @@ from .evaluation import (freeze_experiment, make_grade_sheet, retrieval_evaluati
                          run_experiment, score_predictions, validate_questions)
 from .ingest import collect, load_documents
 from .io import load_env, read_jsonl, write_json, write_jsonl
-from .provider import OpenAIProvider
+from .provider import create_provider
 from .retrieval import Index, build_index
 from .schemas import Config
 
@@ -134,7 +134,7 @@ def execute(args) -> object:
             raise ValueError("Index already exists; choose a new version")
         documents = load_documents(args.corpus, args.allow_unreviewed)
         config = Config.load(args.config)
-        provider = None if args.lexical_only else OpenAIProvider(config)
+        provider = None if args.lexical_only else create_provider(config)
         index = build_index(documents, config, provider,
                             reviewed=all(r.get("review_status") == "human_reviewed"
                                          for r in read_jsonl(args.corpus)))
@@ -142,7 +142,7 @@ def execute(args) -> object:
         return index.metadata
     if args.command == "ask":
         config = Config.load(args.config)
-        provider = OpenAIProvider(config, args.ledger)
+        provider = create_provider(config, args.ledger)
         index = Index.load(args.index) if config.system == "rag" else None
         return AnswerService(index, config, provider).ask(args.question)
     if args.command == "audit-benchmark":
@@ -159,7 +159,7 @@ def execute(args) -> object:
     if args.command == "evaluate":
         return run_experiment(ROOT, read_jsonl(args.questions), Index.load(args.index),
             [Config.load(args.baseline_config), Config.load(args.rag_config)],
-            lambda config: OpenAIProvider(config, args.ledger), args.output, args.split,
+            lambda config: create_provider(config, args.ledger), args.output, args.split,
             args.freeze, args.allow_draft)
     if args.command == "grade-sheet":
         if args.output.exists():
@@ -173,7 +173,7 @@ def execute(args) -> object:
         write_json(args.output, report)
         return report
     if args.command == "retrieval-eval":
-        provider = OpenAIProvider(Config.load(args.config)) if args.dense else None
+        provider = create_provider(Config.load(args.config)) if args.dense else None
         report = retrieval_evaluation(Index.load(args.index), read_jsonl(args.questions), provider)
         write_json(args.output, report)
         return report

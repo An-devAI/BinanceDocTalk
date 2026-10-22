@@ -101,6 +101,7 @@ def build_index(documents: list[Document], config: Config, provider=None,
         "tokenizer": config.tokenizer, "chunk_tokens": config.chunk_tokens,
         "overlap_tokens": config.overlap_tokens, "human_reviewed": reviewed,
         "embedding_model": config.embedding_model if provider else None,
+        "embedding_revision": config.embedding_revision if provider else "",
     }
     vectors = None
     if provider:

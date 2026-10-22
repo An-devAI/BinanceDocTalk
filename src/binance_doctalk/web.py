@@ -11,7 +11,7 @@ from urllib.parse import urlparse
 
 from .answering import AnswerService
 from .cli import benchmark_status, demo_service
-from .provider import OpenAIProvider
+from .provider import create_provider
 from .retrieval import Index
 from .schemas import Config
 
@@ -52,7 +52,7 @@ def serve(port: int = 8765, index_path: Path | None = None,
                                  content_type="text/html")
             if path == "/api/status":
                 return self.send({"api_key_configured": bool(os.getenv("OPENAI_API_KEY")),
-                                  "live_index_loaded": live_index is not None,
+                                  "provider": config.provider, "live_index_loaded": live_index is not None,
                                   "demo": demo.index.metadata, "model": config.model,
                                   "quality_results": "saved_report_available" if report else "not_measured",
                                   "benchmark": benchmark_status()})
@@ -80,7 +80,7 @@ def serve(port: int = 8765, index_path: Path | None = None,
                     service = demo
                 else:
                     selected = replace(config, system=mode)
-                    service = AnswerService(live_index, selected, OpenAIProvider(selected))
+                    service = AnswerService(live_index, selected, create_provider(selected))
                 result = service.ask(payload.get("question", ""), demo=mode == "demo")
                 # Local UI can inspect context. Evaluation artifacts deliberately omit raw context.
                 for hit in result["retrieved"]:

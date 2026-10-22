@@ -15,7 +15,7 @@ import zipfile
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 from package_source import source_archive
-from kaggle_task import cli_command, cli_environment, doctor, prepare
+from kaggle_task import cli_command, cli_environment, doctor, prepare, prepare_gpu
 
 
 class KaggleBundleTests(unittest.TestCase):
@@ -81,6 +81,26 @@ class KaggleBundleTests(unittest.TestCase):
                       and isinstance(node.targets[0], ast.Name)}
             raw = base64.b64decode(values["PAYLOAD"])
             self.assertEqual(hashlib.sha256(raw).hexdigest(), values["EXPECTED_SHA256"])
+
+    def test_gpu_notebook_preserves_private_visibility_and_separates_smoke(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder)
+            result = prepare_gpu("unit-test-owner", path)
+            notebook = json.loads((path/"binance_doctalk.ipynb").read_text())
+            metadata = json.loads((path/"kernel-metadata.json").read_text())
+            self.assertTrue(metadata["is_private"])
+            self.assertTrue(metadata["enable_gpu"])
+            self.assertEqual(metadata["machine_shape"], "NvidiaTeslaT4")
+            self.assertEqual(metadata["id"], result["kernel"])
+            for index, item in enumerate(notebook["cells"]):
+                if item["cell_type"] == "code":
+                    code = "".join(item["source"])
+                    compile(code, f"gpu-{index}", "exec")
+                    self.assertNotIn("scripts/doctalk.py evaluate", code)
+            source = json.dumps(notebook)
+            self.assertIn("/kaggle/temp", source)
+            self.assertIn("scripts/gpu_smoke.py", source)
+            self.assertNotIn("RUN_PAID_OPENAI_PROBE", source)
 
     def test_email_or_token_cannot_be_used_as_owner(self):
         with tempfile.TemporaryDirectory() as folder:

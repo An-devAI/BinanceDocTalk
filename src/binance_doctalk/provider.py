@@ -114,7 +114,9 @@ class OpenAIProvider:
             time.sleep(1)
         raise ProviderError("Request failed")
 
-    def embed(self, texts: list[str]) -> list[list[float]]:
+    def embed(self, texts: list[str], *, purpose: str = "document") -> list[list[float]]:
+        if purpose not in {"query", "document"}:
+            raise ValueError("Unknown embedding purpose")
         if not texts or any(not text.strip() for text in texts):
             raise ValueError("Cannot embed empty input")
         config = self.config
@@ -169,3 +171,10 @@ class OpenAIProvider:
             return json.loads("".join(texts))
         except json.JSONDecodeError:
             raise ProviderError("No parseable structured model output") from None
+
+
+def create_provider(config: Config, ledger_path: Path = Path("artifacts/local/budget.json")):
+    if config.provider == "huggingface_local":
+        from .local_provider import LocalProvider
+        return LocalProvider(config)
+    return OpenAIProvider(config, ledger_path)

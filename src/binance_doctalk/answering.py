@@ -66,6 +66,8 @@ class AnswerService:
                     raise ValueError("Live RAG requires an official corpus, not synthetic demo notes")
                 if not demo and self.index.metadata.get("embedding_model") != self.config.embedding_model:
                     raise ValueError("Index embedding model does not match configuration")
+                if not demo and self.index.metadata.get("embedding_revision", "") != self.config.embedding_revision:
+                    raise ValueError("Index embedding revision does not match configuration")
                 if demo and self.index.metadata["kind"] != "synthetic_demo":
                     raise ValueError("Demo extraction is restricted to original synthetic notes")
                 tick = time.perf_counter()
@@ -73,7 +75,7 @@ class AnswerService:
                 if not demo:
                     if self.provider is None:
                         raise ValueError("Live mode needs an API provider")
-                    vector = self.provider.embed([question])[0]
+                    vector = self.provider.embed([question], purpose="query")[0]
                 stages["query_embedding_ms"] = (time.perf_counter() - tick) * 1000
                 tick = time.perf_counter()
                 hits = self.index.search(question, self.config.top_k, vector)
@@ -110,6 +112,7 @@ class AnswerService:
         result["estimated_usd"] = (self.provider.ledger.read()["estimated_usd"] - before_cost
                                    if self.provider else 0.0)
         result["retry_count"] = self.provider.retry_count - before_retry if self.provider else 0
+        result["runtime"] = self.provider.runtime_info() if self.provider and hasattr(self.provider, "runtime_info") else {"provider": self.config.provider, "cost_basis": "estimated API cost"}
         result["actual_models"] = sorted(self.provider.actual_models) if self.provider else []
         return result
 

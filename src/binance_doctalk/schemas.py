@@ -5,11 +5,13 @@ from __future__ import annotations
 from dataclasses import asdict, dataclass, fields
 from pathlib import Path
 import math
+import re
 import tomllib
 
 
 @dataclass(frozen=True)
 class Config:
+    provider: str = "openai"
     system: str = "rag"
     model: str = "gpt-5.4-mini-2026-03-17"
     embedding_model: str = "text-embedding-3-small"
@@ -26,6 +28,10 @@ class Config:
     output_usd_per_million: float = 4.5
     embedding_usd_per_million: float = 0.02
     pricing_checked_at: str = "2026-10-22"
+    model_revision: str = ""
+    embedding_revision: str = ""
+    max_input_tokens: int = 4096
+    seed: int = 42
 
     def __post_init__(self):
         for name in ["top_k", "max_output_tokens", "chunk_tokens", "overlap_tokens",
@@ -34,11 +40,23 @@ class Config:
                 raise ValueError(f"{name} must be an integer")
         if self.system not in {"rag", "baseline"}:
             raise ValueError("system must be rag or baseline")
+        if self.provider not in {"openai", "huggingface_local"}:
+            raise ValueError("Unknown provider")
+        if type(self.max_input_tokens) is not int or self.max_input_tokens < 256:
+            raise ValueError("max_input_tokens must be an integer >= 256")
+        if type(self.seed) is not int or self.seed < 0:
+            raise ValueError("seed must be a nonnegative integer")
+        if self.provider == "huggingface_local":
+            if any(not re.fullmatch(r"[0-9a-f]{40}", r)
+                   for r in [self.model_revision, self.embedding_revision]):
+                raise ValueError("Local models require pinned 40-character commit revisions")
+            if self.embedding_model != "BAAI/bge-small-en-v1.5" or self.tokenizer != "bge_small_v1_5":
+                raise ValueError("Local backend uses BGE small with its matching tokenizer")
         if not 1 <= self.top_k <= 10:
             raise ValueError("top_k must be between 1 and 10")
         if not 0 <= self.overlap_tokens < self.chunk_tokens:
             raise ValueError("overlap must be smaller than chunk size")
-        if self.tokenizer not in {"cl100k_base", "regex_word_v1"}:
+        if self.tokenizer not in {"cl100k_base", "regex_word_v1", "bge_small_v1_5"}:
             raise ValueError("Unknown tokenizer")
         if not 1 <= self.max_output_tokens <= 4000:
             raise ValueError("max_output_tokens must be between 1 and 4000")

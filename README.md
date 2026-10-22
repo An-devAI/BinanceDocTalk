@@ -28,6 +28,10 @@ evidence of official-corpus answer quality.
 See [Kaggle execution](kaggle/README.md) and [verification evidence](docs/verification.md) for the
 observed run status. The default notebook performs no paid API calls.
 
+**Open-model GPU backend:** pinned Qwen3-4B + BGE inference is implemented. See
+[local inference on Kaggle](docs/local_inference.md); the GPU run evidence is recorded separately
+from the earlier CPU smoke and from the still-pending official-source study.
+
 ## Run in under a minute
 
 Watch the [27-second recorded offline walkthrough](demo/offline-walkthrough.webm), or open

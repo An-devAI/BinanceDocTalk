@@ -1,0 +1,17 @@
+provider = "huggingface_local"
+system = "baseline"
+model = "Qwen/Qwen3-4B-Instruct-2507"
+model_revision = "cdbee75f17c01a7cc42f958dc650907174af0554"
+embedding_model = "BAAI/bge-small-en-v1.5"
+embedding_revision = "5c38ec7c405ec4b44b94cc5a9bb96e735b38267a"
+tokenizer = "bge_small_v1_5"
+max_input_tokens = 4096
+max_output_tokens = 768
+top_k = 3
+chunk_tokens = 400
+overlap_tokens = 60
+max_retries = 0
+seed = 42
+input_usd_per_million = 0.0
+output_usd_per_million = 0.0
+embedding_usd_per_million = 0.0

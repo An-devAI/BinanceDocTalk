@@ -84,7 +84,7 @@ def source_fingerprint(root: Path) -> str:
 
 def optional_versions() -> dict:
     versions = {}
-    for name in ["tiktoken", "streamlit", "numpy", "openai", "kaggle"]:
+    for name in ["tiktoken", "streamlit", "numpy", "openai", "kaggle", "torch", "transformers", "sentence-transformers"]:
         try:
             versions[name] = importlib.metadata.version(name)
         except importlib.metadata.PackageNotFoundError:
@@ -117,6 +117,7 @@ def freeze_experiment(root: Path, corpus: Path, index_path: Path, question_paths
         raise ValueError("Baseline and RAG must share generation/retrieval settings except system")
     rag = next(c for c in parsed if c.system == "rag")
     if (index.metadata["embedding_model"] != rag.embedding_model
+            or index.metadata.get("embedding_revision", "") != rag.embedding_revision
             or index.metadata["tokenizer"] != rag.tokenizer
             or index.metadata["chunk_tokens"] != rag.chunk_tokens
             or index.metadata["overlap_tokens"] != rag.overlap_tokens):
@@ -183,6 +184,9 @@ def run_experiment(root: Path, rows: list[dict], index: Index, configs: list[Con
         raise ValueError("Paired LLM evaluation requires an official dense corpus index")
     # Create providers before consuming the held-out run marker (missing key is preflight).
     providers = {c.system: provider_factory(c) for c in configs}
+    for provider in providers.values():
+        if hasattr(provider, "warmup"):
+            provider.warmup()
     output.mkdir(parents=True)
     if split == "test":
         marker = freeze_path.with_suffix(".test-consumed.json")
@@ -404,7 +408,7 @@ def retrieval_evaluation(index: Index, rows: list[dict], provider=None) -> dict:
         groups = row.get("evidence_groups", [])
         if not groups or any(not group for group in groups):
             raise ValueError("Bind reviewed source spans before retrieval evaluation")
-        vector = provider.embed([row["question"]])[0] if provider else None
+        vector = provider.embed([row["question"]], purpose="query")[0] if provider else None
         for backend in (["bm25", "dense"] if provider else ["bm25"]):
             hits = index.search(row["question"], 5, vector if backend == "dense" else None)
             for k in [3, 5]:

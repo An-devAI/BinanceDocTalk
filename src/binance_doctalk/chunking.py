@@ -3,14 +3,30 @@
 from __future__ import annotations
 
 from itertools import groupby
+from functools import lru_cache
 import re
 
 from .schemas import Chunk, Document
+
+BGE_REVISION = "5c38ec7c405ec4b44b94cc5a9bb96e735b38267a"
+
+
+@lru_cache(maxsize=1)
+def bge_tokenizer():
+    try:
+        from transformers import AutoTokenizer
+    except ImportError as exc:
+        raise ValueError("Install requirements-local-model.txt for BGE tokenization") from exc
+    return AutoTokenizer.from_pretrained("BAAI/bge-small-en-v1.5", revision=BGE_REVISION,
+                                        use_fast=True, trust_remote_code=False)
 
 
 def token_offsets(text: str, tokenizer: str) -> list[tuple[int, int]]:
     if tokenizer == "regex_word_v1":
         return [m.span() for m in re.finditer(r"\S+", text)]
+    if tokenizer == "bge_small_v1_5":
+        return [tuple(span) for span in bge_tokenizer()(text, add_special_tokens=False,
+                return_offsets_mapping=True, truncation=False)["offset_mapping"] if span[1] > span[0]]
     if tokenizer != "cl100k_base":
         raise ValueError("Unknown tokenizer")
     try:

@@ -9,7 +9,7 @@ import streamlit as st
 from binance_doctalk.answering import AnswerService
 from binance_doctalk.cli import benchmark_status, demo_service
 from binance_doctalk.io import load_env
-from binance_doctalk.provider import OpenAIProvider
+from binance_doctalk.provider import create_provider
 from binance_doctalk.retrieval import Index
 from binance_doctalk.schemas import Config
 
@@ -18,6 +18,7 @@ st.set_page_config(page_title="BinanceDocTalk", page_icon="📚", layout="wide")
 st.title("BinanceDocTalk")
 st.caption("Independent educational project. Not affiliated with or endorsed by Binance. Not investment advice.")
 mode = st.sidebar.selectbox("Mode", ["Offline original-notes preview", "Live RAG", "Live baseline"])
+config_path = st.sidebar.text_input("Configuration", "configs/kaggle-rag.toml")
 review = benchmark_status()
 st.sidebar.info(f"{review['questions']} benchmark cases · {review['human_reviewed']} declared reviewed · load final metrics separately after evaluation")
 if mode.startswith("Offline"):
@@ -30,10 +31,10 @@ if question:
         if demo:
             service = demo_service()
         else:
-            config = replace(Config.load(Path("configs/rag.toml")),
+            config = replace(Config.load(Path(config_path)),
                              system="rag" if mode == "Live RAG" else "baseline")
             index = Index.load(Path("data/local/index.v1.json")) if config.system == "rag" else None
-            service = AnswerService(index, config, OpenAIProvider(config))
+            service = AnswerService(index, config, create_provider(config))
         with st.spinner("Retrieving and validating…"):
             result = service.ask(question, demo=demo)
         with st.chat_message("assistant"):

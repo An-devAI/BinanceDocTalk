@@ -95,7 +95,7 @@ class TransportTests(unittest.TestCase):
     def test_invalid_generated_citation_becomes_error_with_usage_preserved(self):
         config = replace(Config(), tokenizer="regex_word_v1")
         class Embedder:
-            def embed(self, texts): return [[1, 0] for _ in texts]
+            def embed(self, texts, *, purpose="document"): return [[1, 0] for _ in texts]
         index = build_index([fixture_doc("official")], config, Embedder(), reviewed=True)
         answer = {"status": "answered", "reason": None, "message": "", "claims": [
             {"text": "Unvalidated model text", "evidence_ids": ["INVENTED"]}]}
@@ -171,7 +171,7 @@ class FreezeTests(unittest.TestCase):
                     self.retry_count = 0
                     self.actual_models = set()
                     self.ledger = Ledger(folder/"ledger.json", 1)
-                def embed(self, texts): return [[1, 0] for _ in texts]
+                def embed(self, texts, *, purpose="document"): return [[1, 0] for _ in texts]
                 def generate(self, instructions, question, context):
                     return {"status": "abstained", "reason": "insufficient_evidence",
                             "message": "UNIT-TEST OUTPUT, not a quality measurement", "claims": []}
