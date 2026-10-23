@@ -13,7 +13,8 @@ def public_files(include_media: bool = True) -> list[Path]:
     names = ["README.md", "LICENSE", "NOTICE.md", "pyproject.toml", "uv.lock", ".gitignore",
              ".env.example", "app.py", "web_app.py", "requirements-ui.txt",
              "requirements-ui.lock.txt", "requirements-tokenizer.txt", "requirements-kaggle.txt", "requirements-local-model.txt", "requirements-datasets.txt", "data/LICENSE.md",
-             "data/huggingface.sources.v1.json", "data/huggingface.candidates.v1.manifest.jsonl",
+             "data/corpus.reviewed.v2.manifest.jsonl", "data/reviews/owner-smoke-v2.json", "data/reviews/smoke-audit-notes.v2.json",
+             "data/eval/v2/smoke.jsonl", "data/huggingface.sources.v1.json", "data/huggingface.candidates.v1.manifest.jsonl",
              "data/huggingface.qa-candidates.v1.manifest.jsonl", "docs/huggingface_import_v1.json",
              "data/manifest.v1.jsonl", "data/curation.v2.json", "data/corpus.curated.v2.manifest.jsonl", "docs/corpus_curation_v2.json", "data/corpus.web-extract.v1.manifest.jsonl", "artifacts/results/README.md", ".github/workflows/ci.yml"]
     paths = [ROOT / name for name in names if (ROOT / name).is_file()]

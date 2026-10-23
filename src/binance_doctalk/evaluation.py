@@ -253,7 +253,12 @@ def run_experiment(root: Path, rows: list[dict], index: Index, configs: list[Con
         arms = list(configs)
         rng.shuffle(arms)
         for config in arms:
-            prediction = AnswerService(index, config, providers[config.system]).ask(row["question"])
+            provider = providers[config.system]
+            if hasattr(provider, "last_raw_output"):
+                provider.last_raw_output = ""
+            prediction = AnswerService(index, config, provider).ask(row["question"])
+            if hasattr(provider, "last_raw_output"):
+                prediction["raw_output"] = provider.last_raw_output
             prediction.update(question_id=row["question_id"], family_id=row["family_id"], split=split,
                               prediction_id=digest([len(predictions), row["question_id"], config.system])[:16])
             predictions.append(prediction)

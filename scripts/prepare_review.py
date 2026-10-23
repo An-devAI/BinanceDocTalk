@@ -39,6 +39,7 @@ def prepare(output: Path, corpus: Path | None, questions: Path, manifest: Path):
     index = Index(chunks, {'kind': 'review_suggestions'}) if chunks else None
     output.mkdir(parents=True)
     total = 0
+    approved = 0
     for split in ['smoke', 'dev', 'test']:
         records, sections = [], []
         for row in read_jsonl(questions / f'{split}.jsonl'):
@@ -51,7 +52,9 @@ def prepare(output: Path, corpus: Path | None, questions: Path, manifest: Path):
                      'start': 0, 'end': len(hit['chunk'].text), 'content_hash': hit['chunk'].content_hash,
                      'heading': hit['chunk'].heading, 'text': hit['chunk'].text,
                      'score': hit['score'], 'selection_method': 'BM25 suggestion, not gold'} for hit in hits]})
-            records.append({'draft': row, 'suggestions': suggestions, 'human_approved': False})
+            recorded_approval = row.get('review_status') == 'human_reviewed' and bool(row.get('reviewer')) and bool(row.get('reviewed_at'))
+            records.append({'draft': row, 'suggestions': suggestions, 'human_approved': recorded_approval})
+            approved += int(recorded_approval)
             evidence = '<h3>Gold binding (current record, not inferred)</h3>'+pretty(row.get('evidence_groups', []))
             if row.get('candidate_evidence_groups'):
                 evidence += '<h3>Feedback-selected candidates — still unapproved</h3>'+pretty(row['candidate_evidence_groups'])
@@ -77,9 +80,9 @@ def prepare(output: Path, corpus: Path | None, questions: Path, manifest: Path):
             if not docs:
                 evidence += '<p><strong>No corpus collected. Source and absence decisions are blocked.</strong></p>'
             metadata = {k: row.get(k) for k in ['schema_version','split','family_id','test_type','category','label','review_status','reviewer','reviewed_at']}
-            sections.append('<article id="'+escape(row['question_id'], quote=True)+'"><h2>'+escape(row['question_id']+' — '+row['question'])+'</h2>'+pretty(metadata)+'<p><b>Draft reference:</b> '+escape(row['reference_answer'])+'</p><h3>Required facts / behavior</h3>'+pretty(row['required_points'])+'<p>'+escape(row.get('behavior_rubric', ''))+'</p>'+evidence+'</article>')
+            sections.append('<article id="'+escape(row['question_id'], quote=True)+'"><h2>'+escape(row['question_id']+' — '+row['question'])+'</h2>'+pretty(metadata)+'<p><b>Reference (see review status):</b> '+escape(row['reference_answer'])+'</p><h3>Required facts / behavior</h3>'+pretty(row['required_points'])+'<p>'+escape(row.get('behavior_rubric', ''))+'</p>'+evidence+'</article>')
         write_jsonl(output / f'{split}.suggestions.jsonl', records)
-        warning = '<p><strong>Draft annotation packet, not approved gold.</strong> All source text is available through Whole corpus. Review type, scope, each required fact and exact spans. Dataset annotation is separate from inference: keep held-out model outputs closed during tuning.</p>'
+        warning = '<p><strong>Annotation packet: recorded owner decisions and pending drafts.</strong> All source text is available through Whole corpus. Review type, scope, each required fact and exact spans. Dataset annotation is separate from inference: keep held-out model outputs closed during tuning.</p>'
         (output / f'{split}.html').write_text(page(split.title()+' review', warning+''.join(sections)))
         total += len(records)
     sections = []
@@ -96,7 +99,9 @@ def prepare(output: Path, corpus: Path | None, questions: Path, manifest: Path):
     write_json(output / 'split-overlap.json', overlap)
     (output / 'overlap.html').write_text(page('Cross-split annotation audit', '<p>Lexical ranking is a shortlist, not semantic clearance. Record human decisions separately. Do not use held-out predictions for tuning.</p>'+pretty(overlap)))
     summary = {'created_at': utc_now(), 'documents': len(docs), 'questions': total,
-               'human_approved': 0, 'status': 'suggestions_only' if docs else 'blocked_missing_corpus'}
+               'human_approved': approved,
+               'reviewed_source_count': sum(r.get('review_status') == 'human_reviewed' for r in raw_docs.values()),
+               'status': 'recorded_owner_review_and_drafts' if approved else ('suggestions_only' if docs else 'blocked_missing_corpus')}
     write_json(output / 'manifest.json', summary)
     return summary
 
