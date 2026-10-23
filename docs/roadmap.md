@@ -21,6 +21,7 @@ source review and annotation time vary, so remove UI polish/hosting before reduc
 - [x] Verify loopback HTTP startup and optional Streamlit AppTest; browser visual QA remains unverified.
 - [x] Verify the chosen local Qwen/BGE backend with real Kaggle GPU inference; optional OpenAI remains mock-tested.
 - [x] Record the owner chat signoff for 20 curated sources and 10 smoke references.
+- [x] Complete private exploratory k=3/k=5 development inference: 144 retained outputs; semantic grades pending.
 - [ ] Complete dev/test gold, gap audits and semantic near-duplicate inspection.
 - [ ] Freeze before test; retain first run including errors.
 - [ ] Complete human grading and publish sanitized measured artifacts.

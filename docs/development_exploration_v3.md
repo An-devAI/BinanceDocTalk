@@ -53,3 +53,42 @@ After download, `scripts/summarize_development.py --run RUN_FOLDER --questions
 data/eval/proposals/dev.v3.jsonl --output NEW_METADATA.json` validates pairs, raw JSON, citation IDs,
 proposal hashes and unreviewed flags before emitting allowlisted metadata. It does not calculate
 answer accuracy or semantic citation support. Run files retain blank grade sheets privately.
+
+## Recorded execution
+
+Both private notebooks use source archive SHA-256
+`1c83bab0ca33697966c63786728a4a8ee45d929bb6584a2fee47a107ba55eec2`
+from commit `e5171ec`. The submitted code passes 102 tests. Input manifest SHA-256 is
+`6e92999ec2a22b9eb149b22b5c4d9b10c56d4a77a1ead56e4fa3874d76b993de`.
+Private dataset `annguyencherry/binancedoctalk-dev-inputs-61f62e0300f7`, version 1, was
+confirmed ready and private through the server API. Both notebook metadata records were pulled
+back and confirmed private with only that dataset attached. Underlying documents are not released.
+
+The k=3 notebook is `annguyencherry/binancedoctalk-dev-k3-1c83bab0`, version 1, COMPLETE.
+Its 72 predictions pass raw/validated JSON and citation-ID checks with zero structural errors.
+Exact hashes, model/package versions, configs, execution conditions, descriptive timings and
+**unreviewed-reference** retrieval diagnostics are in [k=3 metadata](kaggle_development_k3_v3.json).
+The local review viewer is `artifacts/local/kaggle/dev-output-v3/k3/development-run/review.html`.
+Semantic grading, reference approval, configuration selection and held-out evaluation are pending.
+
+The k=5 notebook is `annguyencherry/binancedoctalk-dev-k5-1c83bab0`, version 1, COMPLETE.
+[k=5 metadata](kaggle_development_k5_v3.json) records its 72 structurally validated outputs and
+zero structural errors. Both workers ran Tesla T4, FP16, torch 2.11.0+cu128 / CUDA 12.8;
+API spend is zero, GPU compute is unpriced. All 36 baseline raw responses match between workers;
+this observation does not promise cross-hardware determinism. The two retrieval diagnostic files
+match (same index/reference proposal, each evaluates both k cutoffs). These remain provisional.
+
+| Trial | Baseline outputs | RAG outputs | Structural errors | Baseline p50 / p95 (s) | RAG p50 / p95 (s) |
+|---|---:|---:|---:|---|---|
+| k=3 | 36 | 36 | 0 | 4.24 / 12.71 | 15.37 / 30.61 |
+| k=5 | 36 | 36 | 0 | 4.08 / 12.15 | 17.08 / 29.85 |
+
+Timings are descriptive: one interleaved sequential pass, separate workers, concurrency one,
+warm models, no response cache. p50 is the median; p95 uses nearest rank. Setup and model load
+are separate. Output lengths/mixes differ, so these are not controlled throughput or speed gains.
+Neither answered/abstained counts nor structural validity establish factual correctness.
+
+Start local inspection at `artifacts/local/development-v3/index.html`. It links the reference
+packet first, then each private source-linked output viewer and unfilled grade sheet.
+All 144 original outputs, raw JSON, run manifests and logs are retained under
+`artifacts/local/kaggle/dev-output-v3/`; no held-out consumption marker was created.

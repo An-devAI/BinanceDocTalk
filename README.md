@@ -20,6 +20,7 @@ and paired evaluation tooling are implemented. **The official-source quality stu
 | Local Qwen + BGE integration | Official-source smoke completed on Kaggle T4: 20 sources, 229 dense chunks, 20 outputs, 97 tests; semantic outputs ungraded |
 | Live OpenAI integration | Implemented and mock-tested; no API key available for a live check |
 | Held-out quality, latency, cost | **Not measured**; no claims of improvement |
+| Development exploration | k=3/k=5 completed on private Kaggle inputs: 144 outputs, zero structural errors; AI references and semantic grades pending. [Run details](docs/development_exploration_v3.md) |
 | GitHub repository | Pushed to [An-devAI/BinanceDocTalk](https://github.com/An-devAI/BinanceDocTalk); official quality study remains pending |
 
 See [verification evidence](docs/verification.md), [evaluation protocol](docs/evaluation.md),

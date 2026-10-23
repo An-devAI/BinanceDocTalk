@@ -15,7 +15,7 @@ from summarize_development import summarize
 from prepare_development_proposal import validate_proposal
 from binance_doctalk.benchmark import validate_bound_evidence
 from binance_doctalk.evaluation import validate_questions
-from binance_doctalk.io import read_jsonl,write_jsonl,write_json,file_hash
+from binance_doctalk.io import read_jsonl,write_jsonl,write_json,file_hash,digest
 from test_pipeline import fixture_doc
 
 
@@ -137,7 +137,7 @@ class DevelopmentSummaryTests(unittest.TestCase):
             write_jsonl(home/'predictions.jsonl',preds)
             write_jsonl(home/'grades.pending.jsonl',[dict(reviewer=None) for _ in preds])
             write_json(home/'run_manifest.json',dict(split='dev',human_review_complete=False,errors=0,
-                       started_at='UNIT TEST',completed_at='UNIT TEST',prompt_hashes={}))
+                       started_at='UNIT TEST',completed_at='UNIT TEST',prompt_hashes={},question_hash=digest([row])))
             summary={k:None for k in ['kind','top_k','status','source_sha256','input_manifest_sha256',
                 'proposed_labels','index','setup_seconds','runtime','configs','statuses','api_usd','compute_usd','note']}
             summary.update(input_file_hashes={'dev.proposed.v3.jsonl':file_hash(questions)},prediction_count=2,

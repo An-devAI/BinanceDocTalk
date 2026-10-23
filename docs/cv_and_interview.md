@@ -24,11 +24,15 @@ Vacancies and requirements can change; check again before applying.
 “Implemented a configurable RAG application with pinned local-model backends, provenance checks,
 and paired evaluation safeguards; verified local Qwen/BGE retrieval and inference on Kaggle GPU, and maintained passing CI
 on Python 3.11–3.13.” Describe the v2 set as 10 owner-signed-off smoke references and
-82 pending development/held-out drafts.
+36 AI-annotated development proposals and 46 pending held-out drafts.
 The latest official-source smoke evidence includes 97 passing tests, 20 sources / 229 BGE chunks
 and 20 structurally validated paired Qwen outputs on Tesla T4. Recorded refusal-class mismatches
 remain; these checks are not accuracy or semantic citation-support measurements. The historical
 synthetic-note run retains its original 67-test/six-output evidence.
+
+Two private development trials subsequently produced 144 structurally valid outputs over 36
+cases each with k=3/k=5. References are AI proposals and outputs ungraded. This supports a claim
+of executing reproducible paired experiments, not a measured answer-quality improvement.
 
 ## Bullets to use only after completing the corresponding work
 

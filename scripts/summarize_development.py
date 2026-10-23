@@ -1,7 +1,6 @@
 """Verify retained development outputs and emit metadata only, never a gold quality score."""
 from __future__ import annotations
 import argparse
-from collections import Counter
 import json
 import math
 from pathlib import Path
@@ -9,7 +8,7 @@ import statistics
 import sys
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/'src'))
-from binance_doctalk.io import file_hash,read_jsonl,write_json
+from binance_doctalk.io import digest,file_hash,read_jsonl,write_json
 from binance_doctalk.schemas import validate_answer
 
 
@@ -23,6 +22,7 @@ def summarize(folder,questions):
     if len(actual)!=len(expected) or set(actual)!=expected:raise ValueError('Incomplete or duplicate development output pairs')
     if manifest['split']!='dev' or manifest['human_review_complete'] is not False:
         raise ValueError('Expected explicitly unreviewed development run')
+    if summary['case_count']!=len(rows) or manifest['question_hash']!=digest(rows):raise ValueError('Run question identity/count mismatch')
     if summary['input_file_hashes']['dev.proposed.v3.jsonl']!=file_hash(questions):raise ValueError('Proposal hash mismatch')
     if any(summary.get(k) is not False for k in ['human_reference_review_complete','human_output_grading_complete','heldout_inference_performed','official_quality_measured','configuration_selected']):
         raise ValueError('Exploration cannot claim human grading, held-out or release selection')
@@ -54,6 +54,7 @@ def summarize(folder,questions):
         started_at=manifest['started_at'],completed_at=manifest['completed_at'],prompt_hashes=manifest['prompt_hashes'],
         output_sha256={name:file_hash(folder/name) for name in ['predictions.jsonl','run_manifest.json','grades.pending.jsonl','retrieval.provisional.json']},
         retrieval_provisional=json.loads((folder/'retrieval.provisional.json').read_text()))
+    public['execution_conditions']={k:manifest.get(k) for k in ['code_hash','python','installed_optional_versions','platform','seed','concurrency','response_cache','cold_start_included']}
     return public
 
 if __name__=='__main__':

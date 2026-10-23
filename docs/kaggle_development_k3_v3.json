@@ -1,0 +1,196 @@
+{
+  "kind": "unreviewed_development_exploration",
+  "top_k": 3,
+  "status": "complete",
+  "source_sha256": "1c83bab0ca33697966c63786728a4a8ee45d929bb6584a2fee47a107ba55eec2",
+  "input_manifest_sha256": "6e92999ec2a22b9eb149b22b5c4d9b10c56d4a77a1ead56e4fa3874d76b993de",
+  "input_file_hashes": {
+    "corpus.reviewed.v2.jsonl": "a1c93283ae5400a72f00e99c350891f5bd415059969e58600cee4ad8a85256ed",
+    "dev.proposed.v3.jsonl": "c8fdcb7b13627cac9985a997b6db2f8fe1bf66157b6ab737ed8eef6fa3c8c6c0",
+    "proposal-manifest.json": "e3623bf9c4ef0a85635ce706f4a05f55c33ebe47d0b175d60541d3bf4994e56d"
+  },
+  "case_count": 36,
+  "prediction_count": 72,
+  "errors": 0,
+  "proposed_labels": {
+    "answerable": 25,
+    "out_of_scope": 9,
+    "insufficient_information": 2
+  },
+  "index": {
+    "format_version": 1,
+    "created_at": "2026-10-23T11:35:30.977874+00:00",
+    "kind": "official",
+    "corpus_hash": "890a89725c17da1ef94f433a13a6744855132303170fe555c30bd769ffb4a712",
+    "context_groups_hash": "1908b68aed15bce31c9d794ceb7a3436de640e05e6e16aef19443c4d71d491cb",
+    "document_count": 20,
+    "chunk_count": 229,
+    "tokenizer": "bge_small_v1_5",
+    "chunk_tokens": 400,
+    "overlap_tokens": 60,
+    "human_reviewed": true,
+    "embedding_model": "BAAI/bge-small-en-v1.5",
+    "embedding_revision": "5c38ec7c405ec4b44b94cc5a9bb96e735b38267a"
+  },
+  "setup_seconds": 113.40740631300002,
+  "runtime": {
+    "provider": "huggingface_local",
+    "model_revision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+    "embedding_revision": "5c38ec7c405ec4b44b94cc5a9bb96e735b38267a",
+    "decoding": "greedy",
+    "structured_decoding": "lm-format-enforcer/json-schema/strict-field-order",
+    "abstention_messages": "fixed_by_reason_v1",
+    "compute_usd": null,
+    "cost_basis": "API only; GPU compute not priced",
+    "gpu": "Tesla T4",
+    "total_vram_bytes": 15636037632,
+    "free_vram_at_load_bytes": 15526068224,
+    "torch": "2.11.0+cu128",
+    "cuda": "12.8",
+    "dtype": "float16",
+    "model_load_seconds": 48.96101800500003,
+    "peak_vram_allocated_bytes": 9006258688
+  },
+  "configs": [
+    {
+      "provider": "huggingface_local",
+      "system": "baseline",
+      "model": "Qwen/Qwen3-4B-Instruct-2507",
+      "embedding_model": "BAAI/bge-small-en-v1.5",
+      "reasoning_effort": "none",
+      "max_output_tokens": 768,
+      "top_k": 3,
+      "chunk_tokens": 400,
+      "overlap_tokens": 60,
+      "tokenizer": "bge_small_v1_5",
+      "timeout_seconds": 30,
+      "max_retries": 0,
+      "budget_usd": 10.0,
+      "input_usd_per_million": 0.0,
+      "output_usd_per_million": 0.0,
+      "embedding_usd_per_million": 0.0,
+      "pricing_checked_at": "2026-10-22",
+      "model_revision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+      "embedding_revision": "5c38ec7c405ec4b44b94cc5a9bb96e735b38267a",
+      "max_input_tokens": 4096,
+      "seed": 42
+    },
+    {
+      "provider": "huggingface_local",
+      "system": "rag",
+      "model": "Qwen/Qwen3-4B-Instruct-2507",
+      "embedding_model": "BAAI/bge-small-en-v1.5",
+      "reasoning_effort": "none",
+      "max_output_tokens": 768,
+      "top_k": 3,
+      "chunk_tokens": 400,
+      "overlap_tokens": 60,
+      "tokenizer": "bge_small_v1_5",
+      "timeout_seconds": 30,
+      "max_retries": 0,
+      "budget_usd": 10.0,
+      "input_usd_per_million": 0.0,
+      "output_usd_per_million": 0.0,
+      "embedding_usd_per_million": 0.0,
+      "pricing_checked_at": "2026-10-22",
+      "model_revision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+      "embedding_revision": "5c38ec7c405ec4b44b94cc5a9bb96e735b38267a",
+      "max_input_tokens": 4096,
+      "seed": 42
+    }
+  ],
+  "statuses": {
+    "baseline": {
+      "answered": 21,
+      "abstained": 15
+    },
+    "rag": {
+      "abstained": 12,
+      "answered": 24
+    }
+  },
+  "human_reference_review_complete": false,
+  "human_output_grading_complete": false,
+  "heldout_inference_performed": false,
+  "official_quality_measured": false,
+  "configuration_selected": false,
+  "api_usd": 0.0,
+  "compute_usd": null,
+  "note": "AI-proposed development references and ungraded model outputs. Retrieval diagnostics are provisional. Do not report final accuracy, select a release config, or run held-out from this artifact.",
+  "structurally_checked_outputs": 72,
+  "latency_descriptive_only": {
+    "baseline": {
+      "n": 36,
+      "p50_ms": 4241.835849999972,
+      "p95_ms_nearest_rank": 12710.460631000045
+    },
+    "rag": {
+      "n": 36,
+      "p50_ms": 15366.262278499958,
+      "p95_ms_nearest_rank": 30606.430713999885
+    }
+  },
+  "latency_note": "One sequential pass per separate GPU worker; includes errors. No cross-worker speed claim.",
+  "started_at": "2026-10-23T11:35:48.550623+00:00",
+  "completed_at": "2026-10-23T11:47:21.093192+00:00",
+  "prompt_hashes": {
+    "baseline": "891eff8ff831ef588c682c4275f3dbf6a13aeff740a700d98594fae032519001",
+    "rag": "06d54f319106494415a5bab48833f10211b5f5c4f5a3da3d6b655adc39fa69b5"
+  },
+  "output_sha256": {
+    "predictions.jsonl": "c3413f321116e9d8d262afb517d93d3786b70aa5f1c0495725775a43fad49eb7",
+    "run_manifest.json": "421590c0db4fc4f2f1d30ce8698c2e0987b4c7b42ca206ddcaa3cc22bddfa5e2",
+    "grades.pending.jsonl": "75123a72fddad6d2ba4e9233575853950f89da191368557efeac67843013d196",
+    "retrieval.provisional.json": "bac89b7d132d06119aa7efdd2f894f58aa1467618cb7309fbd2ce3201896219e"
+  },
+  "retrieval_provisional": {
+    "kind": "ai_reference_diagnostics_only",
+    "human_reference_review_complete": false,
+    "metrics": {
+      "bm25@3": {
+        "answerable_n": 25,
+        "evidence_recall": 0.6,
+        "complete_evidence_rate": 0.6,
+        "multi_evidence_complete_rate": 0.2222222222222222
+      },
+      "bm25@5": {
+        "answerable_n": 25,
+        "evidence_recall": 0.64,
+        "complete_evidence_rate": 0.64,
+        "multi_evidence_complete_rate": 0.3333333333333333
+      },
+      "dense@3": {
+        "answerable_n": 25,
+        "evidence_recall": 0.52,
+        "complete_evidence_rate": 0.48,
+        "multi_evidence_complete_rate": 0.2222222222222222
+      },
+      "dense@5": {
+        "answerable_n": 25,
+        "evidence_recall": 0.78,
+        "complete_evidence_rate": 0.72,
+        "multi_evidence_complete_rate": 0.4444444444444444
+      }
+    }
+  },
+  "execution_conditions": {
+    "code_hash": "97872cf74c3c979b69b2d3eb2b090f4e964672dcd7e63729ea9cb183ec564c54",
+    "python": "3.13.15",
+    "installed_optional_versions": {
+      "tiktoken": "0.14.0",
+      "streamlit": null,
+      "numpy": "2.1.3",
+      "openai": "2.54.0",
+      "kaggle": "2.0.2",
+      "torch": "2.11.0+cu128",
+      "transformers": "4.57.6",
+      "sentence-transformers": "5.2.0",
+      "lm-format-enforcer": "0.11.3"
+    },
+    "platform": "Linux-6.18.48+-x86_64-with-glibc2.39",
+    "seed": 42,
+    "concurrency": 1,
+    "response_cache": false,
+    "cold_start_included": false
+  }
+}

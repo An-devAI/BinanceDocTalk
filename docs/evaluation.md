@@ -38,13 +38,17 @@ establish absence; lexical overlap checks do not establish semantic split indepe
 
 ```bash
 # Source and smoke signoff already exist. Continue with development:
-python3 scripts/review_dataset.py audits --input data/eval/drafts-v2/dev.jsonl \
+python3 scripts/review_dataset.py audits --input data/eval/proposals/dev.v3.jsonl \
   --output data/local/dev.audited.v2.jsonl --corpus data/local/corpus.reviewed.v2.jsonl \
   --reviewer "Your actual name"
 python3 scripts/review_dataset.py questions --input data/local/dev.audited.v2.jsonl \
   --output data/eval/v2/dev.jsonl --corpus data/local/corpus.reviewed.v2.jsonl \
   --reviewer "Your actual name"
 ```
+
+The development proposal packet is `artifacts/local/review-pack-dev-v3b/dev.html`; it displays
+bound excerpts, change history and pending audit assessments. Review references before inspecting
+model outputs to avoid adapting the key to model answers.
 
 The source/smoke milestone above has been materialized; do not repeat or overwrite that approval.
 Continue the interactive audit/question workflow for dev and test. If interrupted, completed decisions are saved;
@@ -61,8 +65,10 @@ For insufficient-information cases, review the **entire selected corpus**. The e
 records its corpus hash, search terms, all document IDs/hashes and lexical candidate paragraph IDs.
 A human must confirm scope, read each full source, record `absent` or `partial` with notes, and
 approve the audit. Any `sufficient` assessment blocks this label: correct or replace the draft.
-The two smoke labels have owner signoff and assistant-attributed audit rationales. Ten dev/test
-gap audits remain pending; their proposed missing facts are hypotheses until their own review.
+The two smoke labels have owner signoff and assistant-attributed audit rationales. Development v3
+proposes two gaps (rather than four); together with six original held-out gap drafts these eight
+audit decisions remain pending. The original v2 drafts are preserved. Missing facts are hypotheses
+until their own review. See [proposal changes and exploratory runs](development_exploration_v3.md).
 
 For out-of-scope cases, reference the frozen **application policy**, not Binance passages claiming
 to define the project's scope. Current account fees, personal liquidation calculations and

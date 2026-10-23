@@ -165,3 +165,23 @@ Runtime is Tesla T4, FP16, torch 2.11.0+cu128 / CUDA 12.8. Setup 114.48 s; illus
 2.03–23.64 s; peak PyTorch allocated VRAM 8,980,763,136 bytes. API spend zero; GPU compute unpriced.
 Full metadata is `kaggle_official_smoke_v2.json`; all predictions and the unfilled grading sheet
 remain private. No official held-out consumption marker was created.
+
+## Development tooling verification
+
+104 core tests pass in the system Python and in a clean extraction of the public source archive.
+The archive contains development proposals and code but excludes raw corpus/credentials/local
+artifacts. Streamlit AppTest and grammar replay pass in `.venv-ui`; no browser visual QA is claimed.
+New tests exercise pending-review gates, span hashes, private-input integrity, complete output pairs,
+HTML escaping and raw-response/metadata validation. The private Kaggle development notebooks
+contain the earlier 102-test source archive, whose exact SHA is recorded with their runs; later
+viewer/export tooling does not change the submitted inference implementation. Gold review and
+semantic grading remain separate.
+
+Both submitted development notebooks are now COMPLETE: 102 tests pass per worker, 20 sources,
+229 BGE chunks and 72 outputs per trial (144 total), zero structural errors. Every non-error raw
+response exactly matches its validated JSON object; citation IDs belong to retrieved context.
+All 36 baseline responses match across workers. Dataset and notebook privacy were verified against
+remote records; source/input/output hashes are retained. Source-linked output review pages and
+unfilled human grading templates remain private. See `kaggle_development_k3_v3.json` and
+`kaggle_development_k5_v3.json`. Retrieval diagnostics use unapproved AI references; no official
+answer/citation quality score or release configuration has been selected. Held-out remains unused.

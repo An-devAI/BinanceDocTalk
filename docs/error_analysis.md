@@ -84,3 +84,20 @@ All twenty predictions and exact input hashes are retained privately. A source-l
 viewer and blank grading sheet are prepared for inspection. No model-output grades were fabricated,
 no official held-out run was consumed, and no semantic prompt/retrieval tuning was performed from
 these smoke observations. Public metadata is `kaggle_official_smoke_v2.json`.
+
+## Unreviewed development v3 — diagnostic observations
+
+The k=3 exploration retains 72 outputs with zero structural errors. References are AI proposals,
+not approved gold. These are candidates for human analysis, not scored errors or a final study:
+
+| Observed k=3 behavior | Review needed |
+|---|---|
+| RAG DEV-033 answers a wrapped-token question using D03 token-definition chunks | Inspect whether the cited context supports the cross-chain and value-relationship claims; valid chunk IDs alone cannot establish entailment. The provisional gap label also requires a whole-corpus human audit. |
+| RAG DEV-034 refuses with out_of_scope, whereas its proposal expects insufficient evidence | Verify application scope and corpus absence, then judge the refusal reason separately from whether a refusal occurred. |
+| RAG DEV-010 refuses with out_of_scope and DEV-011 with insufficient_evidence | Proposals expect supported FOK/IOC definitions; inspect retrieval coverage, retained context and semantic answers before assigning grades. |
+| RAG DEV-021/022/026/032 use insufficient_evidence rather than proposed out_of_scope | Check the policy basis; schema checks do not resolve the answer-class distinction. |
+
+No prompt, retrieval, threshold or release configuration was changed from these observations.
+Review the reference proposal first, then grade the retained outputs. If reference review changes
+a question materially, preserve this run as exploration and rerun development under a new version.
+A selected benchmark span is not an exhaustive catalogue of valid supporting passages.
