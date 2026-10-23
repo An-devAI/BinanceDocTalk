@@ -20,12 +20,14 @@ source review and annotation time vary, so remove UI polish/hosting before reduc
 - [x] Lock the optional UI stack, pin local model revisions/packages, and record actual torch/CUDA versions.
 - [x] Verify loopback HTTP startup and optional Streamlit AppTest; browser visual QA remains unverified.
 - [x] Verify the chosen local Qwen/BGE backend with real Kaggle GPU inference; optional OpenAI remains mock-tested.
-- [ ] Complete source/gold review and semantic near-duplicate inspection.
+- [x] Record the owner chat signoff for 20 curated sources and 10 smoke references.
+- [ ] Complete dev/test gold, gap audits and semantic near-duplicate inspection.
 - [ ] Freeze before test; retain first run including errors.
 - [ ] Complete human grading and publish sanitized measured artifacts.
 - [ ] Update README results only from those artifacts.
 - [ ] Add actual failure examples and limitations.
-- [ ] Record an official-corpus demo; label any offline preview clearly.
+- [x] Run a signed-off official-source smoke on private Kaggle inputs and retain all 20 outputs.
+- [ ] Record a reviewed official-corpus release demo; label any offline preview clearly.
 - [ ] Inspect all files for secrets, account data and copied source text.
 - [x] Initialize a real Git checkout on `main`; use an honest initial implementation commit.
 - [ ] Publish a reviewed official-study release after these checks; hosting is optional.
@@ -37,3 +39,7 @@ The initial commit records the existing implementation; subsequent commits shoul
 On 2026-10-22 the owner explicitly chose to leave human source/gold review pending while technical
 integration is completed. The 20 cached source snapshots are preserved; curated v2 has 477 paragraphs and a
 92-question review packet at `artifacts/local/review-pack-v3/`. Gap audits and gold remain pending. Do not run the held-out study or claim reviewed quality metrics until that review occurs.
+
+The owner subsequently signed off the 20-source/10-smoke milestone. The exact statement and
+bound input hashes are retained in `data/reviews/owner-smoke-v2.json`. Development/held-out
+approvals and model-output grading are separate; none is inferred from that message.

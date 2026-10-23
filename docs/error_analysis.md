@@ -65,3 +65,22 @@ The baseline classified the in-scope stop-limit question as out of scope. Market
 can still strengthen source wording into execution guarantees. These are observed model-content
 limitations, not fixed by grammar or valid citation IDs. No human correctness/support grade is
 assigned here. Review and development experiments are required before claiming answer quality.
+
+## Owner-signed-off official-source smoke — 2026-10-23
+
+Notebook `annguyencherry/binancedoctalk-official-smoke-82d67381` completed with 20 outputs and zero
+structural errors. References were owner-signed-off; model output correctness and citation
+entailment remain ungraded. The following are direct status/reason comparisons against those
+references, not a held-out score or a comprehensive semantic judgment.
+
+| Observation | Interpretation / next diagnostic |
+|---|---|
+| RAG SMOKE-009 and SMOKE-010 returned out_of_scope; expected insufficient_evidence | The two refusal classes are confused even when schema validation passes. Investigate on development; do not count arbitrary refusal as success. |
+| Baseline SMOKE-007 refused as out_of_scope although the reference is answerable | A correctable false premise was treated as a prohibited request. Preserve this false-refusal example. |
+| Baseline SMOKE-010 answered although the corpus-relative reference is insufficient | Baseline may use pretrained knowledge. This is not by itself a factual-error verdict; discuss the abstention-comparison limitation. |
+| All 20 raw JSON outputs equal the validated answer objects | No post-generation repair or dropped output explains structural success; this does not establish semantic support. |
+
+All twenty predictions and exact input hashes are retained privately. A source-linked local
+viewer and blank grading sheet are prepared for inspection. No model-output grades were fabricated,
+no official held-out run was consumed, and no semantic prompt/retrieval tuning was performed from
+these smoke observations. Public metadata is `kaggle_official_smoke_v2.json`.

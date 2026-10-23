@@ -23,9 +23,12 @@ Vacancies and requirements can change; check again before applying.
 
 “Implemented a configurable RAG application with pinned local-model backends, provenance checks,
 and paired evaluation safeguards; verified local Qwen/BGE retrieval and inference on Kaggle GPU, and maintained passing CI
-on Python 3.11–3.13.” Describe the 92 v2 questions as unreviewed drafts until actual annotation.
-The GPU integration evidence includes 67 passing tests and six structurally validated original-note
-outputs; these are not accuracy or semantic citation-support measurements.
+on Python 3.11–3.13.” Describe the v2 set as 10 owner-signed-off smoke references and
+82 pending development/held-out drafts.
+The latest official-source smoke evidence includes 97 passing tests, 20 sources / 229 BGE chunks
+and 20 structurally validated paired Qwen outputs on Tesla T4. Recorded refusal-class mismatches
+remain; these checks are not accuracy or semantic citation-support measurements. The historical
+synthetic-note run retains its original 67-test/six-output evidence.
 
 ## Bullets to use only after completing the corresponding work
 

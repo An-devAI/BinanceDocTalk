@@ -1,6 +1,6 @@
 # Original dataset materials
 
-The original benchmark drafts in `eval/drafts/` and `eval/drafts-v2/`, together with the original
+The original benchmark drafts in `eval/drafts/`, `eval/drafts-v2/` and `eval/v2/`, together with the original
 illustrative notes in `demo/`,
 are offered under Creative Commons Attribution 4.0 International (CC BY 4.0):
 https://creativecommons.org/licenses/by/4.0/

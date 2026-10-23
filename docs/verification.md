@@ -4,7 +4,7 @@
 
 | Check | Observed result |
 |---|---|
-| Core and integration suite | 89 tests pass on Python 3.12.3 |
+| Core and integration suite | 97 tests pass locally on Python 3.12.3 and on the official-source Kaggle smoke snapshot |
 | Benchmark v2 structural audit | 92 drafts; splits 10/36/46; labels 56 answerable / 12 candidate gaps / 24 out-of-scope; zero approvals |
 | CLI demonstration | Actual original-note retrieval, false-premise example and out-of-scope response |
 | API transport | Mocked structured generation, embedding order, usage, 401/no retry, 429/one retry |
@@ -25,7 +25,8 @@ assertions validate the metric implementation; they are not project accuracy or 
 - Direct HTTP collection failed for 20 URLs. A subsequent web-reader import retrieved 20 snapshots
   containing 481 paragraphs. These may be cached and remain pending human review; no reviewed
   official corpus is claimed. See `docs/collection_workflow.md`.
-- No human gold annotation, official held-out inference or semantic output grading is complete.
+- Owner chat signoff covers 20 sources and 10 smoke references. Dev/test gold, official held-out
+  inference and semantic output grading remain incomplete.
 - Streamlit/tiktoken were installed and exercised with AppTest and real tokenizer calls;
   see `docs/local_ui_run.json`. No live browser visual QA is claimed.
 - No real browser UI inspection: browser control reported no available browser, and local browser
@@ -145,3 +146,22 @@ The latest allowlisted source archive reproduces all 89 core tests and the uncha
 audit in a clean temporary extraction. The HF packet's 43 links resolve; public metadata contains
 no copied source paragraphs or upstream QA strings. The preserved active corpus and all three
 benchmark files match the import report's recorded input hashes.
+
+## Signed-off official-source smoke — completed
+
+Private notebook `annguyencherry/binancedoctalk-official-smoke-82d67381` version 1 is COMPLETE.
+Private input dataset visibility was confirmed; only source/smoke/signoff inputs were attached.
+Submitted source archive SHA-256:
+`82d673816e932416d1365c61daed8d7bfe5c8a7956fbc4daf9d371e80558e712`.
+
+Actual execution: 97 tests pass; 20 sources / 477 paragraphs form 229 BGE chunks; 10 smoke
+questions produce 20 baseline/RAG predictions with zero structural errors. All raw output JSON
+objects match their validated counterparts. Input, source, owner-decision and prediction hashes
+were checked after download. Model outputs are ungraded; observed refusal classification
+mismatches are retained in error analysis. The real BGE tokenizer/embedding path exercised the
+protected definition/exception groups on these source snapshots successfully.
+
+Runtime is Tesla T4, FP16, torch 2.11.0+cu128 / CUDA 12.8. Setup 114.48 s; illustrative query times
+2.03–23.64 s; peak PyTorch allocated VRAM 8,980,763,136 bytes. API spend zero; GPU compute unpriced.
+Full metadata is `kaggle_official_smoke_v2.json`; all predictions and the unfilled grading sheet
+remain private. No official held-out consumption marker was created.

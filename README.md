@@ -15,9 +15,9 @@ and paired evaluation tooling are implemented. **The official-source quality stu
 | Offline demonstration | Runs on 12 original synthetic notes, with no LLM or API charges |
 | Official source manifests | 20 candidate URLs plus actual snapshot timestamps/hashes; raw text excluded from Git |
 | HF import | 15 separate source candidates and 12 development QA candidates; pinned Parquet, no automatic adoption. [Workflow](docs/huggingface_workflow.md) |
-| Benchmark | 92 v2 drafts: 10 smoke / 36 dev / 46 test; labels and test types separated; human review pending |
-| Official corpus collection | 20 web-reader snapshots; curated v2 retains 477 of 481 paragraphs, with a versioned edit log; human review pending. [Provenance](docs/collection_workflow.md) |
-| Local Qwen + BGE integration | Verified on Kaggle GPU: 67 tests pass, six original-note outputs validated; semantic quality ungraded |
+| Benchmark | 10 owner-signed-off smoke references; 36 dev / 46 test drafts pending; labels and test types separated |
+| Official corpus collection | 20 curated sources / 477 paragraphs signed off by the owner via chat; exact decision/provenance recorded. [Provenance](docs/owner_smoke_signoff.md) |
+| Local Qwen + BGE integration | Official-source smoke completed on Kaggle T4: 20 sources, 229 dense chunks, 20 outputs, 97 tests; semantic outputs ungraded |
 | Live OpenAI integration | Implemented and mock-tested; no API key available for a live check |
 | Held-out quality, latency, cost | **Not measured**; no claims of improvement |
 | GitHub repository | Pushed to [An-devAI/BinanceDocTalk](https://github.com/An-devAI/BinanceDocTalk); official quality study remains pending |
@@ -25,6 +25,12 @@ and paired evaluation tooling are implemented. **The official-source quality stu
 See [verification evidence](docs/verification.md), [evaluation protocol](docs/evaluation.md),
 and [remaining acceptance steps](docs/roadmap.md). Unit tests and the offline preview are **not**
 evidence of official-corpus answer quality.
+
+**Official-source smoke completed:** 20 owner-signed-off sources produced a 229-chunk BGE index
+and 20 paired Qwen outputs over 10 smoke questions. All 97 tests and 20 structural output checks
+passed on Tesla T4. Model refusal-reason mismatches remain; answer/citation semantics are ungraded.
+See [exact run metadata](docs/kaggle_official_smoke_v2.json), [signoff](docs/owner_smoke_signoff.md)
+and [observed failures](docs/error_analysis.md). This is pipeline verification, not held-out quality.
 
 **Kaggle GPU verification:** pinned Qwen3-4B and BGE completed actual retrieval and generation on
 Tesla T4 / FP16 / CUDA 12.8. All 67 tests and six structured-output checks passed in the submitted
@@ -214,9 +220,11 @@ review pool: nine existing-URL mirror candidates, six supplemental articles and 
 candidates. Upstream answers are generated drafts; labels/types/evidence remain unassigned.
 Public metadata records hashes and provenance; actual source/QA text stays local.
 
-Corpus curation, gold review and held-out inference are separate milestones. The complete local
-annotation packet is `artifacts/local/review-pack-v3/smoke.html`; it links to the entire corpus,
-actual scope policy, all splits and the overlap audit. See [the curation log](docs/corpus_curation_v2.json).
+Corpus curation, reference review and held-out inference are separate milestones. The owner
+signed off the 20-source/10-smoke milestone through chat; [the review record](docs/owner_smoke_signoff.md)
+distinguishes that approval from assistant-authored bindings/rationales and future output grading.
+The updated local annotation packet is `artifacts/local/review-pack-v4/smoke.html`; it links to
+the entire corpus, policy, pending dev/test drafts and overlap audit. See [the curation log](docs/corpus_curation_v2.json).
 The original v1 drafts and recorded GPU snapshots are retained as historical artifacts.
 
 - **Retrieval corpus:** official source paragraphs, stored locally, never benchmark answers.
@@ -228,7 +236,8 @@ The current v2 benchmark contains 56 answerable drafts, 12 in-scope evidence-gap
 24 out-of-scope requests. `test_type` is independent of the answer label; prompt injection is a
 test type, not a refusal reason. The 12 gap cases include whole-corpus lexical censuses and require
 human absence/sufficiency review. Proposed source IDs are **not verified citations**.
-Evidence groups intentionally remain empty until a human binds them.
+The 10 smoke cases have bound spans or recorded corpus-gap rationales under owner signoff.
+Other draft evidence groups remain empty until the corresponding review is complete.
 Use [the review workflow](docs/evaluation.md) before measuring quality. Existing draft cases have
 been visible to the implementation assistant; do not describe them as an independently blind benchmark.
 

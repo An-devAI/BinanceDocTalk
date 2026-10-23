@@ -6,7 +6,7 @@
 |---|---|---|
 | Candidate official-source manifest | `data/manifest.v1.jsonl` | 20 URLs; direct HTTP attempt failed; web-reader snapshot import recorded separately |
 | Retrieved source snapshots | Local `corpus.web-extract.v1.jsonl`; public metadata manifest | 20 potentially cached web-reader extracts, 481 paragraphs; human review pending |
-| Benchmark | `data/eval/drafts-v2/*.jsonl`; original v1 preserved | 92 AI-authored drafts; whole-corpus gap audits and gold pending |
+| Benchmark | `data/eval/drafts-v2/*.jsonl`; original v1 preserved | 92-case design; 10 owner-signed-off smoke references; 82 dev/test drafts pending |
 | Original preview corpus | `data/demo/notes.jsonl` | 12 synthetic notes; not official Binance material |
 
 No training/fine-tuning dataset is used. Never add question/reference-answer files to the index.
@@ -61,7 +61,8 @@ official source by assigning it an official URL. Check exact correspondence to t
 Current drafts are in `data/eval/drafts-v2/`; original v1 drafts remain unchanged for provenance.
 V2 has **92 questions: 10 smoke / 36 dev / 46 test**. Draft label counts are 56 answerable,
 24 out-of-scope, and 12 candidate in-scope evidence gaps. These are design counts, not approved
-labels or measured performance. All records remain pending human review.
+labels or measured performance. The original drafts remain pending as historical inputs. A separate signed-off smoke copy contains
+10 owner-approved references; 82 dev/test cases remain pending. See [the signoff record](owner_smoke_signoff.md).
 
 `label` is answerable / insufficient_information / out_of_scope. Independent `test_type` values
 are ordinary / multi_evidence / false_premise / distractor / prompt_injection. A false premise

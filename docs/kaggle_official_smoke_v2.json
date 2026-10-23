@@ -1,0 +1,232 @@
+{
+  "created_at": "2026-10-23T10:58:53.416941+00:00",
+  "kind": "official_source_smoke_only",
+  "status": "complete",
+  "source_sha256": "82d673816e932416d1365c61daed8d7bfe5c8a7956fbc4daf9d371e80558e712",
+  "input_manifest_sha256": "737dca2e71784bd4568f102ba8f373dc4fbddbafe31f92c54e726a3b38f2ab0f",
+  "owner_decision_sha256": "619309a9f94c749cb958d0dd0b7e11bd66fdf398ef598941961db4f41dfd59a5",
+  "input_file_hashes": {
+    "corpus.reviewed.v2.jsonl": "a1c93283ae5400a72f00e99c350891f5bd415059969e58600cee4ad8a85256ed",
+    "smoke.reviewed.v2.jsonl": "cf4e483c597487be1242ba14ea9eacad6ef711f5fd69c4e3c6a66bb3a072918a",
+    "owner-signoff.json": "619309a9f94c749cb958d0dd0b7e11bd66fdf398ef598941961db4f41dfd59a5"
+  },
+  "source_count": 20,
+  "smoke_cases": 10,
+  "prediction_count": 20,
+  "errors": 0,
+  "index": {
+    "format_version": 1,
+    "created_at": "2026-10-23T10:55:43.445756+00:00",
+    "kind": "official",
+    "corpus_hash": "890a89725c17da1ef94f433a13a6744855132303170fe555c30bd769ffb4a712",
+    "context_groups_hash": "1908b68aed15bce31c9d794ceb7a3436de640e05e6e16aef19443c4d71d491cb",
+    "document_count": 20,
+    "chunk_count": 229,
+    "tokenizer": "bge_small_v1_5",
+    "chunk_tokens": 400,
+    "overlap_tokens": 60,
+    "human_reviewed": true,
+    "embedding_model": "BAAI/bge-small-en-v1.5",
+    "embedding_revision": "5c38ec7c405ec4b44b94cc5a9bb96e735b38267a"
+  },
+  "setup_seconds": 114.48482387099997,
+  "runtime": {
+    "provider": "huggingface_local",
+    "model_revision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+    "embedding_revision": "5c38ec7c405ec4b44b94cc5a9bb96e735b38267a",
+    "decoding": "greedy",
+    "structured_decoding": "lm-format-enforcer/json-schema/strict-field-order",
+    "abstention_messages": "fixed_by_reason_v1",
+    "compute_usd": null,
+    "cost_basis": "API only; GPU compute not priced",
+    "gpu": "Tesla T4",
+    "total_vram_bytes": 15636037632,
+    "free_vram_at_load_bytes": 15526068224,
+    "torch": "2.11.0+cu128",
+    "cuda": "12.8",
+    "dtype": "float16",
+    "model_load_seconds": 54.29882801900001,
+    "peak_vram_allocated_bytes": 8980763136
+  },
+  "configs": [
+    {
+      "provider": "huggingface_local",
+      "system": "baseline",
+      "model": "Qwen/Qwen3-4B-Instruct-2507",
+      "embedding_model": "BAAI/bge-small-en-v1.5",
+      "reasoning_effort": "none",
+      "max_output_tokens": 768,
+      "top_k": 3,
+      "chunk_tokens": 400,
+      "overlap_tokens": 60,
+      "tokenizer": "bge_small_v1_5",
+      "timeout_seconds": 30,
+      "max_retries": 0,
+      "budget_usd": 10.0,
+      "input_usd_per_million": 0.0,
+      "output_usd_per_million": 0.0,
+      "embedding_usd_per_million": 0.0,
+      "pricing_checked_at": "2026-10-22",
+      "model_revision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+      "embedding_revision": "5c38ec7c405ec4b44b94cc5a9bb96e735b38267a",
+      "max_input_tokens": 4096,
+      "seed": 42
+    },
+    {
+      "provider": "huggingface_local",
+      "system": "rag",
+      "model": "Qwen/Qwen3-4B-Instruct-2507",
+      "embedding_model": "BAAI/bge-small-en-v1.5",
+      "reasoning_effort": "none",
+      "max_output_tokens": 768,
+      "top_k": 3,
+      "chunk_tokens": 400,
+      "overlap_tokens": 60,
+      "tokenizer": "bge_small_v1_5",
+      "timeout_seconds": 30,
+      "max_retries": 0,
+      "budget_usd": 10.0,
+      "input_usd_per_million": 0.0,
+      "output_usd_per_million": 0.0,
+      "embedding_usd_per_million": 0.0,
+      "pricing_checked_at": "2026-10-22",
+      "model_revision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+      "embedding_revision": "5c38ec7c405ec4b44b94cc5a9bb96e735b38267a",
+      "max_input_tokens": 4096,
+      "seed": 42
+    }
+  ],
+  "statuses": {
+    "baseline": {
+      "answered": 5,
+      "abstained": 5,
+      "error": 0
+    },
+    "rag": {
+      "answered": 5,
+      "abstained": 5,
+      "error": 0
+    }
+  },
+  "latencies_ms": [
+    {
+      "question_id": "SMOKE-008",
+      "mode": "baseline",
+      "latency_ms": 2029.2377740000234
+    },
+    {
+      "question_id": "SMOKE-008",
+      "mode": "rag",
+      "latency_ms": 2987.5113709999823
+    },
+    {
+      "question_id": "SMOKE-004",
+      "mode": "rag",
+      "latency_ms": 16319.036262999987
+    },
+    {
+      "question_id": "SMOKE-004",
+      "mode": "baseline",
+      "latency_ms": 13859.032296000009
+    },
+    {
+      "question_id": "SMOKE-003",
+      "mode": "rag",
+      "latency_ms": 23640.016388999982
+    },
+    {
+      "question_id": "SMOKE-003",
+      "mode": "baseline",
+      "latency_ms": 14460.193336000031
+    },
+    {
+      "question_id": "SMOKE-009",
+      "mode": "rag",
+      "latency_ms": 4046.2950460000116
+    },
+    {
+      "question_id": "SMOKE-009",
+      "mode": "baseline",
+      "latency_ms": 2730.1527920000126
+    },
+    {
+      "question_id": "SMOKE-006",
+      "mode": "rag",
+      "latency_ms": 3730.076163999968
+    },
+    {
+      "question_id": "SMOKE-006",
+      "mode": "baseline",
+      "latency_ms": 2241.678696000008
+    },
+    {
+      "question_id": "SMOKE-007",
+      "mode": "rag",
+      "latency_ms": 11648.375463999968
+    },
+    {
+      "question_id": "SMOKE-007",
+      "mode": "baseline",
+      "latency_ms": 2649.941900999977
+    },
+    {
+      "question_id": "SMOKE-010",
+      "mode": "rag",
+      "latency_ms": 3671.554618000016
+    },
+    {
+      "question_id": "SMOKE-010",
+      "mode": "baseline",
+      "latency_ms": 11766.724343999955
+    },
+    {
+      "question_id": "SMOKE-005",
+      "mode": "rag",
+      "latency_ms": 2778.342608999992
+    },
+    {
+      "question_id": "SMOKE-005",
+      "mode": "baseline",
+      "latency_ms": 2180.0646970000344
+    },
+    {
+      "question_id": "SMOKE-001",
+      "mode": "baseline",
+      "latency_ms": 8586.901135999995
+    },
+    {
+      "question_id": "SMOKE-001",
+      "mode": "rag",
+      "latency_ms": 16400.69825500001
+    },
+    {
+      "question_id": "SMOKE-002",
+      "mode": "rag",
+      "latency_ms": 19566.203084999983
+    },
+    {
+      "question_id": "SMOKE-002",
+      "mode": "baseline",
+      "latency_ms": 8446.398775999967
+    }
+  ],
+  "api_usd": 0.0,
+  "compute_usd": null,
+  "output_human_grading_complete": false,
+  "heldout_inference_performed": false,
+  "heldout_quality_measured": false,
+  "note": "Owner-signed-off smoke references; model outputs are ungraded. Timing/status observations are pipeline checks, not final answer/citation quality scores.",
+  "kernel": "annguyencherry/binancedoctalk-official-smoke-82d67381",
+  "kernel_version": 1,
+  "kernel_status": "COMPLETE",
+  "private_notebook_confirmed": true,
+  "private_dataset_ref": "annguyencherry/binancedoctalk-smoke-inputs-c69cf64ff6c7",
+  "private_dataset_confirmed": true,
+  "core_tests_passed": 97,
+  "core_tests_log_sha256": "a9986a52901e01ee04ee33a2fe54853d869b3f7304fed74a0958e4a69d4c7eed",
+  "predictions_sha256": "cfbf03fd973aa1a6664b86da447cb797bd775a9eee4ee25d467152a4b99c2be9",
+  "run_manifest_sha256": "c6aa15481a788b43e5c4b1355511829fef35daf13dab10bd57b3769a24ee4fb0",
+  "raw_output_matches_validated_output": true,
+  "structural_validation_passed": 20,
+  "publication_note": "Metadata only. All 20 original outputs are retained privately; semantic quality and final held-out results are unmeasured."
+}

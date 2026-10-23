@@ -75,3 +75,16 @@ implemented pin/hash/schema validation, explicit source selection, provenance, c
 and local comparison/review pages. Upstream questions and answers remain attributed generated
 drafts. No human source/QA approval was fabricated, no candidate was merged into the active
 benchmark, and no official held-out inference or tuning occurred in this import.
+
+## Owner smoke signoff and real official-source run
+
+The owner explicitly approved the preceding 20-source/10-smoke milestone. The exact chat statement,
+input hashes and bounded scope are in `data/reviews/owner-smoke-v2.json`. Existing suggested spans
+were transcribed into final smoke bindings; assistant-authored per-document rationale remains
+attributed to the assistant. This does not assert the owner wrote or individually inspected each
+new annotation. It is owner-declared approval, not independent certification or output grading.
+
+A private-only Kaggle input bundle and private GPU notebook ran the actual 20-source/10-case smoke:
+97 tests pass, 229 BGE chunks and 20 outputs are retained, including observed reason mismatches.
+No development/held-out approval, HF candidate adoption, human output grade or final quality gain
+was inferred. All original predictions remain private; only sanitized metadata is published.

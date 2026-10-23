@@ -2,10 +2,13 @@
 
 ## Current state and contracts
 
-The current benchmark has **92 unreviewed drafts: 10 smoke / 36 development / 46 held-out**.
+The v2 design has **92 cases: 10 smoke / 36 development / 46 held-out**. The owner has signed
+off the 20 curated sources and the 10 smoke references through chat. The 82 dev/test cases
+remain pending. Original drafts stay unchanged; the signed-off copy is `data/eval/v2/smoke.jsonl`.
 Its design labels are 56 answerable, 12 candidate corpus gaps, and 24 out-of-scope requests.
 The original 80 v1 drafts and historical Kaggle outputs remain unchanged. No official-source
-quality score or human gold approval is claimed. Existing GPU outputs use original synthetic notes.
+quality score is claimed. Review is owner-declared rather than independently certified. The official-source smoke run completed with 20 ungraded outputs; historical GPU previews use
+original synthetic notes. See [run metadata](kaggle_official_smoke_v2.json).
 
 `label` is the expected answer class: `answerable`, `insufficient_information`, or `out_of_scope`.
 `test_type` is independent: `ordinary`, `multi_evidence`, `false_premise`, `distractor`, or
@@ -24,24 +27,27 @@ to select a prompt, retriever, threshold or other behavior is test contamination
 
 ## Source and gold review
 
-Start with `artifacts/local/review-pack-v3/sources.html`, then `smoke.html`. Navigation includes
+The current recorded-review packet is `artifacts/local/review-pack-v4/sources.html`, then `smoke.html`.
+The original v3 packet remains as provenance for the approved milestone. Navigation includes
 all selected paragraphs, exact metadata, policy, all splits and the cross-split overlap shortlist.
 The packet distinguishes feedback-selected spans, lexical suggestions and actual gold bindings.
-Only a human-entered review decision approves a record. Keyword misses and top-k results do not
+Owner decisions may be recorded through the interactive helper or an explicit hash-bound chat
+attestation. The latter is documented in [owner_smoke_signoff.md](owner_smoke_signoff.md); assistant
+authorship of evidence transcriptions and audit rationales remains explicit. Keyword misses and top-k results do not
 establish absence; lexical overlap checks do not establish semantic split independence.
 
 ```bash
-python3 scripts/review_dataset.py sources --input data/local/corpus.curated.v2.jsonl \
-  --output data/local/corpus.reviewed.v2.jsonl --reviewer "Your actual name"
-python3 scripts/review_dataset.py audits --input data/eval/drafts-v2/smoke.jsonl \
-  --output data/local/smoke.audited.v2.jsonl --corpus data/local/corpus.reviewed.v2.jsonl \
+# Source and smoke signoff already exist. Continue with development:
+python3 scripts/review_dataset.py audits --input data/eval/drafts-v2/dev.jsonl \
+  --output data/local/dev.audited.v2.jsonl --corpus data/local/corpus.reviewed.v2.jsonl \
   --reviewer "Your actual name"
-python3 scripts/review_dataset.py questions --input data/local/smoke.audited.v2.jsonl \
-  --output data/eval/v2/smoke.jsonl --corpus data/local/corpus.reviewed.v2.jsonl \
+python3 scripts/review_dataset.py questions --input data/local/dev.audited.v2.jsonl \
+  --output data/eval/v2/dev.jsonl --corpus data/local/corpus.reviewed.v2.jsonl \
   --reviewer "Your actual name"
 ```
 
-Repeat audits and questions for dev and test. If interrupted, completed decisions are saved;
+The source/smoke milestone above has been materialized; do not repeat or overwrite that approval.
+Continue the interactive audit/question workflow for dev and test. If interrupted, completed decisions are saved;
 resume using that output as input and a new output filename. Correct wrong drafts in versioned
 copies before approval. No helper silently approves, relabels, or overwrites existing versions.
 
@@ -55,7 +61,8 @@ For insufficient-information cases, review the **entire selected corpus**. The e
 records its corpus hash, search terms, all document IDs/hashes and lexical candidate paragraph IDs.
 A human must confirm scope, read each full source, record `absent` or `partial` with notes, and
 approve the audit. Any `sufficient` assessment blocks this label: correct or replace the draft.
-All 12 new audits currently remain pending. Their proposed missing facts are hypotheses, not gold.
+The two smoke labels have owner signoff and assistant-attributed audit rationales. Ten dev/test
+gap audits remain pending; their proposed missing facts are hypotheses until their own review.
 
 For out-of-scope cases, reference the frozen **application policy**, not Binance passages claiming
 to define the project's scope. Current account fees, personal liquidation calculations and
@@ -65,6 +72,7 @@ from the actual shared system scope, with version, SHA-256 and rule references.
 ```bash
 python3 scripts/doctalk.py evidence --corpus data/local/corpus.reviewed.v2.jsonl \
   --doc-id D17 --paragraph-id p029
+# After reviewed dev.jsonl and test.jsonl also exist:
 python3 scripts/doctalk.py audit-benchmark --directory data/eval/v2 \
   --require-reviewed --corpus data/local/corpus.reviewed.v2.jsonl
 ```
