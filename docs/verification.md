@@ -4,7 +4,7 @@
 
 | Check | Observed result |
 |---|---|
-| Core and integration suite | 79 tests pass on Python 3.12.3 |
+| Core and integration suite | 89 tests pass on Python 3.12.3 |
 | Benchmark v2 structural audit | 92 drafts; splits 10/36/46; labels 56 answerable / 12 candidate gaps / 24 out-of-scope; zero approvals |
 | CLI demonstration | Actual original-note retrieval, false-premise example and out-of-scope response |
 | API transport | Mocked structured generation, embedding order, usage, 401/no retry, 429/one retry |
@@ -126,3 +126,22 @@ python3 scripts/kaggle_task.py doctor --check-auth
 
 Raw local check logs, budget/configuration state and remote outputs belong under ignored
 `artifacts/local/`. Inspect any future public results against the frozen manifest and human grades.
+
+## Optional Hugging Face import
+
+Pinned full Parquet artifacts were downloaded and SHA-256/schema/count checked locally.
+Observed: 3,487 corpus rows (581 Binance); 497 QA (84 Binance from 42 URLs). Selection stages
+15 source candidates (nine URL matches/six supplemental) and 12 development QA candidates.
+Public metadata: `huggingface_import_v1.json`; actual source/QA and full comparison pages stay
+under ignored local artifacts. All candidate labels/types/evidence remain unassigned and pending.
+The active corpus/92-case benchmark hashes are preserved; no held-out model outputs were read.
+
+Ten additional core tests exercise external import boundaries. The optional real Parquet fixture
+check passes with Arrow 26.0.0; core runtime dependencies remain empty. These checks and source
+counts are not human gold review or LLM quality results. Historical GPU snapshots below retain
+their original test counts and source hashes.
+
+The latest allowlisted source archive reproduces all 89 core tests and the unchanged 92-case
+audit in a clean temporary extraction. The HF packet's 43 links resolve; public metadata contains
+no copied source paragraphs or upstream QA strings. The preserved active corpus and all three
+benchmark files match the import report's recorded input hashes.

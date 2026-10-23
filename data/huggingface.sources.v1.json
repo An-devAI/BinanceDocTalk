@@ -1,0 +1,37 @@
+{
+  "format_version": 1,
+  "selection_version": "hf-candidates-v1",
+  "max_candidate_documents": 30,
+  "artifacts": {
+    "corpus": {
+      "repo_id": "kskada/crypto-education-en-corpus",
+      "revision": "f23dd9dd360b485fb25db063ed0a3dad38d4dbd0",
+      "file": "data/train-00000-of-00001.parquet",
+      "sha256": "dd1823a63bde2cf8afe78cc3fcc25eff77c161b9df4e1bbd89c7b98efc05ec61",
+      "bytes": 12354997,
+      "rows": 3487,
+      "columns": ["url", "title", "markdown", "word_count", "depth", "source", "related_topics"]
+    },
+    "qa": {
+      "repo_id": "kskada/crypto-education-en-golden-set",
+      "revision": "5f22df94f486328c5baaf2f5bdb64b2cc5afa893",
+      "file": "data/train-00000-of-00001.parquet",
+      "sha256": "8880058a9c9341a80ed6f7b422efaefe68885ee1c9edb21a0040093eb6d2b2a7",
+      "bytes": 88271,
+      "rows": 497,
+      "columns": ["question", "answer", "source_url", "source_title", "topic", "question_type"]
+    }
+  },
+  "additional_sources": [
+    {"url": "https://academy.binance.com/en/articles/understanding-the-different-order-types", "reason": "Core market/limit order concepts; review maker/taker and execution qualifications."},
+    {"url": "https://academy.binance.com/en/articles/what-is-a-stablecoin", "reason": "Basic crypto terminology; compare with the existing stablecoin glossary and check semantic duplication."},
+    {"url": "https://academy.binance.com/en/articles/what-is-proof-of-stake-pos", "reason": "Basic consensus terminology only; detailed staking procedures and return recommendations require exclusion."},
+    {"url": "https://academy.binance.com/en/articles/pyramid-and-ponzi-schemes", "reason": "Conceptual crypto scam terminology; legal generalizations require separate review."},
+    {"url": "https://academy.binance.com/en/articles/what-is-spoofing-in-the-financial-markets", "reason": "Order-book terminology; review legal claims and exclude procedural manipulation advice."},
+    {"url": "https://academy.binance.com/en/articles/what-is-ethereum-and-how-does-it-work", "reason": "Basic crypto/platform terminology; detailed protocol and time-sensitive numerical claims require review."}
+  ],
+  "license_declared_by_publisher": "MIT",
+  "rights_review_status": "not_verified_for_underlying_third_party_articles",
+  "qa_generation_declared_by_publisher": "Claude-generated Q&A; dataset card does not describe human gold verification",
+  "adoption_policy": "External source/QA candidate pool only. Do not merge, approve, index, or run held-out automatically."
+}

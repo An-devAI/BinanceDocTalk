@@ -1,0 +1,2 @@
+# Optional local import of pinned Parquet files; the core app remains dependency-free.
+pyarrow==26.0.0

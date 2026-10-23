@@ -31,6 +31,8 @@ def validate_questions(rows: list[dict], require_review: bool = False,
     ids, normalized, family_splits = set(), set(), defaultdict(set)
     docs = {d.doc_id: d for d in documents or []}
     for row in rows:
+        if "candidate_format_version" in row:
+            validate_v2(row, list(docs.values()), False)
         qid = row["question_id"]
         if qid in ids:
             raise ValueError(f"Duplicate question ID: {qid}")

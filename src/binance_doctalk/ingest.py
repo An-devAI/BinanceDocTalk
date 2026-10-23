@@ -23,7 +23,9 @@ def allowed_url(url: str) -> bool:
     parsed = urlparse(url)
     return (parsed.scheme == "https" and parsed.hostname in ALLOWED_HOSTS
             and parsed.port in {None, 443} and not parsed.username
-            and ("/academy/" in parsed.path or "/support/faq/" in parsed.path))
+            and ("/academy/" in parsed.path or "/support/faq/" in parsed.path
+                 or (parsed.hostname == "academy.binance.com"
+                     and parsed.path.startswith(("/en/articles/", "/en/glossary/")))))
 
 
 class RestrictedRedirect(HTTPRedirectHandler):

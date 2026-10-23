@@ -14,3 +14,16 @@ This assistant is not investment advice and cannot determine live account or tra
 Model weights and dependencies retain their own licences. Qwen3-4B-Instruct-2507 is Apache 2.0,
 BGE-small-en-v1.5 and LM Format Enforcer are MIT; model cards and dependency distributions are
 authoritative. Weights are downloaded separately and are not included in the repository.
+
+## Optional Crypto Education dataset import
+
+The external source/development candidate importer uses pinned releases of Kirill Konovalov's
+`kskada/crypto-education-en-corpus` and `kskada/crypto-education-en-golden-set` (2026):
+https://huggingface.co/datasets/kskada/crypto-education-en-corpus
+https://huggingface.co/datasets/kskada/crypto-education-en-golden-set
+
+Their dataset cards declare MIT. This records the publisher's declaration, not independent
+verification of rights for the underlying articles. The corpus card identifies
+`distilled-ai/web3-oriented-pretraining-data` among its upstream inputs. Public import artifacts
+contain metadata/hashes only; copied source text and original upstream QA stay in ignored local
+files. MIT licensing of this project's code is separate from imported content rights.

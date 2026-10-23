@@ -40,6 +40,8 @@ def predicted_label(prediction: dict) -> str:
 
 
 def validate_v2(row: dict, documents, require_review: bool) -> None:
+    if "candidate_format_version" in row:
+        raise ValueError("External QA candidates are not an adopted benchmark; review and version them first")
     qid = row["question_id"]
     if row.get("schema_version") != 2 or row.get("test_type") not in TEST_TYPES:
         raise ValueError(f"{qid}: benchmark v2 needs a valid independent test_type")

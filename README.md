@@ -14,6 +14,7 @@ and paired evaluation tooling are implemented. **The official-source quality stu
 | Dependency-free local application and CLI | Implemented; core behavior tested |
 | Offline demonstration | Runs on 12 original synthetic notes, with no LLM or API charges |
 | Official source manifests | 20 candidate URLs plus actual snapshot timestamps/hashes; raw text excluded from Git |
+| HF import | 15 separate source candidates and 12 development QA candidates; pinned Parquet, no automatic adoption. [Workflow](docs/huggingface_workflow.md) |
 | Benchmark | 92 v2 drafts: 10 smoke / 36 dev / 46 test; labels and test types separated; human review pending |
 | Official corpus collection | 20 web-reader snapshots; curated v2 retains 477 of 481 paragraphs, with a versioned edit log; human review pending. [Provenance](docs/collection_workflow.md) |
 | Local Qwen + BGE integration | Verified on Kaggle GPU: 67 tests pass, six original-note outputs validated; semantic quality ungraded |
@@ -207,6 +208,11 @@ conservative bookkeeping, not a hard billing cap enforced by the provider. Do no
 to hide spending. Inspect a stale `.lock` only after confirming no process is using it.
 
 ## Dataset and evaluation
+
+An optional [pinned Hugging Face import](docs/huggingface_workflow.md) provides a separate
+review pool: nine existing-URL mirror candidates, six supplemental articles and 12 development QA
+candidates. Upstream answers are generated drafts; labels/types/evidence remain unassigned.
+Public metadata records hashes and provenance; actual source/QA text stays local.
 
 Corpus curation, gold review and held-out inference are separate milestones. The complete local
 annotation packet is `artifacts/local/review-pack-v3/smoke.html`; it links to the entire corpus,

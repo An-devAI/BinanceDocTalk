@@ -60,6 +60,10 @@ class KaggleBundleTests(unittest.TestCase):
             names = archive.namelist()
         self.assertIn("src/binance_doctalk/answering.py", names)
         self.assertIn("data/eval/drafts/test.jsonl", names)
+        self.assertIn("data/huggingface.sources.v1.json", names)
+        self.assertIn("requirements-datasets.txt", names)
+        self.assertIn("docs/huggingface_import_v1.json", names)
+        self.assertFalse(any(name.endswith(".parquet") for name in names))
         for name in names:
             self.assertNotIn("data/local", name)
             self.assertNotIn("artifacts/local", name)

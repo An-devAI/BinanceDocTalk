@@ -67,3 +67,11 @@ is recorded in `review_feedback_v2.md`; it is not a blanket human gold approval.
 use synthetic fixtures and do not certify semantic evidence or source absence. Twelve new gap
 questions, all per-document audit decisions, and final source/gold decisions remain pending.
 No held-out model outputs were used to select behavior during this revision.
+
+## Hugging Face candidate integration
+
+The owner proposed two public datasets and approved staging reusable material. AI-assisted work
+implemented pin/hash/schema validation, explicit source selection, provenance, candidate isolation
+and local comparison/review pages. Upstream questions and answers remain attributed generated
+drafts. No human source/QA approval was fabricated, no candidate was merged into the active
+benchmark, and no official held-out inference or tuning occurred in this import.

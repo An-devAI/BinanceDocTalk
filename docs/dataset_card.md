@@ -108,3 +108,12 @@ replace source text under the same version. A changed page requires a new corpus
 evidence binding. Hashes detect changes but cannot restore content. When an old snapshot cannot be
 lawfully shared or recollected, document that exact inference reproduction is unavailable; retained
 outputs still allow independent recomputation of aggregate scores.
+
+## External HF review pool
+
+The optional [HF import workflow](huggingface_workflow.md) stages 15 source mirrors and 12
+development QA candidates, with pinned revisions/file hashes and per-row provenance. These are
+separate from the active corpus and 92-case benchmark. No external candidate has a gold label,
+behavioral test type or approved evidence binding. Existing true-gap audits must be repeated if
+any new text is adopted. Metadata-only public manifests are stored under `data/huggingface.*`;
+actual sources, QA and comparisons remain private under `artifacts/local/hf-import-v1/`.
