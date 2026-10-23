@@ -6,7 +6,7 @@
 |---|---|---|
 | Candidate official-source manifest | `data/manifest.v1.jsonl` | 20 URLs; direct HTTP attempt failed; web-reader snapshot import recorded separately |
 | Retrieved source snapshots | Local `corpus.web-extract.v1.jsonl`; public metadata manifest | 20 potentially cached web-reader extracts, 481 paragraphs; human review pending |
-| Benchmark | `data/eval/drafts/*.jsonl` | 80 AI-authored drafts, no human-reviewed gold evidence |
+| Benchmark | `data/eval/drafts-v2/*.jsonl`; original v1 preserved | 92 AI-authored drafts; whole-corpus gap audits and gold pending |
 | Original preview corpus | `data/demo/notes.jsonl` | 12 synthetic notes; not official Binance material |
 
 No training/fine-tuning dataset is used. Never add question/reference-answer files to the index.
@@ -16,6 +16,26 @@ and resolved URLs when collecting.
 
 See [collection evidence and review handoff](collection_workflow.md). HTML imports require actual
 collection timestamps; a missing corpus is never replaced with synthetic notes under official URLs.
+
+## Curated corpus v2
+
+`data/local/corpus.curated.v2.jsonl` retains 477 paragraphs from the 481-paragraph parent.
+`data/curation.v2.json` specifies seven sentence-filter/delete operations with pinned parent
+hashes. `docs/corpus_curation_v2.json` records changed paragraph IDs, reasons, lengths and hashes;
+`data/corpus.curated.v2.manifest.jsonl` publishes metadata without paragraph text.
+
+Source metadata includes `source_url` (= `url`), `retrieved_at` (= `fetched_at`), `version`,
+`content_sha256` (= `content_hash`), parent content hash and source-update evidence. Conflicting
+aliases are rejected. Retrieval timestamps are real snapshot retrieval times, not upstream crawl
+times or curation dates. Unknown update times are null; unknown retrieval times may be recorded
+in a manifest but do not pass the official-index gate. The content hash is SHA-256 over canonical
+JSON paragraphs; the raw snapshot hash is separate.
+
+Paragraph IDs survive deletion. Any changed document hash invalidates old evidence bindings,
+even for retained paragraphs. Explicit context groups keep selected maker/taker and stop-limit
+definition/exception paragraphs together and fail if the unit exceeds the configured token budget.
+The market-order execution-certainty wording conflict in D15/D16 is exposed for human adjudication;
+source text has not been rewritten to manufacture agreement.
 
 ## Corpus schema
 
@@ -36,38 +56,34 @@ For local imports, extract permitted HTML with `binance_doctalk.ingest.extract_h
 schema above from legitimately obtained source text. Do not change a third-party note into an
 official source by assigning it an official URL. Check exact correspondence to the source page.
 
-## Benchmark design
+## Benchmark v2 design
 
-| Primary category | Smoke | Dev | Test |
-|---|---:|---:|---:|
-| Ordinary | 2 | 14 | 16 |
-| Multiple evidence units | 2 | 6 | 8 |
-| Insufficient / outside scope | 2 | 6 | 8 |
-| False premise | 1 | 3 | 4 |
-| Distractor / instruction interference | 1 | 3 | 4 |
-| Total | 8 | 32 | 40 |
+Current drafts are in `data/eval/drafts-v2/`; original v1 drafts remain unchanged for provenance.
+V2 has **92 questions: 10 smoke / 36 dev / 46 test**. Draft label counts are 56 answerable,
+24 out-of-scope, and 12 candidate in-scope evidence gaps. These are design counts, not approved
+labels or measured performance. All records remain pending human review.
 
-Answerable/insufficient counts: smoke 5/3, dev 23/9, test 28/12. These are **design counts**, not
-measured performance. False premises can be answerable when evidence allows correction. Unsupported
-assertions must not be confidently declared false without evidence.
+`label` is answerable / insufficient_information / out_of_scope. Independent `test_type` values
+are ordinary / multi_evidence / false_premise / distractor / prompt_injection. A false premise
+can be corrected with evidence; an injection can be answerable if its remaining request is valid.
+An out-of-scope question cites project policy, not Binance evidence about the project's scope.
+Policy hashes bind to the actual shared system scope.
 
-All questions have IDs, `family_id`, split, category, label, draft reference, required points,
-proposed source IDs and review status. `proposed_source_ids` do not constitute gold evidence.
+Each proposed gap audit enumerates every source document/hash, lexical candidate paragraph IDs,
+search terms and proposed missing information. No-hit search is not absence evidence. A human
+must inspect all selected text, record absent/partial assessments and notes, and approve the audit.
+Finding sufficient evidence requires changing the draft. Gap audits are bound to the corpus hash.
+See [the complete protocol](evaluation.md) for review commands, grading and held-out restrictions.
 
-`evidence_groups` is a list of required-fact groups. Each group contains alternative acceptable spans:
+Answerable records require one evidence group per required point; alternatives inside a group
+are interchangeable supporting spans. Offsets are Python Unicode character positions, start
+inclusive/end exclusive. Proposed source IDs and `candidate_evidence_groups` remain unapproved
+suggestions; final `evidence_groups` are empty until actual human binding.
 
-```json
-[[{"doc_id":"D17","paragraph_id":"p003","start":0,"end":120,"content_hash":"actual hash"}]]
-```
-
-Offsets are Python Unicode character positions, start inclusive/end exclusive, in the normalized
-paragraph text. The example above is illustrative, not a usable source binding. Each required fact
-must have an adequate group; a multiple-evidence case needs multiple groups. Retrieval recall treats
-alternatives as alternatives and does not double-count overlapping chunks.
-
-Use `doctalk evidence` to inspect spans. Check the entire selected corpus before declaring a question
-unanswerable. Check family assignments and near paraphrases manually; exact duplicate checks do not
-detect semantic paraphrases. Shared source documents across splits are expected in this closed-corpus task.
+Family IDs and semantic near-paraphrases must be reviewed across splits. Shared source documents
+are expected in this closed-corpus task. The assistant has seen drafts; held-out means excluded
+from actual tuning rather than independently blind. After tuning on test outputs, a new final
+question set with new families and semantic audit is required.
 
 ## Publication and rights
 

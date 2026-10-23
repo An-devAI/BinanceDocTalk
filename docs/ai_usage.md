@@ -57,3 +57,13 @@ actually occur, and retain the relevant diff/test evidence.
   application validator; it is not a claim of measured official-corpus answer quality.
 
 These were assistant-discovered corrections. They are not claims of personal human debugging work.
+
+## Benchmark v2 revision
+
+The owner supplied source-filtering and eight-item smoke review feedback. AI-assisted work
+implemented separate answer labels/test types, reason-sensitive metrics, versioned curation,
+complete annotation packets, corpus-gap census drafts, and held-out reuse guards. The feedback
+is recorded in `review_feedback_v2.md`; it is not a blanket human gold approval. Automated tests
+use synthetic fixtures and do not certify semantic evidence or source absence. Twelve new gap
+questions, all per-document audit decisions, and final source/gold decisions remain pending.
+No held-out model outputs were used to select behavior during this revision.

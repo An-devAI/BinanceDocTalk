@@ -14,8 +14,8 @@ and paired evaluation tooling are implemented. **The official-source quality stu
 | Dependency-free local application and CLI | Implemented; core behavior tested |
 | Offline demonstration | Runs on 12 original synthetic notes, with no LLM or API charges |
 | Official source manifests | 20 candidate URLs plus actual snapshot timestamps/hashes; raw text excluded from Git |
-| Benchmark | 80 AI-authored drafts: 8 smoke / 32 dev / 40 test; human review pending |
-| Official corpus collection | 20 web-reader snapshots / 481 paragraphs retrieved locally; potentially cached, human review pending. [Provenance](docs/collection_workflow.md) |
+| Benchmark | 92 v2 drafts: 10 smoke / 36 dev / 46 test; labels and test types separated; human review pending |
+| Official corpus collection | 20 web-reader snapshots; curated v2 retains 477 of 481 paragraphs, with a versioned edit log; human review pending. [Provenance](docs/collection_workflow.md) |
 | Local Qwen + BGE integration | Verified on Kaggle GPU: 67 tests pass, six original-note outputs validated; semantic quality ungraded |
 | Live OpenAI integration | Implemented and mock-tested; no API key available for a live check |
 | Held-out quality, latency, cost | **Not measured**; no claims of improvement |
@@ -141,10 +141,10 @@ local; see [collection and review](docs/collection_workflow.md). After actual re
 runtime with `requirements-local-model.txt` installed:
 
 ```bash
-python scripts/doctalk.py build --corpus data/local/corpus.reviewed.v1.jsonl \
-  --config configs/kaggle-rag.toml --output data/local/index.local.v1.json
+python scripts/doctalk.py build --corpus data/local/corpus.reviewed.v2.jsonl \
+  --config configs/kaggle-rag.toml --output data/local/index.local.v2.json
 python scripts/doctalk.py ask "Why can a stop-limit order remain unfilled?" \
-  --config configs/kaggle-rag.toml --index data/local/index.local.v1.json
+  --config configs/kaggle-rag.toml --index data/local/index.local.v2.json
 ```
 
 No OpenAI key is used for this backend. Continue with the paired k=3/k=5 configurations and review,
@@ -208,19 +208,28 @@ to hide spending. Inspect a stale `.lock` only after confirming no process is us
 
 ## Dataset and evaluation
 
+Corpus curation, gold review and held-out inference are separate milestones. The complete local
+annotation packet is `artifacts/local/review-pack-v3/smoke.html`; it links to the entire corpus,
+actual scope policy, all splits and the overlap audit. See [the curation log](docs/corpus_curation_v2.json).
+The original v1 drafts and recorded GPU snapshots are retained as historical artifacts.
+
 - **Retrieval corpus:** official source paragraphs, stored locally, never benchmark answers.
 - **Benchmark:** separate questions, original reference answers, required points, answerability
   labels, grouped split IDs, and exact evidence spans.
 - **Offline preview:** 12 original notes; isolated from both official assets.
 
-The 80 drafts have the planned category counts and labels, but their proposed source IDs are
-**not verified citations**. Evidence groups intentionally remain empty until a human binds them.
+The current v2 benchmark contains 56 answerable drafts, 12 in-scope evidence-gap candidates and
+24 out-of-scope requests. `test_type` is independent of the answer label; prompt injection is a
+test type, not a refusal reason. The 12 gap cases include whole-corpus lexical censuses and require
+human absence/sufficiency review. Proposed source IDs are **not verified citations**.
+Evidence groups intentionally remain empty until a human binds them.
 Use [the review workflow](docs/evaluation.md) before measuring quality. Existing draft cases have
 been visible to the implementation assistant; do not describe them as an independently blind benchmark.
 
 The experiment compares model knowledge without retrieval against dense RAG using the same
 generation settings. BM25 is a separate retrieval baseline. Tune only on dev, then freeze code,
-data, prompts and configs. The official test runner permits one held-out run per freeze.
+data, prompts and configs. The official test runner records a consumed question-set identity
+across freeze filenames and rejects overlapping consumed families. If test outputs informed tuning, create a new final set.
 
 Current results:
 
@@ -230,7 +239,7 @@ Current results:
 | Official-source RAG | Not measured | Not measured | Not measured | Not measured | Not measured |
 
 After producing a real report, load it into the local UI with
-`python3 web_app.py --report artifacts/local/test-v1/metrics.json` to inspect the saved metrics.
+`python3 web_app.py --report artifacts/local/test-v2/metrics.json` to inspect the saved metrics.
 It remains a report of its frozen run, not a measurement of a newly changed configuration.
 
 These entries must remain unchanged until real inference and declared human grading have been

@@ -23,7 +23,7 @@ Vacancies and requirements can change; check again before applying.
 
 “Implemented a configurable RAG application with pinned local-model backends, provenance checks,
 and paired evaluation safeguards; verified local Qwen/BGE retrieval and inference on Kaggle GPU, and maintained passing CI
-on Python 3.11–3.13.” Describe the 80 questions as unreviewed drafts until actual annotation.
+on Python 3.11–3.13.” Describe the 92 v2 questions as unreviewed drafts until actual annotation.
 The GPU integration evidence includes 67 passing tests and six structurally validated original-note
 outputs; these are not accuracy or semantic citation-support measurements.
 
@@ -48,9 +48,13 @@ outputs; these are not accuracy or semantic citation-support measurements.
 7. Why can a valid citation still fail semantic support?
 8. How do false refusal and abstention recall expose trivial refusal strategies?
 9. Is the no-retrieval baseline fair? Did it ever outperform RAG?
-10. What can 28 answerable and 12 insufficient test cases establish?
+10. What can the 46-case test and its small evidence-gap/scope subgroups establish?
 11. Why is a triggered stop-limit not necessarily filled?
 12. What dominates end-to-end latency and cost, including failures?
 13. Which results can be recomputed when the provider or page changes?
 14. What did you personally check, and which changes were AI-assisted?
 15. What next experiment follows from the observed errors?
+
+16. How do out-of-scope refusal and corpus-relative insufficient evidence differ?
+17. Why can prompt injection still be answerable, and how did you grade that behavior?
+18. What happens if held-out outputs influence a later prompt or retrieval change?

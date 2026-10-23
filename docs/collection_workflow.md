@@ -60,29 +60,44 @@ If a proposed question is unsupported, correct or replace it before freezing the
 A zero-corpus packet has already been prepared locally under `artifacts/local/review-pack-v1/`.
 It contains all 80 drafts and proposed source links, with an explicit missing-corpus warning.
 
-## Record actual review decisions
+## Curated v2 and the complete review packet
+
+The parent snapshot and its original packet are historical artifacts. The active corpus is
+`data/local/corpus.curated.v2.jsonl`; the active packet is `artifacts/local/review-pack-v3/`.
+It contains all 20 sources/477 selected paragraphs, 92 drafts, per-document gap audits, policy,
+feedback-selected evidence candidates, all split metadata and a semantic-overlap review shortlist.
+
+Reproduce curation from the exact local parent without overwriting existing outputs:
 
 ```bash
-python3 scripts/review_dataset.py sources --input data/local/corpus.web-extract.v1.jsonl \
-  --output data/local/corpus.reviewed.v1.jsonl --reviewer 'Your actual name'
-python3 scripts/review_dataset.py questions --input data/eval/drafts/smoke.jsonl \
-  --output data/eval/v1/smoke.jsonl --corpus data/local/corpus.reviewed.v1.jsonl \
-  --reviewer 'Your actual name'
+python3 scripts/curate_corpus.py --input data/local/corpus.web-extract.v1.jsonl \
+  --spec data/curation.v2.json --output data/local/corpus.curated.v2.jsonl \
+  --manifest data/corpus.curated.v2.manifest.jsonl --log docs/corpus_curation_v2.json \
+  --snapshots data/local/web-extracts
+python3 scripts/prepare_benchmark_v2.py --corpus data/local/corpus.curated.v2.jsonl \
+  --output data/eval/drafts-v2
+python3 scripts/prepare_review.py --corpus data/local/corpus.curated.v2.jsonl \
+  --output artifacts/local/review-pack-v3
 ```
 
-Repeat question review for dev and test, retaining 8/32/40 cases and family isolation. The helper
-only saves approvals entered by the operator. Corrections belong in versioned copies, not silently
-rewritten historical artifacts. Afterward run the reviewed benchmark audit documented in
-`docs/evaluation.md`. Do not use the coding assistant's review as a human review declaration.
+These outputs already exist in this workspace; select fresh output paths for a reproduction.
+The curation log retains removed/trimmed paragraph IDs, reasons and hashes without publishing source
+text. The raw snapshot hash and literal Updated line provide date provenance. Grouped definition/
+exception spans are retained as atomic source units when indexing; oversized groups fail explicitly.
+
+Review all sources first, then whole-corpus gap audits, then the question references, labels,
+required points and exact evidence. Use the commands in [evaluation.md](evaluation.md). Completed
+partial decisions are saved on interruption; resume with the saved input and a new output version.
+No previous draft review or owner feedback has been silently converted into gold approval.
 
 ## Continue the GPU study
 
-Use `configs/kaggle-baseline.toml` and `configs/kaggle-rag.toml` for both arms. Build the dense index
-from the reviewed corpus, run smoke, tune k=3/k=5 on dev, grade, then freeze the exact selected inputs.
-When executing in Kaggle, provide the reviewed data through authorized private inputs; do not embed
-raw Binance documents into the public source bundle. Record the actual input paths in that session.
-The freeze and held-out run must use the same preserved paths and source fingerprint.
+Use `configs/kaggle-baseline.toml` and `configs/kaggle-rag.toml` for both arms. Build the reviewed
+v2 dense index, run smoke, tune k=3/k=5 on dev, grade, then freeze the exact selected inputs.
+When executing in Kaggle, provide reviewed data through authorized private inputs; do not embed
+raw Binance documents into the public source bundle. Preserve the same paths, frozen source
+fingerprint and held-out registry across sessions.
 
-Run held-out once only after the source/gold audit passes. The freeze refuses unreviewed draft gold;
-the report refuses ungraded predictions. Final metrics and a real official-source demonstration
-remain pending until these independent review and inference steps are complete.
+The runner binds consumption to question-set identity, not a freeze filename. Keep all results;
+if held-out outputs influenced behavior, author a new independent final test. Official inference
+and quality reporting remain gated on actual human source/gold/audit review and output grading.

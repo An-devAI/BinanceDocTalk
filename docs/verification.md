@@ -4,11 +4,11 @@
 
 | Check | Observed result |
 |---|---|
-| Core and integration suite | 67 tests pass on Python 3.12.3 |
-| Benchmark structural audit | 80 drafts; splits 8/32/40; labels 56/24; zero declared human reviews |
+| Core and integration suite | 79 tests pass on Python 3.12.3 |
+| Benchmark v2 structural audit | 92 drafts; splits 10/36/46; labels 56 answerable / 12 candidate gaps / 24 out-of-scope; zero approvals |
 | CLI demonstration | Actual original-note retrieval, false-premise example and out-of-scope response |
 | API transport | Mocked structured generation, embedding order, usage, 401/no retry, 429/one retry |
-| Held-out controls | Review/freeze gates, payload integrity, immutable first-run marker tested on synthetic fixtures |
+| Held-out controls | Review/audit/freeze gates, payload integrity, question-set identity, renamed-freeze rejection and consumed-family guard tested on synthetic fixtures |
 | UI server handlers | In-memory handler tests plus actual loopback server startup: HTTP 200, 12,043-byte page |
 | Browser JavaScript | Syntax checked with Node.js; not browser interaction testing |
 | Python package | Wheel builds without fetching runtime dependencies; HTML asset included |
@@ -33,6 +33,26 @@ assertions validate the metric implementation; they are not project accuracy or 
 - Online hosting has not been performed. GitHub Actions passed core checks on Python 3.11–3.13,
   optional Streamlit checks and actual grammar replay for `f6fa78f`:
   https://github.com/An-devAI/BinanceDocTalk/actions/runs/39825385108.
+
+## V2 revision verification
+
+Corpus curation preserves the 481-paragraph parent and produces 477 selected paragraphs across
+20 sources. Seven operations remove four paragraphs and trim three; paragraph IDs are retained.
+Public metadata, raw snapshot date provenance, edit hashes and known source conflicts are recorded.
+The corpus and all 92 questions remain pending human review. Twelve new gap audits enumerate every
+source, but their lexical findings are not a claim of human-verified insufficiency.
+
+New tests exercise independent labels/types, scope policy bindings, whole-corpus audit coverage,
+stale hashes, evidence groups per fact, refusal reason confusion, injection behavior, source aliases,
+protected exception chunks and renamed held-out freeze rejection. Source and benchmark v1 artifacts
+are preserved. The complete local packet is `artifacts/local/review-pack-v3/`.
+Optional Streamlit AppTest and real grammar replay passed again locally after this revision.
+The allowlisted archive reproduced all 79 tests and the 92-question audit in a clean temporary
+extraction. All 518 local review-packet links resolve. Protected source groups were exercised
+with cl100k tokenization (139, 125 and 196 tokens); actual BGE tokenization on these new source
+groups remains unverified locally. The pinned BGE path validates its real token budget at build time.
+No additional GPU inference or official held-out run was performed for v2. The GPU counts below
+refer to their exact historical submitted snapshots, not the updated tree.
 
 ## Kaggle account and execution state
 
