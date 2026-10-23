@@ -39,6 +39,28 @@ def predicted_label(prediction: dict) -> str:
     return "error"
 
 
+def validate_bound_evidence(row: dict, documents) -> None:
+    """Check evidence geometry without making or inferring a human review decision."""
+    if row["label"] != "answerable":
+        return
+    qid = row["question_id"]
+    groups = row.get("evidence_groups", [])
+    if not groups or any(not group for group in groups):
+        raise ValueError(f"{qid}: answerable question needs evidence groups")
+    if len(groups) != len(row["required_points"]):
+        raise ValueError(f"{qid}: bind one evidence group per required fact")
+    docs = {d.doc_id: d for d in documents}
+    for group in groups:
+        for ref in group:
+            doc = docs.get(ref["doc_id"])
+            if not doc or ref["content_hash"] != doc.content_hash:
+                raise ValueError(f"{qid}: evidence source/hash mismatch")
+            paragraph = next((p for p in doc.paragraphs if p.paragraph_id == ref["paragraph_id"]), None)
+            if (not paragraph or type(ref["start"]) is not int or type(ref["end"]) is not int
+                    or not 0 <= ref["start"] < ref["end"] <= len(paragraph.text)):
+                raise ValueError(f"{qid}: invalid evidence character span")
+
+
 def validate_v2(row: dict, documents, require_review: bool) -> None:
     if "candidate_format_version" in row:
         raise ValueError("External QA candidates are not an adopted benchmark; review and version them first")

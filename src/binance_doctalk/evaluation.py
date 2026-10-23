@@ -20,7 +20,7 @@ from .io import digest, file_hash, read_jsonl, utc_now, write_json, write_jsonl
 from .retrieval import Index
 from .schemas import Chunk, Config
 from .benchmark import (SPLITS, LABELS, heldout_identity,
-                        predicted_label, scope_policy, validate_v2)
+                        predicted_label, scope_policy, validate_v2, validate_bound_evidence)
 
 
 
@@ -54,22 +54,7 @@ def validate_questions(rows: list[dict], require_review: bool = False,
             if not row.get("reference_answer") or not row.get("required_points"):
                 raise ValueError(f"{qid}: missing reference or required behavior")
             if row["label"] == "answerable":
-                groups = row.get("evidence_groups", [])
-                if not groups or any(not group for group in groups):
-                    raise ValueError(f"{qid}: answerable question needs evidence groups")
-                if len(groups) != len(row["required_points"]):
-                    raise ValueError(f"{qid}: bind one evidence group per required fact")
-                for group in groups:
-                    for ref in group:
-                        doc = docs.get(ref["doc_id"])
-                        if not doc or ref["content_hash"] != doc.content_hash:
-                            raise ValueError(f"{qid}: evidence source/hash mismatch")
-                        paragraph = next((p for p in doc.paragraphs
-                                          if p.paragraph_id == ref["paragraph_id"]), None)
-                        if (not paragraph or not isinstance(ref["start"], int)
-                                or not isinstance(ref["end"], int)
-                                or not 0 <= ref["start"] < ref["end"] <= len(paragraph.text)):
-                            raise ValueError(f"{qid}: invalid evidence character span")
+                validate_bound_evidence(row, list(docs.values()))
             elif not row.get("unanswerable_reason"):
                 raise ValueError(f"{qid}: explain why information is insufficient")
     if any(len(splits) > 1 for splits in family_splits.values()):

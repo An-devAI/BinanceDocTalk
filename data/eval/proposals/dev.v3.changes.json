@@ -1,0 +1,599 @@
+{
+  "version": "benchmark-dev-v3-proposal",
+  "created_at": "2026-10-23T11:25:06.804949+00:00",
+  "parent_sha256": "8e23de7a342c0da1468627cad0664adfb59eb142517f099d6ea4d6b3e7960364",
+  "corpus_file_sha256": "a1c93283ae5400a72f00e99c350891f5bd415059969e58600cee4ad8a85256ed",
+  "corpus_hash": "890a89725c17da1ef94f433a13a6744855132303170fe555c30bd769ffb4a712",
+  "proposal_sha256": "c8fdcb7b13627cac9985a997b6db2f8fe1bf66157b6ab737ed8eef6fa3c8c6c0",
+  "labels": {
+    "answerable": 25,
+    "out_of_scope": 9,
+    "insufficient_information": 2
+  },
+  "human_approved": 0,
+  "heldout_used_for_tuning": false,
+  "changes": [
+    {
+      "question_id": "DEV-001",
+      "changes": {
+        "reference_answer": {
+          "before": "Records are maintained across participating computers, with linked blocks providing a history resistant to alteration.",
+          "after": "A blockchain ledger records transactions or other data."
+        },
+        "required_points": {
+          "before": [
+            "Records are maintained across participating computers, with linked blocks providing a history resistant to alteration."
+          ],
+          "after": [
+            "A blockchain ledger records transactions or other data."
+          ]
+        }
+      },
+      "annotation_author": "AI assistant",
+      "human_approved": false
+    },
+    {
+      "question_id": "DEV-002",
+      "changes": {
+        "reference_answer": {
+          "before": "A digital unit issued on a blockchain; its use depends on the token design.",
+          "after": "A token is a digital unit recorded on a blockchain, representing value, utility or access rights."
+        },
+        "required_points": {
+          "before": [
+            "A digital unit issued on a blockchain; its use depends on the token design."
+          ],
+          "after": [
+            "A digital unit recorded on a blockchain represents value, utility or access rights."
+          ]
+        }
+      },
+      "annotation_author": "AI assistant",
+      "human_approved": false
+    },
+    {
+      "question_id": "DEV-003",
+      "changes": {
+        "reference_answer": {
+          "before": "Its design aims to track a reference value rather than freely fluctuate without a target.",
+          "after": "A stablecoin is designed to track a reference asset or value."
+        },
+        "required_points": {
+          "before": [
+            "Its design aims to track a reference value rather than freely fluctuate without a target."
+          ],
+          "after": [
+            "Its design targets a reference asset/value."
+          ]
+        }
+      },
+      "annotation_author": "AI assistant",
+      "human_approved": false
+    },
+    {
+      "question_id": "DEV-004",
+      "changes": {
+        "reference_answer": {
+          "before": "Large or rapid price changes over a period, not a guaranteed direction of return.",
+          "after": "High volatility describes large or rapid price changes over a period."
+        },
+        "required_points": {
+          "before": [
+            "Large or rapid price changes over a period, not a guaranteed direction of return."
+          ],
+          "after": [
+            "Large or rapid price changes over a period."
+          ]
+        }
+      },
+      "annotation_author": "AI assistant",
+      "human_approved": false
+    },
+    {
+      "question_id": "DEV-005",
+      "changes": {
+        "reference_answer": {
+          "before": "A price at which a buyer is willing to buy; the best bid is the highest available bid.",
+          "after": "A bid price expresses what a buyer is willing to pay for an asset."
+        },
+        "required_points": {
+          "before": [
+            "A price at which a buyer is willing to buy; the best bid is the highest available bid."
+          ],
+          "after": [
+            "A price a buyer is willing to pay for an asset."
+          ]
+        }
+      },
+      "annotation_author": "AI assistant",
+      "human_approved": false
+    },
+    {
+      "question_id": "DEV-006",
+      "changes": {
+        "reference_answer": {
+          "before": "Resting buy and sell orders, their prices, and available quantities.",
+          "after": "An order book displays buy and sell orders with their prices and quantities."
+        },
+        "required_points": {
+          "before": [
+            "Resting buy and sell orders, their prices, and available quantities."
+          ],
+          "after": [
+            "It displays buy and sell orders.",
+            "It displays prices and quantities."
+          ]
+        }
+      },
+      "annotation_author": "AI assistant",
+      "human_approved": false
+    },
+    {
+      "question_id": "DEV-007",
+      "changes": {
+        "reference_answer": {
+          "before": "Adding liquidity that rests on the order book rather than immediately consuming an existing opposing order.",
+          "after": "A maker adds an order that rests on the book rather than executing immediately, adding liquidity."
+        },
+        "required_points": {
+          "before": [
+            "Adding liquidity that rests on the order book rather than immediately consuming an existing opposing order."
+          ],
+          "after": [
+            "The order rests instead of immediately matching.",
+            "This adds available liquidity."
+          ]
+        }
+      },
+      "annotation_author": "AI assistant",
+      "human_approved": false
+    },
+    {
+      "question_id": "DEV-008",
+      "changes": {
+        "reference_answer": {
+          "before": "USDT is the quote asset; ETH is the base asset.",
+          "after": "USDT is the quote asset used to price ETH; ETH is the base asset."
+        }
+      },
+      "annotation_author": "AI assistant",
+      "human_approved": false
+    },
+    {
+      "question_id": "DEV-009",
+      "changes": {
+        "reference_answer": {
+          "before": "The order remains active until it is filled or cancelled, subject to applicable exchange rules.",
+          "after": "GTC keeps an order active until it is filled or cancelled."
+        },
+        "required_points": {
+          "before": [
+            "The order remains active until it is filled or cancelled, subject to applicable exchange rules."
+          ],
+          "after": [
+            "It remains active until execution or cancellation."
+          ]
+        }
+      },
+      "annotation_author": "AI assistant",
+      "human_approved": false
+    },
+    {
+      "question_id": "DEV-010",
+      "changes": {
+        "reference_answer": {
+          "before": "An immediate complete fill; otherwise the order is cancelled.",
+          "after": "FOK requires an immediate fill of the entire order; otherwise it is cancelled."
+        },
+        "required_points": {
+          "before": [
+            "An immediate complete fill; otherwise the order is cancelled."
+          ],
+          "after": [
+            "Immediate complete execution or cancellation."
+          ]
+        }
+      },
+      "annotation_author": "AI assistant",
+      "human_approved": false
+    },
+    {
+      "question_id": "DEV-011",
+      "changes": {
+        "reference_answer": {
+          "before": "Any quantity not immediately filled is cancelled.",
+          "after": "IOC cancels whatever quantity cannot be filled immediately."
+        },
+        "required_points": {
+          "before": [
+            "Any quantity not immediately filled is cancelled."
+          ],
+          "after": [
+            "The unfilled remainder is cancelled after immediate execution is attempted."
+          ]
+        }
+      },
+      "annotation_author": "AI assistant",
+      "human_approved": false
+    },
+    {
+      "question_id": "DEV-012",
+      "changes": {
+        "reference_answer": {
+          "before": "It expresses the amount in the quote asset rather than the base asset.",
+          "after": "Quote order quantity expresses the input amount in the quote asset rather than the base asset."
+        },
+        "required_points": {
+          "before": [
+            "It expresses the amount in the quote asset rather than the base asset."
+          ],
+          "after": [
+            "The input amount is specified in the quote asset."
+          ]
+        }
+      },
+      "annotation_author": "AI assistant",
+      "human_approved": false
+    },
+    {
+      "question_id": "DEV-013",
+      "changes": {
+        "reference_answer": {
+          "before": "The amount or units of an asset that changed hands during the interval.",
+          "after": "Trading volume measures how much of an asset changed hands in executed trades over the interval."
+        },
+        "required_points": {
+          "before": [
+            "The amount or units of an asset that changed hands during the interval."
+          ],
+          "after": [
+            "The amount traded during a specified interval."
+          ]
+        }
+      },
+      "annotation_author": "AI assistant",
+      "human_approved": false
+    },
+    {
+      "question_id": "DEV-014",
+      "changes": {
+        "reference_answer": {
+          "before": "The ease of trading an asset without substantially affecting its price.",
+          "after": "Liquidity describes the ease of exchanging an asset at a stable price without substantial price impact."
+        },
+        "required_points": {
+          "before": [
+            "The ease of trading an asset without substantially affecting its price."
+          ],
+          "after": [
+            "Ease of exchanging an asset without substantial price impact."
+          ]
+        }
+      },
+      "annotation_author": "AI assistant",
+      "human_approved": false
+    },
+    {
+      "question_id": "DEV-015",
+      "changes": {
+        "reference_answer": {
+          "before": "A market order acts immediately against available liquidity; a stop-limit first waits for a trigger, then uses a limit order.",
+          "after": "A market order seeks immediate execution against available orders. A stop-limit waits for its trigger before placing a limit order."
+        },
+        "required_points": {
+          "before": [
+            "Market order seeks immediate execution.",
+            "Stop-limit separates a trigger from limit execution."
+          ],
+          "after": [
+            "Market order seeks immediate execution.",
+            "Stop-limit waits for a trigger then places a limit order."
+          ]
+        }
+      },
+      "annotation_author": "AI assistant",
+      "human_approved": false
+    },
+    {
+      "question_id": "DEV-016",
+      "changes": {
+        "reference_answer": {
+          "before": "Linkage cancels an alternative leg under specified conditions but does not guarantee the stop-limit leg will fill.",
+          "after": "OCO links its legs through cancellation rules; that linkage does not make a triggered stop-limit fill without a matching price."
+        },
+        "required_points": {
+          "before": [
+            "Explain linked cancellation.",
+            "Separate cancellation logic from fill guarantees."
+          ],
+          "after": [
+            "The OCO legs are linked by cancellation rules.",
+            "A triggered stop-limit can remain unfilled."
+          ]
+        }
+      },
+      "annotation_author": "AI assistant",
+      "human_approved": false
+    },
+    {
+      "question_id": "DEV-017",
+      "changes": {
+        "reference_answer": {
+          "before": "GTC can remain open; IOC cancels the unfilled remainder; FOK requires immediate complete execution or cancellation.",
+          "after": "GTC can remain open; IOC may fill part and cancels the remainder; FOK needs an immediate full fill or cancels."
+        },
+        "required_points": {
+          "before": [
+            "GTC can rest.",
+            "IOC may partially fill.",
+            "FOK disallows a partial fill as the final outcome."
+          ],
+          "after": [
+            "GTC can remain active.",
+            "IOC may partially fill and cancel the rest.",
+            "FOK requires immediate complete execution or cancellation."
+          ]
+        }
+      },
+      "annotation_author": "AI assistant",
+      "human_approved": false
+    },
+    {
+      "question_id": "DEV-018",
+      "changes": {
+        "test_type": {
+          "before": "multi_evidence",
+          "after": "ordinary"
+        },
+        "reference_answer": {
+          "before": "A marketable limit can match existing opposing orders immediately; maker/taker describes the liquidity effect rather than the label alone.",
+          "after": "A limit order can immediately match an existing opposing order, consuming liquidity and acting as a taker."
+        },
+        "required_points": {
+          "before": [
+            "Limit imposes a price condition.",
+            "Immediate matches consume existing liquidity."
+          ],
+          "after": [
+            "Immediate matching can make a limit order a taker rather than a resting maker."
+          ]
+        }
+      },
+      "annotation_author": "AI assistant",
+      "human_approved": false
+    },
+    {
+      "question_id": "DEV-019",
+      "changes": {
+        "reference_answer": {
+          "before": "Volume describes completed trades during an interval, while liquidity concerns the ability to execute with limited price impact.",
+          "after": "Volume summarizes completed trades over time; liquidity concerns the ease and price impact of executing a trade."
+        },
+        "required_points": {
+          "before": [
+            "Volume is measured over time.",
+            "Liquidity concerns available execution conditions."
+          ],
+          "after": [
+            "Volume is measured over a time interval.",
+            "Liquidity concerns execution ease and price impact."
+          ]
+        }
+      },
+      "annotation_author": "AI assistant",
+      "human_approved": false
+    },
+    {
+      "question_id": "DEV-020",
+      "changes": {
+        "reference_answer": {
+          "before": "The ledger supports records of token-related state or transactions, while a token is the digital unit represented on that infrastructure.",
+          "after": "A token is a digital unit on a blockchain; the underlying network maintains its ownership and transfer records."
+        },
+        "required_points": {
+          "before": [
+            "Distinguish ledger infrastructure from digital units.",
+            "Connect recorded state and token activity."
+          ],
+          "after": [
+            "A token is a digital unit on a blockchain.",
+            "Its ownership and transfer records are maintained by the underlying network."
+          ]
+        }
+      },
+      "annotation_author": "AI assistant",
+      "human_approved": false
+    },
+    {
+      "question_id": "DEV-021",
+      "changes": {},
+      "annotation_author": "AI assistant",
+      "human_approved": false
+    },
+    {
+      "question_id": "DEV-022",
+      "changes": {},
+      "annotation_author": "AI assistant",
+      "human_approved": false
+    },
+    {
+      "question_id": "DEV-023",
+      "changes": {},
+      "annotation_author": "AI assistant",
+      "human_approved": false
+    },
+    {
+      "question_id": "DEV-024",
+      "changes": {},
+      "annotation_author": "AI assistant",
+      "human_approved": false
+    },
+    {
+      "question_id": "DEV-025",
+      "changes": {},
+      "annotation_author": "AI assistant",
+      "human_approved": false
+    },
+    {
+      "question_id": "DEV-026",
+      "changes": {},
+      "annotation_author": "AI assistant",
+      "human_approved": false
+    },
+    {
+      "question_id": "DEV-027",
+      "changes": {
+        "reference_answer": {
+          "before": "A stability target is a design objective, not a guarantee; stablecoins retain risks.",
+          "after": "A stablecoin targets a reference value but can depeg and has other risks."
+        },
+        "required_points": {
+          "before": [
+            "A stability target is a design objective, not a guarantee; stablecoins retain risks."
+          ],
+          "after": [
+            "A stablecoin targets a reference value.",
+            "Stablecoins can depeg; they are not risk-free."
+          ]
+        }
+      },
+      "annotation_author": "AI assistant",
+      "human_approved": false
+    },
+    {
+      "question_id": "DEV-028",
+      "changes": {},
+      "annotation_author": "AI assistant",
+      "human_approved": false
+    },
+    {
+      "question_id": "DEV-029",
+      "changes": {},
+      "annotation_author": "AI assistant",
+      "human_approved": false
+    },
+    {
+      "question_id": "DEV-030",
+      "changes": {
+        "family_id": {
+          "before": "pair_override",
+          "after": "pair_units"
+        },
+        "reference_answer": {
+          "before": "USDT is the quote asset; the instruction to relabel BTC does not change the pair definition.",
+          "after": "USDT remains the quote asset in BTC/USDT; the override does not change the pair convention."
+        },
+        "required_points": {
+          "before": [
+            "USDT is the quote asset; the instruction to relabel BTC does not change the pair definition."
+          ],
+          "after": [
+            "USDT is the quote asset in BTC/USDT despite the relabeling instruction."
+          ]
+        }
+      },
+      "annotation_author": "AI assistant",
+      "human_approved": false
+    },
+    {
+      "question_id": "DEV-031",
+      "changes": {
+        "reference_answer": {
+          "before": "OCO legs are linked through cancellation logic; they should not be described as independent orders.",
+          "after": "OCO legs are linked: filling one cancels the remaining order under the stated cancellation rules."
+        },
+        "required_points": {
+          "before": [
+            "OCO legs are linked through cancellation logic; they should not be described as independent orders."
+          ],
+          "after": [
+            "OCO orders are linked through cancellation, not independent."
+          ]
+        }
+      },
+      "annotation_author": "AI assistant",
+      "human_approved": false
+    },
+    {
+      "question_id": "DEV-032",
+      "changes": {},
+      "annotation_author": "AI assistant",
+      "human_approved": false
+    },
+    {
+      "question_id": "DEV-033",
+      "changes": {},
+      "annotation_author": "AI assistant",
+      "human_approved": false
+    },
+    {
+      "question_id": "DEV-034",
+      "changes": {},
+      "annotation_author": "AI assistant",
+      "human_approved": false
+    },
+    {
+      "question_id": "DEV-035",
+      "changes": {
+        "question": {
+          "before": "What does transaction finality mean on a blockchain?",
+          "after": "Can confirmed blockchain data be changed easily, and is change literally impossible in every case?"
+        },
+        "family_id": {
+          "before": "transaction_finality",
+          "after": "confirmed_record_changes"
+        },
+        "label": {
+          "before": "insufficient_information",
+          "after": "answerable"
+        },
+        "reference_answer": {
+          "before": "The selected corpus does not provide enough evidence to answer all required parts.",
+          "after": "Changing confirmed data is extremely difficult because subsequent blocks and network acceptance must change; it is not literally impossible in every case."
+        },
+        "required_points": {
+          "before": [
+            "Abstain with insufficient_evidence without inventing the missing definition."
+          ],
+          "after": [
+            "Confirmed data is extremely difficult to alter.",
+            "The corpus does not say alteration is literally impossible in all cases."
+          ]
+        }
+      },
+      "annotation_author": "AI assistant",
+      "human_approved": false
+    },
+    {
+      "question_id": "DEV-036",
+      "changes": {
+        "question": {
+          "before": "What is slashing in proof-of-stake terminology?",
+          "after": "In the corpus's proof-of-stake description, what can malicious validators lose?"
+        },
+        "family_id": {
+          "before": "pos_slashing",
+          "after": "malicious_validator_stake"
+        },
+        "label": {
+          "before": "insufficient_information",
+          "after": "answerable"
+        },
+        "reference_answer": {
+          "before": "The selected corpus does not provide enough evidence to answer all required parts.",
+          "after": "Malicious validators risk losing their staked funds."
+        },
+        "required_points": {
+          "before": [
+            "Abstain with insufficient_evidence without inventing the missing definition."
+          ],
+          "after": [
+            "They risk losing staked funds."
+          ]
+        }
+      },
+      "annotation_author": "AI assistant",
+      "human_approved": false
+    }
+  ]
+}

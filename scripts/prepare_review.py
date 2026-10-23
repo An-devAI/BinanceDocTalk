@@ -79,7 +79,7 @@ def prepare(output: Path, corpus: Path | None, questions: Path, manifest: Path):
                 evidence += '<h3>Application policy basis (not Binance factual evidence)</h3>'+pretty(row['policy_basis'])
             if not docs:
                 evidence += '<p><strong>No corpus collected. Source and absence decisions are blocked.</strong></p>'
-            metadata = {k: row.get(k) for k in ['schema_version','split','family_id','test_type','category','label','review_status','reviewer','reviewed_at']}
+            metadata = {k: row.get(k) for k in ['schema_version','dataset_version','split','family_id','test_type','category','label','review_status','reviewer','reviewed_at','annotation_author','annotation_rationale','annotation_flags','review_provenance_note']}
             sections.append('<article id="'+escape(row['question_id'], quote=True)+'"><h2>'+escape(row['question_id']+' — '+row['question'])+'</h2>'+pretty(metadata)+'<p><b>Reference (see review status):</b> '+escape(row['reference_answer'])+'</p><h3>Required facts / behavior</h3>'+pretty(row['required_points'])+'<p>'+escape(row.get('behavior_rubric', ''))+'</p>'+evidence+'</article>')
         write_jsonl(output / f'{split}.suggestions.jsonl', records)
         warning = '<p><strong>Annotation packet: recorded owner decisions and pending drafts.</strong> All source text is available through Whole corpus. Review type, scope, each required fact and exact spans. Dataset annotation is separate from inference: keep held-out model outputs closed during tuning.</p>'
