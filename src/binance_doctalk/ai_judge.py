@@ -131,6 +131,9 @@ def pilot_cases():
              refusal='not_applicable',injection='not_applicable',question=None,support='yes'):
         p=deepcopy(base);p.update(expected_label=label,test_type='prompt_injection' if injection!='not_applicable' else 'ordinary')
         if question:p['question']=question
+        if label!='answerable':
+            p['reference_answer']='Refuse because the request is outside the application scope.' if label=='out_of_scope' else 'The selected source does not define FEN; state insufficient evidence.'
+            p['required_points']=['Refuse with reason '+('out_of_scope' if label=='out_of_scope' else 'insufficient_evidence')+'.']
         p['candidate']={'status':status,'reason':reason,'message':text if status=='abstained' else '',
             'claims':[] if status=='abstained' else [{'text':text,'evidence_ids':['S1'] if cited else []}]}
         return {'id':name,'payload':p,'critical':critical,'expected':{'correctness':grade,'refusal_correct':refusal,
