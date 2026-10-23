@@ -1,0 +1,8 @@
+model = "microsoft/Phi-4-mini-instruct"
+model_revision = "cfbefacb99257ffa30c83adab238a50856ac3083"
+max_input_tokens = 6144
+max_output_tokens = 1024
+window_tokens = 3000
+seed = 42
+max_gpu_seconds = 10800
+pilot_min_pass = 10

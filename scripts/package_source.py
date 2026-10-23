@@ -19,7 +19,7 @@ def public_files(include_media: bool = True) -> list[Path]:
              "data/manifest.v1.jsonl", "data/curation.v2.json", "data/corpus.curated.v2.manifest.jsonl", "docs/corpus_curation_v2.json", "data/corpus.web-extract.v1.manifest.jsonl", "artifacts/results/README.md", ".github/workflows/ci.yml"]
     paths = [ROOT / name for name in names if (ROOT / name).is_file()]
     for pattern in ["src/binance_doctalk/*.py", "src/binance_doctalk/ui.html", "tests/*.py",
-                    "scripts/*.py", "scripts/*.sh", "configs/*.toml", "docs/*.md", "docs/kaggle_run.json", "docs/kaggle_gpu_run.json", "docs/kaggle_official_smoke_v2.json", "docs/kaggle_development_k*.json", "docs/kaggle_gpu_failures.json", "docs/local_ui_run.json", "docs/kaggle_embedding_run.json", "docs/source_collection_run.json",
+                    "scripts/*.py", "scripts/*.sh", "configs/*.toml", "docs/*.md", "docs/kaggle_run.json", "docs/kaggle_gpu_run.json", "docs/kaggle_official_smoke_v2.json", "docs/kaggle_development_k*.json", "docs/kaggle_ai_judge*.json", "docs/kaggle_gpu_failures.json", "docs/local_ui_run.json", "docs/kaggle_embedding_run.json", "docs/source_collection_run.json",
                     "data/eval/proposals/*.jsonl", "data/eval/proposals/*.json", "data/demo/*.jsonl", "data/eval/drafts/*.jsonl", "data/eval/drafts-v2/*.jsonl", "data/eval/drafts-v2/migration.json", "tests/fixtures/*.json", "kaggle/README.md"]:
         paths.extend(ROOT.glob(pattern))
     if include_media:

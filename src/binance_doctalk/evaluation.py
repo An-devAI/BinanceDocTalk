@@ -293,6 +293,8 @@ def percentile(values: list[float], q: float) -> float | None:
 
 
 def score_predictions(predictions: list[dict], grades: list[dict], rows: list[dict]) -> dict:
+    if any(g.get("grader_type") not in {None, "human"} for g in grades):
+        raise ValueError("AI grades cannot produce a human-graded report")
     for row in rows:
         validate_v2(row, [], False)
     questions = {r["question_id"]: r for r in rows}

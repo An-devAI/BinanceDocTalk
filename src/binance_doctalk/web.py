@@ -22,7 +22,7 @@ def serve(port: int = 8765, index_path: Path | None = None,
     config = Config.load(config_path) if config_path else Config()
     live_index = Index.load(index_path) if index_path and index_path.exists() else None
     report = json.loads(report_path.read_text()) if report_path else None
-    if report is not None and (report.get("status") != "human_graded" or "systems" not in report):
+    if report is not None and (report.get("status") != "human_graded" or "systems" not in report or report.get("grader_type") not in {None, "human"}):
         raise ValueError("UI report must be a completed human-graded metrics file")
 
     class Handler(BaseHTTPRequestHandler):

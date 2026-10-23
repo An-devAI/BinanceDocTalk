@@ -97,3 +97,11 @@ AI-authored 20-document audits. OCO wording conflicts and an ETH/USDT convention
 for human adjudication. The old drafts, source approval and held-out are preserved. Prepared private
 paired k=3/k=5 exploration without assigning human annotations, output grades or a release config.
 A source-linked viewer checks hashes and complete output pairs; it does not judge semantic quality.
+
+## AI-only judging implementation
+
+The owner chose a private Kaggle judge without a paid API because human grading is currently
+unavailable. Assistant-authored implementation adds a pinned Phi model, a 12-case toy gate,
+reference-first audit, separate AI grades/metadata and an explicit stop on failed pilot. No
+source/gold approval or human grade is inferred. AI grades are rejected by human report/UI
+contracts. The pilot expectations are assistant-authored sanity checks, not human calibration.
