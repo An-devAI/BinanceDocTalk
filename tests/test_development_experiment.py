@@ -10,6 +10,8 @@ ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/'scripts'));sys.path.insert(0,str(ROOT/'src'))
 from prepare_development_experiment import prepare_inputs,prepare_notebook
 from development_experiment import verify_inputs
+from prepare_prediction_review import prepare as prepare_prediction_review
+from summarize_development import summarize
 from prepare_development_proposal import validate_proposal
 from binance_doctalk.benchmark import validate_bound_evidence
 from binance_doctalk.evaluation import validate_questions
@@ -99,5 +101,55 @@ class DevelopmentTests(unittest.TestCase):
         self.assertTrue(all(r['review_status']=='pending_human_review' for r in parents))
         self.assertTrue(all(next(r for r in parents if r['question_id']==qid)['label']=='insufficient_information'
             for qid in ['DEV-035','DEV-036']))
+
+class PredictionReviewTests(unittest.TestCase):
+    def test_source_linked_viewer_requires_complete_pairs_and_checks_hashes(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            home=Path(tmp);corpus,questions,_=fixture(home)
+            row=read_jsonl(questions)[0];row['question']='<script>UNIT TEST ONLY</script>'
+            write_jsonl(questions,[row])
+            base=dict(question_id=row['question_id'],status='error',claims=[],retrieved=[],error_type='UNIT TEST ONLY')
+            predictions=home/'predictions.jsonl'
+            records=[dict(base,mode=mode) for mode in ['baseline','rag']]
+            write_jsonl(predictions,records)
+            out=home/'review.html'
+            result=prepare_prediction_review(corpus,questions,predictions,out)
+            self.assertEqual(result['human_grades_assigned'],0)
+            self.assertIn('&lt;script&gt;',out.read_text());self.assertNotIn('<script>',out.read_text())
+            with self.assertRaisesRegex(ValueError,'Preserve prior'):
+                prepare_prediction_review(corpus,questions,predictions,out)
+            write_jsonl(predictions,records[:1])
+            with self.assertRaisesRegex(ValueError,'all paired outputs'):
+                prepare_prediction_review(corpus,questions,predictions,home/'partial.html')
+            self.assertFalse((home/'partial.html').exists())
+            write_jsonl(predictions,records)
+            row['evidence_groups'][0][0]['content_hash']='tampered';write_jsonl(questions,[row])
+            with self.assertRaisesRegex(ValueError,'source/hash mismatch'):
+                prepare_prediction_review(corpus,questions,predictions,home/'tampered.html')
+
+class DevelopmentSummaryTests(unittest.TestCase):
+    def test_summary_checks_raw_outputs_and_never_exports_text(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            home=Path(tmp);_,questions,_=fixture(home);row=read_jsonl(questions)[0];write_jsonl(questions,[row])
+            answer=dict(status='abstained',reason='insufficient_evidence',message='UNIT TEST PRIVATE MESSAGE',claims=[])
+            preds=[dict(answer,question_id=row['question_id'],question=row['question'],split='dev',mode=m,
+                        retrieved=[],raw_output=json.dumps(answer),latency_ms=1) for m in ['baseline','rag']]
+            write_jsonl(home/'predictions.jsonl',preds)
+            write_jsonl(home/'grades.pending.jsonl',[dict(reviewer=None) for _ in preds])
+            write_json(home/'run_manifest.json',dict(split='dev',human_review_complete=False,errors=0,
+                       started_at='UNIT TEST',completed_at='UNIT TEST',prompt_hashes={}))
+            summary={k:None for k in ['kind','top_k','status','source_sha256','input_manifest_sha256',
+                'proposed_labels','index','setup_seconds','runtime','configs','statuses','api_usd','compute_usd','note']}
+            summary.update(input_file_hashes={'dev.proposed.v3.jsonl':file_hash(questions)},prediction_count=2,
+                errors=0,case_count=1,human_reference_review_complete=False,human_output_grading_complete=False,
+                heldout_inference_performed=False,official_quality_measured=False,configuration_selected=False)
+            write_json(home/'development-summary.json',summary);write_json(home/'retrieval.provisional.json',{})
+            result=summarize(home,questions)
+            self.assertEqual(result['structurally_checked_outputs'],2)
+            self.assertNotIn('UNIT TEST PRIVATE MESSAGE',json.dumps(result))
+            preds[0]['raw_output']='{}';write_jsonl(home/'predictions.jsonl',preds)
+            with self.assertRaisesRegex(ValueError,'Raw response differs'):summarize(home,questions)
+            summary['heldout_inference_performed']=True;write_json(home/'development-summary.json',summary)
+            with self.assertRaisesRegex(ValueError,'cannot claim'):summarize(home,questions)
 
 if __name__=='__main__':unittest.main()

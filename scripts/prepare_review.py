@@ -8,7 +8,7 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'src'))
-from binance_doctalk.benchmark import scope_policy
+from binance_doctalk.benchmark import scope_policy, validate_bound_evidence
 from binance_doctalk.ingest import load_documents
 from binance_doctalk.io import read_jsonl, utc_now, write_json, write_jsonl
 from binance_doctalk.retrieval import Index
@@ -55,7 +55,16 @@ def prepare(output: Path, corpus: Path | None, questions: Path, manifest: Path):
             recorded_approval = row.get('review_status') == 'human_reviewed' and bool(row.get('reviewer')) and bool(row.get('reviewed_at'))
             records.append({'draft': row, 'suggestions': suggestions, 'human_approved': recorded_approval})
             approved += int(recorded_approval)
-            evidence = '<h3>Gold binding (current record, not inferred)</h3>'+pretty(row.get('evidence_groups', []))
+            evidence = '<h3>Bound evidence — see record review status</h3>'+pretty(row.get('evidence_groups', []))
+            if row.get('evidence_groups'):
+                validate_bound_evidence(row, docs)
+                for group in row['evidence_groups']:
+                    evidence += '<details><summary>Required point — evidence alternatives</summary>'
+                    for ref in group:
+                        doc = raw_docs[ref['doc_id']]
+                        paragraph = next(p for p in doc['paragraphs'] if p['paragraph_id'] == ref['paragraph_id'])
+                        evidence += '<p>'+escape(paragraph['text'][ref['start']:ref['end']])+'</p><a href="sources.html#'+escape(ref['doc_id']+'-'+ref['paragraph_id'], quote=True)+'">Read complete paragraph and surrounding source</a>'
+                    evidence += '</details>'
             if row.get('candidate_evidence_groups'):
                 evidence += '<h3>Feedback-selected candidates — still unapproved</h3>'+pretty(row['candidate_evidence_groups'])
                 for group in row['candidate_evidence_groups']:

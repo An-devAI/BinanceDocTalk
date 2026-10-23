@@ -88,3 +88,12 @@ A private-only Kaggle input bundle and private GPU notebook ran the actual 20-so
 97 tests pass, 229 BGE chunks and 20 outputs are retained, including observed reason mismatches.
 No development/held-out approval, HF candidate adoption, human output grade or final quality gain
 was inferred. All original predictions remain private; only sanitized metadata is published.
+
+## Assistant development annotations — pending human review
+
+The assistant bound 36 development proposals to source spans and corrected two invalid keyword-based
+gap assumptions. DEV-035/036 were rewritten to supported questions; two provisional gaps remain with
+AI-authored 20-document audits. OCO wording conflicts and an ETH/USDT convention transfer are flagged
+for human adjudication. The old drafts, source approval and held-out are preserved. Prepared private
+paired k=3/k=5 exploration without assigning human annotations, output grades or a release config.
+A source-linked viewer checks hashes and complete output pairs; it does not judge semantic quality.

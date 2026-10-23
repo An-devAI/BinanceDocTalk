@@ -15,7 +15,7 @@ and paired evaluation tooling are implemented. **The official-source quality stu
 | Offline demonstration | Runs on 12 original synthetic notes, with no LLM or API charges |
 | Official source manifests | 20 candidate URLs plus actual snapshot timestamps/hashes; raw text excluded from Git |
 | HF import | 15 separate source candidates and 12 development QA candidates; pinned Parquet, no automatic adoption. [Workflow](docs/huggingface_workflow.md) |
-| Benchmark | 10 owner-signed-off smoke references; 36 dev / 46 test drafts pending; labels and test types separated |
+| Benchmark | 10 owner-signed-off smoke references; 36 AI-annotated dev proposals / 46 test drafts pending; labels and test types separated |
 | Official corpus collection | 20 curated sources / 477 paragraphs signed off by the owner via chat; exact decision/provenance recorded. [Provenance](docs/owner_smoke_signoff.md) |
 | Local Qwen + BGE integration | Official-source smoke completed on Kaggle T4: 20 sources, 229 dense chunks, 20 outputs, 97 tests; semantic outputs ungraded |
 | Live OpenAI integration | Implemented and mock-tested; no API key available for a live check |
@@ -237,7 +237,7 @@ The current v2 benchmark contains 56 answerable drafts, 12 in-scope evidence-gap
 test type, not a refusal reason. The 12 gap cases include whole-corpus lexical censuses and require
 human absence/sufficiency review. Proposed source IDs are **not verified citations**.
 The 10 smoke cases have bound spans or recorded corpus-gap rationales under owner signoff.
-Other draft evidence groups remain empty until the corresponding review is complete.
+Development v3 proposals have source-bound evidence but remain unapproved; original v2 drafts are preserved. See [development workflow](docs/development_exploration_v3.md).
 Use [the review workflow](docs/evaluation.md) before measuring quality. Existing draft cases have
 been visible to the implementation assistant; do not describe them as an independently blind benchmark.
 

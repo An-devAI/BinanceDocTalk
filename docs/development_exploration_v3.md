@@ -14,7 +14,7 @@ conflicting OCO cancellation wording in D18:p002/p009 for human adjudication. DE
 application of the illustrated BTC/USDT convention to ETH/USDT. The two remaining provisional
 gaps have a census of all 20 sources with AI-authored assessments; these are not human audits.
 
-The private review packet is `artifacts/local/review-pack-dev-v3/dev.html`; it links the full
+The private review packet is `artifacts/local/review-pack-dev-v3b/dev.html`; it links the full
 corpus, policy, change manifest and other splits. The earlier owner approval covers sources
 and smoke only. Do not promote this proposal, its gap audits or pending model grades to gold.
 
@@ -44,3 +44,12 @@ valid JSON and citation IDs do not establish factual correctness or citation ent
 `official_quality_measured`, `configuration_selected` and `heldout_inference_performed` remain
 false. These runs do not select a release configuration. Human reference review and paired
 output grading must precede selection; freeze and run the untouched held-out only afterward.
+
+Use `scripts/prepare_prediction_review.py` with the corpus, proposal, each predictions file and
+a new output HTML path to inspect exact reference excerpts and all retrieved contexts locally.
+It preserves review status, includes errors, requires complete pairs and never assigns grades.
+
+After download, `scripts/summarize_development.py --run RUN_FOLDER --questions
+data/eval/proposals/dev.v3.jsonl --output NEW_METADATA.json` validates pairs, raw JSON, citation IDs,
+proposal hashes and unreviewed flags before emitting allowlisted metadata. It does not calculate
+answer accuracy or semantic citation support. Run files retain blank grade sheets privately.
