@@ -1,6 +1,9 @@
 seed = 42
 bootstrap_samples = 2000
-held_out_size = 40
+held_out_size = 46
+smoke_size = 10
+development_size = 36
+benchmark_version = 2
 development_k = [3, 5]
 concurrency = 1
 response_cache = false

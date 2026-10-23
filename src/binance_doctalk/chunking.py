@@ -50,8 +50,20 @@ def chunk_document(document: Document, size: int = 400, overlap: int = 60,
     if not 0 <= overlap < size:
         raise ValueError("Invalid chunk size or overlap")
     chunks = []
-    # Adjacent paragraphs under the same heading remain together.
+    # Explicit definition/exception units are indivisible and retain exact source spans.
+    by_id = {p.paragraph_id: p for p in document.paragraphs}
+    positions = {p.paragraph_id: i for i, p in enumerate(document.paragraphs)}
+    protected = {pid for group in document.context_groups for pid in group}
+    units = []
+    for ids in document.context_groups:
+        paragraphs = [by_id[pid] for pid in ids]
+        heading = " / ".join(dict.fromkeys(p.heading for p in paragraphs))
+        units.append((min(positions[pid] for pid in ids), heading, paragraphs, True))
     for heading, group in groupby(document.paragraphs, key=lambda p: p.heading):
+        remaining = [p for p in group if p.paragraph_id not in protected]
+        if remaining:
+            units.append((positions[remaining[0].paragraph_id], heading, remaining, False))
+    for _, heading, group, atomic in sorted(units, key=lambda unit: unit[0]):
         paragraphs = list(group)
         pieces, paragraph_offsets, cursor = [], [], 0
         for paragraph in paragraphs:
@@ -60,6 +72,8 @@ def chunk_document(document: Document, size: int = 400, overlap: int = 60,
             cursor += len(paragraph.text) + 2
         text = "\n\n".join(pieces)
         offsets = token_offsets(text, tokenizer)
+        if atomic and len(offsets) > size:
+            raise ValueError("Definition/exception context group exceeds chunk token budget")
         for start in range(0, len(offsets), size - overlap):
             end = min(start + size, len(offsets))
             left, right = offsets[start][0], offsets[end - 1][1]

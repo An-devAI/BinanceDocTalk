@@ -97,6 +97,8 @@ def build_index(documents: list[Document], config: Config, provider=None,
         "format_version": 1, "created_at": utc_now(), "kind": documents[0].kind,
         "corpus_hash": digest([{"doc_id": d.doc_id, "content_hash": d.content_hash}
                                for d in sorted(documents, key=lambda d: d.doc_id)]),
+        "context_groups_hash": digest([{"doc_id": d.doc_id, "groups": d.context_groups}
+                                       for d in sorted(documents, key=lambda d: d.doc_id)]),
         "document_count": len(documents), "chunk_count": len(chunks),
         "tokenizer": config.tokenizer, "chunk_tokens": config.chunk_tokens,
         "overlap_tokens": config.overlap_tokens, "human_reviewed": reviewed,

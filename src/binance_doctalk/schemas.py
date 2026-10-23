@@ -92,6 +92,7 @@ class Document:
     content_hash: str
     paragraphs: tuple[Paragraph, ...]
     kind: str = "official"
+    context_groups: tuple[tuple[str, ...], ...] = ()
 
     @classmethod
     def from_dict(cls, row: dict) -> Document:
@@ -106,6 +107,13 @@ class Document:
             raise ValueError("Empty paragraph")
         values = {f.name: row[f.name] for f in fields(cls) if f.name in row}
         values["paragraphs"] = paragraphs
+        groups = tuple(tuple(g) for g in row.get("context_groups", []))
+        grouped_ids = [pid for group in groups for pid in group]
+        if (any(len(group) < 2 for group in groups)
+                or len(grouped_ids) != len(set(grouped_ids))
+                or not set(grouped_ids) <= {p.paragraph_id for p in paragraphs}):
+            raise ValueError("Context groups need distinct, existing paragraph IDs")
+        values["context_groups"] = groups
         return cls(**values)
 
 

@@ -9,6 +9,8 @@ import sys
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 from binance_doctalk.ingest import load_documents
 from binance_doctalk.io import read_jsonl, utc_now, write_jsonl
+from binance_doctalk.benchmark import corpus_fingerprint, scope_policy, validate_v2
+from binance_doctalk.evaluation import validate_questions
 
 
 def review_sources(rows, reviewer):
@@ -44,6 +46,12 @@ def review_questions(rows, reviewer, corpus):
         print(f"\n{row['question_id']} [{row['split']}] {row['question']}\nLabel: {row['label']}")
         print("Draft answer:", row["reference_answer"])
         print("Required points:", row["required_points"])
+        print("Test type:", row.get("test_type"), "Family:", row["family_id"])
+        if row.get("policy_basis"):
+            print("Application policy (not source evidence):", scope_policy())
+            print("Policy basis:", row["policy_basis"])
+        if row.get("corpus_audit"):
+            print("Whole-corpus audit:", row["corpus_audit"])
         print("Edit an incorrect draft in the input JSONL before reviewing; Enter skips this case.")
         if input("Review this case now? Type review: ").strip() != "review":
             continue
@@ -68,18 +76,77 @@ def review_questions(rows, reviewer, corpus):
             if not groups:
                 print("No evidence selected; left pending.")
                 continue
-        else:
+        elif row["label"] == "insufficient_information":
             print("Search/read the entire selected corpus; a retrieval miss alone is insufficient.")
             print("Reason:", row.get("unanswerable_reason"))
+        else:
+            print("Check the frozen application policy. Out-of-scope is not a corpus absence claim.")
         if input(f"Type approve {row['question_id']} only after checking all gold fields: ").strip() == f"approve {row['question_id']}":
-            row.update(evidence_groups=groups, review_status="human_reviewed",
-                       reviewer=reviewer, reviewed_at=utc_now())
+            candidate = dict(row, evidence_groups=groups, review_status="human_reviewed",
+                             reviewer=reviewer, reviewed_at=utc_now())
+            try:
+                validate_questions([candidate], True, list(documents.values()))
+            except ValueError as exc:
+                print("Not approved:", exc)
+                continue
+            row.update(candidate)
+    return rows
+
+
+def review_audits(rows, reviewer, corpus):
+    documents = load_documents(corpus)
+    expected = {d.doc_id: d.content_hash for d in documents}
+    active = []
+    print("Frozen scope policy:", scope_policy())
+    for row in rows:
+        if row["label"] != "insufficient_information":
+            continue
+        audit = row.get("corpus_audit", {})
+        entries = audit.get("documents", [])
+        if (audit.get("corpus_hash") != corpus_fingerprint(documents)
+                or len(entries) != len(expected)
+                or {e.get("doc_id"): e.get("content_hash") for e in entries} != expected):
+            print(row["question_id"], "stale/incomplete audit; regenerate against the selected corpus")
+            continue
+        print(row["question_id"], row["question"])
+        print("Proposed missing information:", audit.get("missing_information"))
+        if input("Confirm this conceptual question is in scope. Type in_scope, or Enter to skip: ").strip() == "in_scope":
+            active.append(row)
+    # Read each source once per split, then make a separate decision for each active question.
+    for doc in documents if active else []:
+        print(f"\n{doc.doc_id} — {doc.title} — {doc.url}")
+        for p in doc.paragraphs:
+            print(f"[{p.paragraph_id}] {p.heading}\n{p.text}")
+        for row in active:
+            audit = row["corpus_audit"]
+            entry = next(e for e in audit["documents"] if e["doc_id"] == doc.doc_id)
+            print(row["question_id"], row["question"])
+            print("Lexical candidates only:", entry.get("matched_paragraph_ids"))
+            print("Existing decision:", entry.get("assessment"), entry.get("notes"))
+            decision = input("After reading ALL paragraphs: absent / partial / sufficient; Enter keeps pending or prior decision: ").strip()
+            if decision not in {"absent", "partial", "sufficient"}:
+                continue
+            notes = input("Explain what this source establishes and what is still missing: ").strip()
+            if notes:
+                entry.update(assessment=decision, notes=notes, reviewer=reviewer, reviewed_at=utc_now())
+                audit.update(review_status="pending_human_review", reviewer=None, reviewed_at=None)
+                row.update(review_status="pending_human_review", reviewer=None, reviewed_at=None)
+    for row in active:
+        audit = row["corpus_audit"]
+        if any(e.get("assessment") not in {"absent", "partial"} or not e.get("notes")
+               for e in audit["documents"]):
+            print(row["question_id"], "Incomplete audit, or sufficient evidence found. Correct/relabel; no approval.")
+            continue
+        if input(f"Type approve audit {row['question_id']} after whole-corpus inspection: ").strip() == f"approve audit {row['question_id']}":
+            candidate = dict(audit, review_status="human_reviewed", reviewer=reviewer, reviewed_at=utc_now())
+            validate_v2(dict(row, corpus_audit=candidate), documents, True)
+            audit.update(candidate)
     return rows
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("kind", choices=["sources", "questions"])
+    parser.add_argument("kind", choices=["sources", "questions", "audits"])
     parser.add_argument("--input", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--reviewer", required=True)
@@ -87,7 +154,7 @@ def main():
     args = parser.parse_args()
     if args.output.exists():
         parser.error("Output exists. Preserve it and choose a new reviewed version.")
-    if args.kind == "questions" and not args.corpus:
+    if args.kind != "sources" and not args.corpus:
         parser.error("Question review requires --corpus")
     rows = read_jsonl(args.input)
     try:
@@ -95,6 +162,8 @@ def main():
             # Validate hashes/shape without claiming human review.
             load_documents(args.input, allow_unreviewed=True)
             rows = review_sources(rows, args.reviewer)
+        elif args.kind == "audits":
+            rows = review_audits(rows, args.reviewer, args.corpus)
         else:
             rows = review_questions(rows, args.reviewer, args.corpus)
     except (EOFError, KeyboardInterrupt):

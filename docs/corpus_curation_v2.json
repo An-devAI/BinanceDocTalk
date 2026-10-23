@@ -1,0 +1,92 @@
+{
+  "version": "corpus-v2",
+  "created_at": "2026-10-23T00:24:03.561722+00:00",
+  "parent_file_sha256": "82d07becc82c95052e6c2c6e2cabd02afb645d5d341e7b3ef8ce9c0f01d45c01",
+  "spec_sha256": "7ef87b10b1eeba8a7c44191ce998d319a9781514f1864ef9e5c32597029a400c",
+  "documents": 20,
+  "paragraphs_before": 481,
+  "paragraphs_after": 477,
+  "changes": [
+    {
+      "doc_id": "D01",
+      "paragraph_id": "p009",
+      "action": "drop",
+      "reason": "Time-dependent regulatory information outside the stable educational scope.",
+      "expected_parent_hash": "21099914fde0e55c5328375de4e66ae4330a2268d2bef0574ea79cf8dd6cee94",
+      "before_sha256": "38d4e8be5b46ee42d2a741f28fbc774516955f57471cdbdce5df94309a336c12",
+      "after_sha256": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+      "before_characters": 346,
+      "after_characters": 0
+    },
+    {
+      "doc_id": "D08",
+      "paragraph_id": "p024",
+      "action": "drop",
+      "reason": "App UI image reference without its image.",
+      "expected_parent_hash": "502069a8fdc5784e029ad446f21d076979f418aa84c79950d1057b097e0ec200",
+      "before_sha256": "4bb3e2c34771d5df78ebd74e85918d4ff16f14955cf87ecd67f4babdc9660f95",
+      "after_sha256": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+      "before_characters": 96,
+      "after_characters": 0
+    },
+    {
+      "doc_id": "D08",
+      "paragraph_id": "p025",
+      "action": "drop",
+      "reason": "Web UI image reference without its image.",
+      "expected_parent_hash": "502069a8fdc5784e029ad446f21d076979f418aa84c79950d1057b097e0ec200",
+      "before_sha256": "00496e4f2dbdd4468f44339e1989becf997580999754bc5c96aec8dba2fc4657",
+      "after_sha256": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+      "before_characters": 179,
+      "after_characters": 0
+    },
+    {
+      "doc_id": "D06",
+      "paragraph_id": "p019",
+      "action": "keep_prefix_sentences",
+      "count": 1,
+      "reason": "Keep the conceptual OTC sentence; exclude the 2026 statistic.",
+      "expected_parent_hash": "a475d7dc250e08a2cf0c2831db0f70ca5f55d7f7d1642c3eb3f9452c410f7c06",
+      "before_sha256": "453aa44a638bc89154f89db6a8d136be584f77ee510284875a1c2d3371b73494",
+      "after_sha256": "a5af2ccb47acdfe3088b081bdad946b856a749807472037c19f791a8ddd212dd",
+      "before_characters": 366,
+      "after_characters": 115
+    },
+    {
+      "doc_id": "D07",
+      "paragraph_id": "p014",
+      "action": "keep_prefix_sentences",
+      "count": 3,
+      "reason": "Exclude the final copy-trading promotion.",
+      "expected_parent_hash": "6d5929dac2c4a926f7e331780455b14cec1fd228c64d0af9e6dd42b6d845f20d",
+      "before_sha256": "93c94013aa4e0fcfce6895b8fecfe18edddb846b105ae6aae7a0d4016047f465",
+      "after_sha256": "336d9ca7ed03cd87aa91217027c85390b366bcbf70c2dd176bfd984b1925566c",
+      "before_characters": 389,
+      "after_characters": 240
+    },
+    {
+      "doc_id": "D14",
+      "paragraph_id": "p010",
+      "action": "keep_prefix_sentences",
+      "count": 1,
+      "reason": "Exclude default and suggested numerical tolerance settings.",
+      "expected_parent_hash": "5b2fcd28803ff0cedf538d2d6a1b6abe8fc8dd63daa11ec3891d35a5b644add6",
+      "before_sha256": "3767cfe58542d73892bde8f1c2558d44df9137a5eaca77524554b2cd2053c731",
+      "after_sha256": "080c368ceadd2f73a76f7b0c0a569d9ded66b24bb3cac89de97fd0f2ff75f14c",
+      "before_characters": 468,
+      "after_characters": 126
+    },
+    {
+      "doc_id": "D14",
+      "paragraph_id": "p011",
+      "action": "drop",
+      "reason": "Orphaned image caption without its image.",
+      "expected_parent_hash": "5b2fcd28803ff0cedf538d2d6a1b6abe8fc8dd63daa11ec3891d35a5b644add6",
+      "before_sha256": "51a05067ce05b896859ab4d4a3b372368f483fdf303d889294c13e1703f886f1",
+      "after_sha256": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+      "before_characters": 41,
+      "after_characters": 0
+    }
+  ],
+  "review_status": "pending_human_review"
+}

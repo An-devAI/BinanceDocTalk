@@ -167,6 +167,10 @@ def load_documents(path: Path, allow_unreviewed: bool = False) -> list[Document]
     documents = []
     for row in rows:
         document = Document.from_dict(row)
+        for alias, canonical in [("source_url", "url"), ("retrieved_at", "fetched_at"),
+                                 ("content_sha256", "content_hash")]:
+            if alias in row and row[alias] != row.get(canonical):
+                raise ValueError(f"Conflicting source metadata: {alias}/{canonical}")
         if digest([asdict(p) for p in document.paragraphs]) != document.content_hash:
             raise ValueError(f"Content hash mismatch: {document.doc_id}")
         if document.kind == "official":

@@ -195,14 +195,17 @@ class FreezeTests(unittest.TestCase):
             index = build_index([doc], config, FakeProvider(config), reviewed=True)
             index.save(index_path)
             question_paths = []
-            for split in ["smoke", "dev", "test"]:
-                rows = read_jsonl(ROOT/f"data/eval/drafts/{split}.jsonl")
-                for row in rows:
-                    row.update(review_status="human_reviewed", reviewer="UNIT TEST FIXTURE ONLY",
-                               reviewed_at="2026-01-01")
-                    if row["label"] == "answerable":
-                        row["evidence_groups"] = [[{"doc_id": doc.doc_id, "paragraph_id": "p001",
-                            "start": 0, "end": 5, "content_hash": doc.content_hash}]]
+            for split, size in [("smoke", 10), ("dev", 36), ("test", 46)]:
+                rows = []
+                for number in range(size):
+                    rows.append(dict(schema_version=2, question_id=f"{split}-{number}",
+                        family_id=f"unit-family-{split}-{number}", split=split,
+                        question=f"UNIT TEST FIXTURE {split} {number}?", label="answerable",
+                        test_type="ordinary", reference_answer="UNIT TEST ONLY",
+                        required_points=["UNIT TEST ONLY"], review_status="human_reviewed",
+                        reviewer="UNIT TEST FIXTURE ONLY", reviewed_at="2026-01-01",
+                        evidence_groups=[[{"doc_id": doc.doc_id, "paragraph_id": "p001",
+                            "start": 0, "end": 5, "content_hash": doc.content_hash}]]))
                 path = folder/f"{split}.jsonl"
                 write_jsonl(path, rows)
                 question_paths.append(path)
@@ -210,21 +213,27 @@ class FreezeTests(unittest.TestCase):
             for path, arm in [(baseline_path, "baseline"), (rag_path, "rag")]:
                 path.write_text(f'system = "{arm}"\ntokenizer = "regex_word_v1"\n')
             freeze_path = folder/"freeze.json"
-            frozen = freeze_experiment(ROOT, corpus_path, index_path, question_paths,
+            frozen = freeze_experiment(folder, corpus_path, index_path, question_paths,
                                        [baseline_path, rag_path], freeze_path)
-            self.assertEqual(len(frozen["test_question_ids"]), 40)
+            self.assertEqual(len(frozen["test_question_ids"]), 46)
             configs = [Config.load(baseline_path), Config.load(rag_path)]
             rows = read_jsonl(question_paths[-1])
-            result = run_experiment(ROOT, rows, index, configs, FakeProvider,
+            result = run_experiment(folder, rows, index, configs, FakeProvider,
                                     folder/"run1", "test", freeze_path)
-            self.assertEqual(result["prediction_count"], 80)
+            self.assertEqual(result["prediction_count"], 92)
             with self.assertRaisesRegex(ValueError, "already consumed"):
-                run_experiment(ROOT, rows, index, configs, FakeProvider,
+                run_experiment(folder, rows, index, configs, FakeProvider,
                                folder/"run2", "test", freeze_path)
+            renamed_freeze = folder/"renamed-freeze.json"
+            renamed_freeze.write_bytes(freeze_path.read_bytes())
+            with self.assertRaisesRegex(ValueError, "already consumed"):
+                run_experiment(folder, rows, index, configs, FakeProvider,
+                               folder/"renamed-run", "test", renamed_freeze)
+            self.assertFalse((folder/"renamed-run").exists())
             rows[0]["question"] = "Tampered question with the same ID"
             with self.assertRaisesRegex(ValueError, "differ from frozen"):
-                run_experiment(ROOT, rows, index, configs, FakeProvider,
+                run_experiment(folder, rows, index, configs, FakeProvider,
                                folder/"run3", "test", freeze_path)
             rag_path.write_text('system = "rag"\ntop_k = 5\n')
             with self.assertRaisesRegex(ValueError, "Frozen input"):
-                verify_freeze(ROOT, freeze_path)
+                verify_freeze(folder, freeze_path)

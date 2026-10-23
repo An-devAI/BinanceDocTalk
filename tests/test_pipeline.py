@@ -215,10 +215,10 @@ class BudgetTests(unittest.TestCase):
 class EvaluationTests(unittest.TestCase):
     def setUp(self):
         self.rows = [dict(question_id="A", family_id="f1", split="dev", question="An answerable question?",
-                          label="answerable", reference_answer="Reference", required_points=["one"],
+                          schema_version=2, test_type="ordinary", label="answerable", reference_answer="Reference", required_points=["one"],
                           review_status="human_reviewed"),
                      dict(question_id="U", family_id="f2", split="dev", question="A missing fact?",
-                          label="insufficient_information", reference_answer="Missing", required_points=["abstain"],
+                          schema_version=2, test_type="ordinary", label="insufficient_information", reference_answer="Missing", required_points=["abstain"],
                           review_status="human_reviewed")]
 
     def predictions(self):
@@ -227,7 +227,8 @@ class EvaluationTests(unittest.TestCase):
             for arm in ["baseline", "rag"]:
                 abstain = qid == "U" and arm == "rag"
                 rows.append(dict(prediction_id=qid+arm, question_id=qid, mode=arm,
-                    status="abstained" if abstain else "answered", message="Missing" if abstain else "",
+                    status="abstained" if abstain else "answered",
+                    reason="insufficient_evidence" if abstain else None, message="Missing" if abstain else "",
                     claims=[] if abstain else [{"text": "Claim", "evidence_ids": ["c1"] if arm == "rag" else []}],
                     latency_ms=100, estimated_usd=.001))
         return rows
@@ -236,7 +237,7 @@ class EvaluationTests(unittest.TestCase):
         grades = make_grade_sheet(predictions, self.rows)
         for grade in grades:
             grade.update(reviewer="UNIT TEST ONLY", reviewed_at="2026-01-01")
-            grade["correctness"] = 2 if grade["prediction_id"] == "Arag" else 0
+            grade["correctness"] = (2 if grade["prediction_id"] == "Arag" else 0) if grade["question_id"] == "A" else None
             for pair in grade["citation_support"]:
                 pair["supports"] = True
         return grades

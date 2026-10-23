@@ -36,7 +36,7 @@ def audit(directory: Path):
 
 if __name__=='__main__':
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--directory',type=Path,default=ROOT/'data/eval/drafts')
+    parser.add_argument('--directory',type=Path,default=ROOT/'data/eval/drafts-v2')
     parser.add_argument('--output',type=Path,required=True)
     args = parser.parse_args()
     if args.output.exists(): parser.error('Output exists; preserve previous review decisions')

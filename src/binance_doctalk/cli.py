@@ -32,8 +32,8 @@ def demo_service() -> AnswerService:
 def benchmark_status() -> dict:
     rows = []
     for split in ["smoke", "dev", "test"]:
-        reviewed = ROOT / f"data/eval/v1/{split}.jsonl"
-        path = reviewed if reviewed.exists() else ROOT / f"data/eval/drafts/{split}.jsonl"
+        reviewed = ROOT / f"data/eval/v2/{split}.jsonl"
+        path = reviewed if reviewed.exists() else ROOT / f"data/eval/drafts-v2/{split}.jsonl"
         rows.extend(read_jsonl(path))
     return {"questions": len(rows),
             "human_reviewed": sum(r.get("review_status") == "human_reviewed" for r in rows),
@@ -65,13 +65,13 @@ def parser() -> argparse.ArgumentParser:
     ask.add_argument("--index", type=Path, default=Path("data/local/index.v1.json"))
     ask.add_argument("--ledger", type=Path, default=Path("artifacts/local/budget.json"))
     audit = sub.add_parser("audit-benchmark")
-    audit.add_argument("--directory", type=Path, default=Path("data/eval/drafts"))
+    audit.add_argument("--directory", type=Path, default=Path("data/eval/drafts-v2"))
     audit.add_argument("--require-reviewed", action="store_true")
     audit.add_argument("--corpus", type=Path)
     freeze = sub.add_parser("freeze")
     freeze.add_argument("--corpus", type=Path, required=True)
     freeze.add_argument("--index", type=Path, required=True)
-    freeze.add_argument("--questions", type=Path, default=Path("data/eval/drafts"))
+    freeze.add_argument("--questions", type=Path, default=Path("data/eval/drafts-v2"))
     freeze.add_argument("--output", type=Path, default=Path("artifacts/local/freeze.v1.json"))
     freeze.add_argument("--baseline-config", type=Path, default=Path("configs/baseline.toml"))
     freeze.add_argument("--rag-config", type=Path, default=Path("configs/rag.toml"))
