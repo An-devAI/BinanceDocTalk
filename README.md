@@ -21,6 +21,7 @@ and paired evaluation tooling are implemented. **The official-source quality stu
 | Live OpenAI integration | Implemented and mock-tested; no API key available for a live check |
 | Held-out quality, latency, cost | **Not measured**; no claims of improvement |
 | Development exploration | k=3/k=5 completed on private Kaggle inputs: 144 outputs, zero structural errors; AI references and semantic grades pending. [Run details](docs/development_exploration_v3.md) |
+| AI judge | Private Phi pilot completed; 0/12 full checks passed, so development grading stopped. No AI semantic scores published. [Protocol and failure analysis](docs/ai_evaluation.md) |
 | GitHub repository | Pushed to [An-devAI/BinanceDocTalk](https://github.com/An-devAI/BinanceDocTalk); official quality study remains pending |
 
 See [verification evidence](docs/verification.md), [evaluation protocol](docs/evaluation.md),

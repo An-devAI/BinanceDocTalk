@@ -168,6 +168,14 @@ def perturbation_sample(records):
     return chosen
 
 
+def substantive_labels(value):
+    if value is None:return None
+    result={k:v for k,v in value.items() if k!='reason'}
+    if 'citation_support' in result:
+        result['citation_support']=sorted(result['citation_support'],key=lambda p:(p['claim_index'],p['evidence_id']))
+    return result
+
+
 def aggregate_ai(records,reference_records):
     eligible={r['question_id'] for r in reference_records if r['assessment']=='consistent'}
     groups={}

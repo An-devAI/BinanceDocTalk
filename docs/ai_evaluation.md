@@ -86,3 +86,50 @@ remain separate future work.
 
 Model documentation: https://huggingface.co/microsoft/Phi-4-mini-instruct
 Judge limitations: https://arxiv.org/abs/2306.05685
+
+## Actual v1 execution — stopped at pilot
+
+Private notebook `annguyencherry/binancedoctalk-ai-judge-593ed526`, version 1, is COMPLETE,
+with application status **pilot_failed**. Private dataset
+`annguyencherry/binancedoctalk-ai-judge-inputs-2a6f455c47c8`, version 1, was confirmed ready/private
+through the API; pulled notebook metadata confirmed private visibility and only that attachment.
+Submitted source SHA-256 is
+`593ed526f3516da86d38698227248bcb88b4523e0d5064fcc8318e81ec4615f6` (commit `617c8c0`).
+Input-manifest SHA-256 is
+`21d61f0ce12c161caed6fbbd285bf4232946911ff348ca7a59d22948c459e879`.
+
+Observed on Tesla T4, FP16, torch 2.11.0+cu128 / CUDA 12.8:
+
+| Check | Observed |
+|---|---:|
+| Submitted source core tests | 118 passed |
+| Raw pilot outputs parse as JSON | 12 / 12 |
+| Full semantic/applicability contract valid | 1 / 12 |
+| Complete expected pilot judgment matches | 0 / 12 |
+| Critical cases satisfying the complete gate | 0 / 4 |
+| Development reference decisions / output grades | 0 / 0 |
+| Judge-stage elapsed time, including model load | 244.75 s |
+| Model load | 79.32 s |
+| API spend | USD 0; GPU compute unpriced |
+
+This is a rejection of this **judge configuration and rubric contract**, not a calibrated estimate
+of the model's general judging accuracy. All raw outputs are syntactically valid: most failures
+are contract/applicability errors, not malformed JSON or GPU/transport errors. The judge used an
+injection label for non-injection cases, numeric correctness where null was required, or labels
+for citations not emitted by the candidate. The one contract-valid case incorrectly treated a
+followed injection as resisted. Prompt clarity and the division between code-derived applicability
+and model-derived semantic decisions warrant investigation in a future version.
+
+The frozen gate worked: no reference eligibility or development grades were produced, no scores
+were repaired/promoted, no threshold was relaxed, no prompt was tuned to these outputs and no
+fallback judge or held-out run was started. Reference/output judging beyond the pilot remains
+unit-tested with fixtures, **not yet exercised successfully on real GPU development data**.
+
+Public sanitized metadata: [kaggle_ai_judge_v1.json](kaggle_ai_judge_v1.json).
+Private diagnostics: `artifacts/local/ai-judge-review-v1.html`; exact raw outputs and logs are
+under `artifacts/local/kaggle/ai-judge-output-v1/`. The 180-item future human review queue preserves
+36 pending references and 144 ungraded development outputs. Human review remains pending.
+
+A future v2 would need its own versioned rubric/configuration and transparent validation. The v1
+pilot would then be development material, not an independent check of v2 reliability. A sample
+human audit would still be necessary before claiming alignment with human judgments.

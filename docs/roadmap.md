@@ -22,6 +22,7 @@ source review and annotation time vary, so remove UI polish/hosting before reduc
 - [x] Verify the chosen local Qwen/BGE backend with real Kaggle GPU inference; optional OpenAI remains mock-tested.
 - [x] Record the owner chat signoff for 20 curated sources and 10 smoke references.
 - [x] Complete private exploratory k=3/k=5 development inference: 144 retained outputs; semantic grades pending.
+- [x] Implement and execute private AI-judge pilot; preserve gate rejection (0/12 full checks), with no semantic scores or fallback.
 - [ ] Complete dev/test gold, gap audits and semantic near-duplicate inspection.
 - [ ] Freeze before test; retain first run including errors.
 - [ ] Complete human grading and publish sanitized measured artifacts.

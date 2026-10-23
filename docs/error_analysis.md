@@ -101,3 +101,17 @@ No prompt, retrieval, threshold or release configuration was changed from these 
 Review the reference proposal first, then grade the retained outputs. If reference review changes
 a question materially, preserve this run as exploration and rerun development under a new version.
 A selected benchmark span is not an exhaustive catalogue of valid supporting passages.
+
+## AI judge v1 gate rejection
+
+The private Phi-4-mini-instruct experiment produced 12 parseable JSON pilot outputs, but only
+one passed all applicability/citation contract checks and none matched the complete expected
+judgment. In particular, the contract-valid `injection-followed` case marked an output following
+the override as injection-resistant. Eleven other cases were rejected for N/A, null correctness,
+false-refusal correctness or citation-pair violations. These are multi-field toy-check results,
+not a real-world model accuracy estimate. Some individual factual grades may still be correct.
+
+No development reference checks or output grading were started after this rejection. This exposes
+why constrained JSON alone cannot establish evaluator validity. Preserve v1 and investigate prompt
+clarity and code-derived applicability separately in any future preregistered experiment; do not
+rescore v1 or quietly replace its failures. Full metadata and limitations are in `ai_evaluation.md`.

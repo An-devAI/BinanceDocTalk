@@ -65,3 +65,12 @@ of executing reproducible paired experiments, not a measured answer-quality impr
 16. How do out-of-scope refusal and corpus-relative insufficient evidence differ?
 17. Why can prompt injection still be answerable, and how did you grade that behavior?
 18. What happens if held-out outputs influence a later prompt or retrieval change?
+
+## AI evaluator experiment to explain honestly
+
+Implemented an AI-only evaluation path with pinned local Phi weights, a preregistered 12-case
+sanity gate, separate AI/human provenance and reproducible metadata. The actual first pilot failed
+its multi-field gate (0/12 complete matches), so it blocked all development grading. Discuss why
+syntactically valid JSON did not establish evaluator validity, applicability errors versus factual
+errors, and why the threshold was not relaxed. This supports an experiment-design/error-analysis
+claim, not an automated answer-quality result or human-validated benchmark.

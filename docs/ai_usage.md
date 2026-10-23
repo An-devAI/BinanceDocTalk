@@ -105,3 +105,8 @@ unavailable. Assistant-authored implementation adds a pinned Phi model, a 12-cas
 reference-first audit, separate AI grades/metadata and an explicit stop on failed pilot. No
 source/gold approval or human grade is inferred. AI grades are rejected by human report/UI
 contracts. The pilot expectations are assistant-authored sanity checks, not human calibration.
+
+The actual v1 pilot ran on private Kaggle T4: 12 parseable outputs, one contract-valid result,
+zero complete expected matches. The gate stopped before reference/output judging. This is an
+assistant-run diagnostic experiment with assistant-authored expectations, not a human quality
+review. All failures remain retained; no prompt/threshold/model was changed to force a pass.

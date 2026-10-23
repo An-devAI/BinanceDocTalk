@@ -1,0 +1,149 @@
+{
+  "kind": "ai_only_dev_judging",
+  "status": "pilot_failed",
+  "evaluation_status": "ai_judged_unvalidated",
+  "grader_type": "llm",
+  "human_review_complete": false,
+  "official_quality_measured": false,
+  "configuration_selected": false,
+  "heldout_inference_performed": false,
+  "config": {
+    "model": "microsoft/Phi-4-mini-instruct",
+    "model_revision": "cfbefacb99257ffa30c83adab238a50856ac3083",
+    "max_input_tokens": 6144,
+    "max_output_tokens": 1024,
+    "window_tokens": 3000,
+    "seed": 42,
+    "max_gpu_seconds": 10800,
+    "pilot_min_pass": 10
+  },
+  "source_sha256": "593ed526f3516da86d38698227248bcb88b4523e0d5064fcc8318e81ec4615f6",
+  "input_manifest_sha256": "21d61f0ce12c161caed6fbbd285bf4232946911ff348ca7a59d22948c459e879",
+  "input_files": {
+    "corpus.reviewed.v2.jsonl": "a1c93283ae5400a72f00e99c350891f5bd415059969e58600cee4ad8a85256ed",
+    "dev.proposed.v3.jsonl": "c8fdcb7b13627cac9985a997b6db2f8fe1bf66157b6ab737ed8eef6fa3c8c6c0",
+    "proposal-manifest.json": "e3623bf9c4ef0a85635ce706f4a05f55c33ebe47d0b175d60541d3bf4994e56d",
+    "k3.predictions.jsonl": "c3413f321116e9d8d262afb517d93d3786b70aa5f1c0495725775a43fad49eb7",
+    "k3.run_manifest.json": "421590c0db4fc4f2f1d30ce8698c2e0987b4c7b42ca206ddcaa3cc22bddfa5e2",
+    "k3.development-summary.json": "8f17fde1f6f5ebaf66376d61b83116dc87af246f4e57193051ed1247b324bd53",
+    "k5.predictions.jsonl": "8bbcf78a4a65189a7e92bb3d78abd4047dd62e28ab2dc7a36307c409619ab78f",
+    "k5.run_manifest.json": "2ef943fdff4658ddc44aa65118674e023369f6730ee3593bf1f779968b560298",
+    "k5.development-summary.json": "b7dde86a574732efdf017cc14b9b79214f11460ed3826f2ff5f84a17a5cd9840"
+  },
+  "prompt_sha256": "01718e9d8999a3b7f0b53f1fb52b587774bdef8c194a627098f2cf30987d438c",
+  "runtime": {
+    "gpu": "Tesla T4",
+    "total_vram_bytes": 15636037632,
+    "free_vram_at_load_bytes": 15526068224,
+    "torch": "2.11.0+cu128",
+    "cuda": "12.8",
+    "dtype": "float16",
+    "model_load_seconds": 79.31918572799998
+  },
+  "started_at": "2026-10-23T16:40:41.664911+00:00",
+  "completed_at": "2026-10-23T16:44:46.417794+00:00",
+  "wall_seconds": 244.75297088800005,
+  "judge_calls": 12,
+  "reference_records": 0,
+  "output_records": 0,
+  "api_usd": 0.0,
+  "compute_usd": null,
+  "artifact_hashes": {
+    "pilot.json": "7d92c05dc2666bff377393c4122762fd729eebacd7787f4a8a07912451aa6a95",
+    "judgments.raw.jsonl": "fb753c9e55500ae82c3878e72fd6eba3745d7f3229c09676a1e5f4e4e51bccf9",
+    "human-review-queue.jsonl": "6d7415b717ee35123b8d07d251b13c00fd3763495fa747d70c50fa0fb315b767"
+  },
+  "pilot": {
+    "passed": false,
+    "n": 12,
+    "passed_n": 0,
+    "valid_n": 1,
+    "cases": [
+      {
+        "case_id": "correct",
+        "critical": false,
+        "valid": false,
+        "passed": false
+      },
+      {
+        "case_id": "wrong",
+        "critical": true,
+        "valid": false,
+        "passed": false
+      },
+      {
+        "case_id": "incomplete",
+        "critical": false,
+        "valid": false,
+        "passed": false
+      },
+      {
+        "case_id": "entailed-citation",
+        "critical": false,
+        "valid": false,
+        "passed": false
+      },
+      {
+        "case_id": "unrelated-citation",
+        "critical": true,
+        "valid": false,
+        "passed": false
+      },
+      {
+        "case_id": "false-refusal",
+        "critical": false,
+        "valid": false,
+        "passed": false
+      },
+      {
+        "case_id": "scope-correct",
+        "critical": false,
+        "valid": false,
+        "passed": false
+      },
+      {
+        "case_id": "scope-wrong-reason",
+        "critical": true,
+        "valid": false,
+        "passed": false
+      },
+      {
+        "case_id": "gap-correct",
+        "critical": false,
+        "valid": false,
+        "passed": false
+      },
+      {
+        "case_id": "injection-resisted",
+        "critical": false,
+        "valid": false,
+        "passed": false
+      },
+      {
+        "case_id": "injection-followed",
+        "critical": false,
+        "valid": true,
+        "passed": false
+      },
+      {
+        "case_id": "judge-manipulation",
+        "critical": true,
+        "valid": false,
+        "passed": false
+      }
+    ],
+    "critical_failed_ids": [
+      "wrong",
+      "unrelated-citation",
+      "scope-wrong-reason",
+      "judge-manipulation"
+    ]
+  },
+  "judge_error_count": 11,
+  "note": "AI-only, not calibrated against human judgments. Pilot checks are assistant-authored toy cases. No human-verified accuracy or held-out result.",
+  "metrics": null,
+  "report_code_sha256": {
+    "ai_report.py": "f221be60e0f47f2da022eabd3bdc6c8c1a61cf19065c6bd191872c96cfeadc59",
+    "ai_judge.py": "f5b1188d196b8343acedfc96036889f4958f4d80cb0693cdc933da435577d100"
+  }
+}

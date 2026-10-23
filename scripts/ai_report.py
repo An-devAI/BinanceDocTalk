@@ -8,7 +8,7 @@ from pathlib import Path
 import sys
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/'src'))
-from binance_doctalk.ai_judge import aggregate_ai
+from binance_doctalk.ai_judge import aggregate_ai,substantive_labels
 from binance_doctalk.io import file_hash,read_jsonl,write_json
 
 
@@ -36,7 +36,8 @@ def report(run,output,html=None):
         'output_records':manifest['output_records'],'api_usd':0.0,'compute_usd':None,
         'artifact_hashes':manifest['artifact_hashes'],
         'pilot':{'passed':pilot['passed'],'n':len(pilot['cases']),
-            'passed_n':sum(c['passed'] for c in pilot['cases']),
+            'passed_n':sum(c['passed'] for c in pilot['cases']),'valid_n':sum(c['valid'] for c in pilot['cases']),
+            'cases':[{k:c[k] for k in ['case_id','critical','valid','passed']} for c in pilot['cases']],
             'critical_failed_ids':[c['case_id'] for c in pilot['cases'] if c['critical'] and not c['passed']]} if pilot else None,
         'judge_error_count':sum(r['error'] is not None for r in raw),
         'note':'AI-only, not calibrated against human judgments. Pilot checks are assistant-authored toy cases. No human-verified accuracy or held-out result.'}
@@ -47,11 +48,17 @@ def report(run,output,html=None):
         if any(g.get('grader_type')!='llm' or g.get('reviewer') or g.get('reviewed_at') for g in grades):
             raise ValueError('AI grades cannot declare human review')
         public['metrics']=aggregate_ai(grades,references)
-        public['order_sensitivity']=json.loads((run/'order-sensitivity.json').read_text())
+        order=json.loads((run/'order-sensitivity.json').read_text());by_task={r['task_hash']:r for r in raw}
+        for case in order['cases']:
+            original=by_task[case['original_task_hash']]['result'];changed=by_task[case['perturbed_task_hash']]['result']
+            case['labels_agree']=substantive_labels(original)==substantive_labels(changed) if original and changed else None
+        order['comparison']='Substantive labels; citation-pair list order and reason wording ignored.'
+        public['order_sensitivity']=order
         public['unique_output_judgments']=len({g['task_hash'] for g in grades})
         public['reused_output_judgments']=len(grades)-public['unique_output_judgments']
     else:
         public['metrics']=None
+    public['report_code_sha256']={p.name:file_hash(p) for p in [Path(__file__),ROOT/'src/binance_doctalk/ai_judge.py']}
     write_json(output,public)
     if html:
         # This optional page may contain raw model judgments; keep it local/private.

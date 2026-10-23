@@ -8,11 +8,13 @@ import tempfile
 import time
 import tomllib
 import unittest
-from unittest.mock import patch
+from unittest.mock import patch,Mock
+from types import SimpleNamespace
+import test_local_provider as local_fixture
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/'scripts'));sys.path.insert(0,str(ROOT/'src'))
 from binance_doctalk.ai_judge import (PROMPT,SCHEMAS,pilot_cases,pilot_match,validate_result,
-    reference_context,reconstruct,aggregate_ai,perturbation_sample)
+    reference_context,reconstruct,aggregate_ai,perturbation_sample,substantive_labels)
 from binance_doctalk.local_judge import LocalJudge,BudgetStop,validate_config
 from binance_doctalk.evaluation import score_predictions
 from binance_doctalk.web import serve
@@ -120,6 +122,13 @@ class JudgeContractTests(unittest.TestCase):
             path=Path(tmp)/'ai.json';write_json(path,dict(status='human_graded',systems={},grader_type='llm'))
             with self.assertRaisesRegex(ValueError,'human-graded'):serve(report_path=path)
 
+    def test_order_check_ignores_citation_pair_order_but_not_support(self):
+        a=dict(reason='UNIT A',citation_support=[dict(claim_index=0,evidence_id=i,supports='yes') for i in ['a','b']])
+        b=deepcopy(a);b['citation_support'].reverse();b['reason']='UNIT B'
+        self.assertEqual(substantive_labels(a),substantive_labels(b))
+        b['citation_support'][0]['supports']='no'
+        self.assertNotEqual(substantive_labels(a),substantive_labels(b))
+
     def test_aggregates_keep_unresolved_references_and_denominators(self):
         refs=[dict(question_id='a',assessment='consistent'),dict(question_id='b',assessment='unknown')]
         grades=[dict(question_id=q,trial=3,mode='rag',label='answerable',judgment=dict(correctness=2,
@@ -201,5 +210,34 @@ class JudgeIntegrationTests(unittest.TestCase):
             self.assertFalse(public['human_review_complete']);self.assertGreater(public['reused_output_judgments'],0)
             self.assertTrue((home/'review.html').exists())
             with self.assertRaisesRegex(ValueError,'Preserve'):report(home/'out',home/'public.json')
+
+class LocalJudgeTransportTests(unittest.TestCase):
+    def test_valid_raw_is_retained_once_and_identical_inputs_are_cached(self):
+        case=pilot_cases()[0];value=expected_result(case)
+        runtime=local_fixture.LocalProviderTests().fake_runtime(json.dumps(value))
+        runtime[2].generation_config=SimpleNamespace(eos_token_id=0)
+        runtime[2].generate=Mock(return_value=[[1]*32+[2,0]])
+        with tempfile.TemporaryDirectory() as tmp:
+            path=Path(tmp)/'raw.jsonl'
+            with patch('binance_doctalk.local_judge.generation_runtime',return_value=runtime), patch('binance_doctalk.local_judge.build_prefix_enforcer',return_value=None):
+                judge=LocalJudge(CONFIG,path);a=judge.ask('output',case['payload']);b=judge.ask('output',case['payload'])
+            self.assertIs(a,b);self.assertEqual(a['result'],value);self.assertEqual(len(read_jsonl(path)),1)
+            self.assertFalse(runtime[2].generate.call_args.kwargs['do_sample'])
+            self.assertEqual(runtime[2].generate.call_args.kwargs['logits_to_keep'],1)
+
+    def test_prompt_overflow_is_not_truncated_or_generated(self):
+        runtime=local_fixture.LocalProviderTests().fake_runtime('{}',input_count=7000);runtime[2].generate=Mock()
+        with tempfile.TemporaryDirectory() as tmp:
+            with patch('binance_doctalk.local_judge.generation_runtime',return_value=runtime):
+                result=LocalJudge(CONFIG,Path(tmp)/'raw.jsonl').ask('output',pilot_cases()[0]['payload'])
+            self.assertIsNone(result['result']);self.assertIn('NOT truncated',result['error']);runtime[2].generate.assert_not_called()
+
+    def test_invalid_json_stays_an_error_without_output_repair(self):
+        runtime=local_fixture.LocalProviderTests().fake_runtime('```json {} ```');runtime[2].generation_config=SimpleNamespace(eos_token_id=0)
+        with tempfile.TemporaryDirectory() as tmp:
+            with patch('binance_doctalk.local_judge.generation_runtime',return_value=runtime), patch('binance_doctalk.local_judge.build_prefix_enforcer',return_value=None):
+                result=LocalJudge(CONFIG,Path(tmp)/'raw.jsonl').ask('output',pilot_cases()[0]['payload'])
+            self.assertIsNone(result['result']);self.assertEqual(result['raw_output'],'```json {} ```')
+            self.assertIn('JSONDecodeError',result['error'])
 
 if __name__=='__main__':unittest.main()

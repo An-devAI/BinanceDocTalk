@@ -185,3 +185,20 @@ remote records; source/input/output hashes are retained. Source-linked output re
 unfilled human grading templates remain private. See `kaggle_development_k3_v3.json` and
 `kaggle_development_k5_v3.json`. Retrieval diagnostics use unapproved AI references; no official
 answer/citation quality score or release configuration has been selected. Held-out remains unused.
+
+## AI-only judge integration and actual gate stop
+
+The submitted source at `617c8c0` passed 118 tests on Kaggle. The private Phi judge loaded and
+ran 12 toy pilot cases on Tesla T4 / FP16, torch 2.11.0+cu128, CUDA 12.8. All raw outputs parse
+as JSON, one satisfies the full result contract, and zero match the complete expected judgments.
+The predeclared gate stopped the run: no reference eligibility, AI development grades or metrics
+file was produced; no held-out consumption marker exists. Exact raw outputs, manifest, pilot
+expectations, errors and input/source hashes are retained. No semantic scores or human approvals
+were manufactured. Public metadata is `kaggle_ai_judge_v1.json`.
+
+Later transport/report tests bring the current core suite to 122 passing tests; they do not change
+the submitted prompt or model configuration. Output-order comparisons canonicalize citation-pair
+lists and ignore reason wording; report-code hashes distinguish postprocessing from the recorded
+GPU source. Optional UI AppTest and both grammar replays pass locally. Subsequent reference/output
+GPU phases were not exercised because the pilot failed; their integration tests use synthetic
+fixtures. This is not evidence of semantic judge reliability.
